@@ -97,6 +97,10 @@ dependencies {
     kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
 
+    implementation(libs.coil)
+    implementation(libs.coil.network.okhttp)
+    implementation(libs.coil.compose)
+
     implementation(libs.timber)
 
     testImplementation(libs.junit)
