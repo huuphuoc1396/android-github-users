@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.android.template.data"
+    namespace = "com.tyme.github.users.data"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
@@ -18,34 +18,50 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+    }
 
+    flavorDimensions += "environment"
+    productFlavors {
+        create("dev") {
             buildConfigField(
                 type = "String",
                 name = "BASE_URL",
-                value = "\"https://669b63f7276e45187d355230.mockapi.io\"",
+                value = "\"https://api.github.com\"",
             )
         }
 
-        debug {
+        create("stag") {
             buildConfigField(
                 type = "String",
                 name = "BASE_URL",
-                value = "\"https://669b63f7276e45187d355230.mockapi.io\"",
+                value = "\"https://api.github.com\"",
+            )
+        }
+
+        create("prod") {
+            buildConfigField(
+                type = "String",
+                name = "BASE_URL",
+                value = "\"https://api.github.com\"",
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
     buildFeatures {
         buildConfig = true
     }

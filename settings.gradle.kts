@@ -19,7 +19,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Android Template"
+rootProject.name = "GitHub Users"
 include(":app")
 include(":data")
 include(":domain")
