@@ -24,7 +24,9 @@ securityCryptoDatastore = "1.0.0"
 
 retrofit = "2.11.0"
 gson = "2.10.1"
-logging-interceptor = "4.12.0"
+loggingInterceptor = "4.12.0"
+
+coil = "3.0.4"
 
 timber = "5.0.1"
 
@@ -69,7 +71,11 @@ security-crypto-datastore-preferences = { group = "io.github.osipxd", name = "se
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
-okhttp3-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "logging-interceptor" }
+okhttp3-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "loggingInterceptor" }
+
+coil = { group = "io.coil-kt.coil3", name = "coil", version.ref = "coil" }
+coil-network-okhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil" }
+coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
 
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 

@@ -3,6 +3,7 @@ package com.tyme.github.users.data.di.modules
 import com.tyme.github.users.data.BuildConfig
 import com.tyme.github.users.data.remote.adapters.errors.ErrorHandlingCallAdapterFactory
 import com.tyme.github.users.data.remote.interceptors.HeaderInterceptor
+import com.tyme.github.users.data.remote.services.UserService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -46,5 +47,11 @@ internal class RemoteModule {
             .addCallAdapterFactory(ErrorHandlingCallAdapterFactory.create())
             .client(okHttpClient)
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserService(retrofit: Retrofit): UserService {
+        return retrofit.create(UserService::class.java)
     }
 }

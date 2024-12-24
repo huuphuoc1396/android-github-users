@@ -6,6 +6,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.tyme.github.users.ui.features.userdetails.UserDetailsScreen
+import com.tyme.github.users.ui.features.userdetails.models.UserDetailsDestination
 import com.tyme.github.users.ui.features.users.UserListScreen
 import com.tyme.github.users.ui.features.users.models.UserListDestination
 
@@ -22,6 +24,10 @@ internal fun MainNavHost(
 
         composable<UserListDestination> {
             UserListScreen(navController = navController)
+        }
+
+        composable<UserDetailsDestination> {
+            UserDetailsScreen()
         }
     }
 }
