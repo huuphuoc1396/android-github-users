@@ -22,7 +22,7 @@ internal fun UserList(
 ) {
     LazyColumn(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
         contentPadding = PaddingValues(16.dp),
     ) {
         items(

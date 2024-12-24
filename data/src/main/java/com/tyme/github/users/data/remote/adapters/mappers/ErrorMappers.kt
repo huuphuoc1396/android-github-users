@@ -2,10 +2,10 @@ package com.tyme.github.users.data.remote.adapters.mappers
 
 import com.google.gson.Gson
 import com.tyme.github.users.data.remote.responses.errors.ErrorResponse
-import com.tyme.github.users.domain.models.errors.ApiException
-import com.tyme.github.users.domain.models.errors.UnauthorizedException
 import com.tyme.github.users.domain.extensions.orEmpty
 import com.tyme.github.users.domain.extensions.orZero
+import com.tyme.github.users.domain.models.errors.ApiException
+import com.tyme.github.users.domain.models.errors.UnauthorizedException
 import retrofit2.Response
 import timber.log.Timber
 import java.net.HttpURLConnection

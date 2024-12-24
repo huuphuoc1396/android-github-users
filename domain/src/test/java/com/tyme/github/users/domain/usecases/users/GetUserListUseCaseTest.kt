@@ -18,7 +18,7 @@ internal class GetUserListUseCaseTest {
     private val useCase = GetUserListUseCase(userRepository)
 
     @Test
-    fun `getUserList returns users`() = runTest {
+    fun `getUserList returns Users`() = runTest {
         // Given
         val userList = mockk<List<UserModel>>()
         every { userRepository.getUserList() } returns flowOf(userList)

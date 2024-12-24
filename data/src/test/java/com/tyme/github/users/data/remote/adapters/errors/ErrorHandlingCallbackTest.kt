@@ -9,7 +9,7 @@ import org.junit.Test
 import retrofit2.Callback
 import java.net.UnknownHostException
 
-class ErrorHandlingCallbackTest {
+internal class ErrorHandlingCallbackTest {
 
     private val response = mockk<retrofit2.Response<Any>>()
     private val call = mockk<retrofit2.Call<Any>>()
