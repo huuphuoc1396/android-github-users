@@ -27,7 +27,7 @@ internal fun MainNavHost(
         }
 
         composable<UserDetailsDestination> {
-            UserDetailsScreen()
+            UserDetailsScreen(navController = navController)
         }
     }
 }

@@ -1,8 +1,11 @@
 package com.tyme.github.users
 
+import androidx.lifecycle.SavedStateHandle
 import com.tyme.github.users.providers.dispatchers.DispatchersProvider
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -42,16 +45,23 @@ internal abstract class ViewModelTest {
 
     private val testDispatcher = StandardTestDispatcher()
 
+    protected val savedStateHandle: SavedStateHandle = mockk(relaxed = true)
     protected val dispatchersProvider: DispatchersProvider = mockk()
 
     @Before
     fun setUp() {
+        mockkSavedStateHandle()
         Dispatchers.setMain(testDispatcher)
         every { dispatchersProvider.io } returns testDispatcher
     }
 
     @After
     fun tearDown() {
+        unmockkSavedStateHandle()
         Dispatchers.resetMain()
     }
+
+    private fun mockkSavedStateHandle() = mockkStatic("androidx.navigation.SavedStateHandleKt")
+
+    private fun unmockkSavedStateHandle() = unmockkStatic("androidx.navigation.SavedStateHandleKt")
 }

@@ -8,7 +8,7 @@ import org.junit.Test
 internal class UserMappersKtTest {
 
     @Test
-    fun `map UserResponse not null to UserModel`() {
+    fun `toUserModel returns UserModel`() {
         // Given
         val userResponse = UserResponse(
             id = 1,
@@ -31,7 +31,7 @@ internal class UserMappersKtTest {
     }
 
     @Test
-    fun `map UserResponse null to UserModel`() {
+    fun `toUserModel returns UserModel with default values`() {
         // Given
         val userResponse = UserResponse()
         val expected = UserModel(

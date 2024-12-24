@@ -8,14 +8,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color.Companion.Black
-import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tyme.github.users.domain.models.users.UserModel
@@ -33,11 +30,6 @@ internal fun UserCard(
 ) {
     Card(
         modifier = modifier,
-        colors = CardDefaults.cardColors(
-            contentColor = Black,
-            containerColor = White,
-        ),
-        elevation = CardDefaults.elevatedCardElevation(),
     ) {
         Row(
             modifier = Modifier
@@ -52,7 +44,7 @@ internal fun UserCard(
             Column(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(horizontal = 8.dp),
+                    .padding(start = 12.dp),
             ) {
                 Text(
                     text = user.username,
