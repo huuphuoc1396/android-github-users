@@ -6,6 +6,7 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -22,6 +23,7 @@ internal fun UserListContent(
     modifier: Modifier = Modifier,
     onUserClick: (UserModel) -> Unit = {},
     onUrlClick: (String) -> Unit = {},
+    onRefresh: () -> Unit = {},
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -31,12 +33,18 @@ internal fun UserListContent(
             )
         }
     ) { paddingValues ->
-        UserList(
-            users = userList.userList,
-            modifier = Modifier.padding(paddingValues),
-            onUserClick = onUserClick,
-            onUrlClick = onUrlClick,
-        )
+        PullToRefreshBox(
+            isRefreshing = userList.isRefreshing,
+            onRefresh = onRefresh,
+            modifier = Modifier.padding(paddingValues)
+        ) {
+            UserList(
+                users = userList.userList,
+                modifier = Modifier.fillMaxSize(),
+                onUserClick = onUserClick,
+                onUrlClick = onUrlClick,
+            )
+        }
     }
 }
 

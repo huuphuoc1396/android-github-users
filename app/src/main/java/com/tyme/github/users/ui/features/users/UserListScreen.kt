@@ -22,6 +22,7 @@ internal fun UserListScreen(
             userList = uiState,
             onUserClick = { user -> navController.navigate(UserDetailsDestination(user.username)) },
             onUrlClick = { url -> context.openBrowser(url) },
+            onRefresh = viewModel::refresh,
         )
     }
 }

@@ -2,6 +2,7 @@ package com.tyme.github.users.ui.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -23,7 +24,7 @@ internal fun LinkText(
     Text(
         text = url,
         modifier = modifier.bouncingClickable { onClick(url) },
-        color = Blue,
+        color = MaterialTheme.colorScheme.primary,
         textDecoration = TextDecoration.Underline,
         style = style,
     )

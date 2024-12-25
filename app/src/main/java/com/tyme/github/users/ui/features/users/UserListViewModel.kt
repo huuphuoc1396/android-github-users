@@ -25,9 +25,16 @@ internal class UserListViewModel @Inject constructor(
         getUserListUseCase().collectSafe(
             context = dispatchersProvider.io,
             onError = ::showError,
-            hasLoading = true,
+            hasLoading = !uiState.isRefreshing,
         ) { userList ->
-            updateUiState { copy(userList = userList.toImmutableList()) }
+            updateUiState { copy(userList = userList.toImmutableList(), isRefreshing = false) }
+        }
+    }
+
+    fun refresh() {
+        launchSafe {
+            updateUiState { copy(isRefreshing = true) }
+            getUserList()
         }
     }
 }
