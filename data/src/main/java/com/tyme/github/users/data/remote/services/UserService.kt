@@ -10,8 +10,8 @@ internal interface UserService {
 
     @GET("/users")
     suspend fun getUsers(
-        @Query("per_page") perPage: Int = 10,
-        @Query("since") since: Int = 100,
+        @Query("per_page") perPage: Int,
+        @Query("since") since: Int,
     ): List<UserResponse>
 
     @GET("/users/{username}")

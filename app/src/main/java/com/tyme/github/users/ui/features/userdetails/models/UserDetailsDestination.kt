@@ -4,5 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 internal data class UserDetailsDestination(
-    val username: String,
+    val username: String = "",
+    val avatarUrl: String = "",
+    val url: String = "",
 )

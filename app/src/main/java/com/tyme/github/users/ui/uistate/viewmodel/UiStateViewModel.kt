@@ -104,17 +104,12 @@ internal abstract class UiStateViewModel<UiState, Event>(initialUiState: UiState
     }
 
     /**
-     * Sets the loading state to `true`.
+     * Shows the loading state.
+     *
+     * @param isLoading If `true`, shows the loading state.
      */
-    open fun showLoading() {
-        _isLoading.update { true }
-    }
-
-    /**
-     * Resets the loading state to `false`.
-     */
-    open fun hideLoading() {
-        _isLoading.update { false }
+    open fun setLoading(isLoading: Boolean) {
+        _isLoading.update { isLoading }
     }
 
     /**
@@ -141,7 +136,7 @@ internal abstract class UiStateViewModel<UiState, Event>(initialUiState: UiState
         hasLoading: Boolean = false,
         block: suspend () -> Unit,
     ): Job {
-        if (hasLoading) showLoading()
+        if (hasLoading) setLoading(true)
         return launch(context) {
             try {
                 block()
@@ -149,7 +144,7 @@ internal abstract class UiStateViewModel<UiState, Event>(initialUiState: UiState
                 Timber.e(e)
                 onError(e)
             }
-            if (hasLoading) hideLoading()
+            if (hasLoading) setLoading(false)
         }
     }
 
@@ -168,15 +163,15 @@ internal abstract class UiStateViewModel<UiState, Event>(initialUiState: UiState
         onError: (Throwable) -> Unit = {},
         block: suspend (T) -> Unit,
     ): Job = flowOn(context)
-        .onStart { if (hasLoading) showLoading() }
+        .onStart { if (hasLoading) setLoading(true) }
         .catch { e ->
             Timber.e(e)
             onError(e)
-            if (hasLoading) hideLoading()
+            if (hasLoading) setLoading(false)
         }
         .onEach {
             block(it)
-            if (hasLoading) hideLoading()
+            if (hasLoading) setLoading(false)
         }
         .launchIn(viewModelScope)
 }

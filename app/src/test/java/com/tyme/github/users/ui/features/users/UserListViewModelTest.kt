@@ -1,17 +1,16 @@
 package com.tyme.github.users.ui.features.users
 
+import androidx.paging.PagingData
 import app.cash.turbine.test
 import com.tyme.github.users.ViewModelTest
 import com.tyme.github.users.domain.models.users.UserModel
-import com.tyme.github.users.domain.usecases.users.GetUserListUseCase
-import com.tyme.github.users.ui.features.users.models.UserListUiState
-import com.tyme.github.users.ui.uistate.mappers.toErrorUiState
+import com.tyme.github.users.domain.usecases.users.GetUserPagingUseCase
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.beInstanceOf
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -20,47 +19,41 @@ import org.junit.Test
 @ExperimentalCoroutinesApi
 internal class UserListViewModelTest : ViewModelTest() {
 
-    private val getUserListUseCase: GetUserListUseCase = mockk()
+    private val getUserPagingUseCase: GetUserPagingUseCase = mockk()
 
     private lateinit var userListViewModel: UserListViewModel
 
     @Test
-    fun `getUserList is success`() = runTest {
-
+    fun `userPaging is cached in viewModelScope`() = runTest {
         // Given
-        val users = MutableList(10) { index -> UserModel(id = index) }
-        every { getUserListUseCase() } returns flowOf(users)
+        every { getUserPagingUseCase() } returns flowOf(PagingData.empty())
+        userListViewModel = UserListViewModel(
+            getUserPagingUseCase = getUserPagingUseCase,
+        )
 
         // When
-        userListViewModel = UserListViewModel(
-            dispatchersProvider = dispatchersProvider,
-            getUserListUseCase = getUserListUseCase,
-        )
+        val userPaging = userListViewModel.userPaging
         advanceUntilIdle()
 
         // Then
-        userListViewModel.uiStateFlow.test {
-            expectMostRecentItem() shouldBe UserListUiState(userList = users.toImmutableList())
+        userPaging.test {
+            expectMostRecentItem() should beInstanceOf<PagingData<UserModel>>()
         }
     }
 
     @Test
-    fun `getUserList is failure`() = runTest {
-
+    fun `setRefreshing updates uiState`() = runTest {
         // Given
-        val error = Exception("Error")
-        every { getUserListUseCase() } returns flow { throw error }
+        every { getUserPagingUseCase() } returns flowOf(PagingData.empty())
+        userListViewModel = UserListViewModel(
+            getUserPagingUseCase = getUserPagingUseCase,
+        )
 
         // When
-        userListViewModel = UserListViewModel(
-            dispatchersProvider = dispatchersProvider,
-            getUserListUseCase = getUserListUseCase,
-        )
+        userListViewModel.setRefreshing(true)
         advanceUntilIdle()
 
         // Then
-        userListViewModel.error.test {
-            expectMostRecentItem() shouldBe error.toErrorUiState()
-        }
+        userListViewModel.uiState.isRefreshing shouldBe true
     }
 }

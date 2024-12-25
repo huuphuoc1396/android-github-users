@@ -97,6 +97,9 @@ dependencies {
     kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
 
+    implementation(libs.androidx.paging.compose)
+    implementation(libs.androidx.paging.runtime.ktx)
+
     implementation(libs.coil)
     implementation(libs.coil.network.okhttp)
     implementation(libs.coil.compose)

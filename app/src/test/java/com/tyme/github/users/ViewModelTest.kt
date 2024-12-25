@@ -9,6 +9,7 @@ import io.mockk.unmockkStatic
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import org.junit.After
@@ -43,7 +44,7 @@ import org.junit.Before
 @ExperimentalCoroutinesApi
 internal abstract class ViewModelTest {
 
-    private val testDispatcher = StandardTestDispatcher()
+    private val testDispatcher = UnconfinedTestDispatcher()
 
     protected val savedStateHandle: SavedStateHandle = mockk(relaxed = true)
     protected val dispatchersProvider: DispatchersProvider = mockk()
@@ -53,6 +54,9 @@ internal abstract class ViewModelTest {
         mockkSavedStateHandle()
         Dispatchers.setMain(testDispatcher)
         every { dispatchersProvider.io } returns testDispatcher
+        every { dispatchersProvider.default } returns testDispatcher
+        every { dispatchersProvider.main } returns testDispatcher
+        every { dispatchersProvider.immediate } returns testDispatcher
     }
 
     @After

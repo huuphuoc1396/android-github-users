@@ -21,16 +21,23 @@ internal class UserDetailsViewModel @Inject constructor(
     initialUiState = UserDetailUiState(),
 ) {
 
-    private val username: String by lazy {
-        savedStateHandle.toRoute<UserDetailsDestination>().username
+    private val destination: UserDetailsDestination by lazy {
+        savedStateHandle.toRoute<UserDetailsDestination>()
     }
 
     init {
+        updateUiState {
+            copy(
+                username = destination.username,
+                avatarUrl = destination.avatarUrl,
+                url = destination.url,
+            )
+        }
         getUserDetails()
     }
 
     private fun getUserDetails() {
-        getUserDetailsUseCase(username).collectSafe(
+        getUserDetailsUseCase(destination.username).collectSafe(
             context = dispatchersProvider.io,
             onError = ::showError,
             hasLoading = true,

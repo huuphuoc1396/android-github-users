@@ -20,6 +20,7 @@ hilt = "2.52"
 hiltNavigationCompose = "1.2.0"
 
 room = "2.6.1"
+paging = "3.3.5"
 securityCryptoDatastore = "1.0.0"
 
 retrofit = "2.11.0"
@@ -62,8 +63,12 @@ hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 
-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+room-paging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+
+androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "paging" }
+androidx-paging-runtime-ktx = { module = "androidx.paging:paging-runtime-ktx", version.ref = "paging" }
 
 security-crypto-datastore = { group = "io.github.osipxd", name = "security-crypto-datastore", version.ref = "securityCryptoDatastore" }
 security-crypto-datastore-preferences = { group = "io.github.osipxd", name = "security-crypto-datastore-preferences", version.ref = "securityCryptoDatastore" }
