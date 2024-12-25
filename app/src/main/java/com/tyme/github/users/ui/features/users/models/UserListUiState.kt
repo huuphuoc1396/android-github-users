@@ -6,4 +6,5 @@ import kotlinx.collections.immutable.persistentListOf
 
 internal data class UserListUiState(
     val userList: ImmutableList<UserModel> = persistentListOf(),
+    val isRefreshing: Boolean = false,
 )
