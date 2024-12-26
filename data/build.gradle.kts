@@ -31,16 +31,19 @@ android {
         create("dev") {
             buildConfigField("String", "BASE_URL", "\"https://api.github.com\"")
             buildConfigField("String", "BASE_DOMAIN", "\"api.github.com\"")
+            buildConfigField("Boolean", "DB_ENCRYPTION_ENABLED", "false")
         }
 
         create("stag") {
             buildConfigField("String", "BASE_URL", "\"https://api.github.com\"")
             buildConfigField("String", "BASE_DOMAIN", "\"api.github.com\"")
+            buildConfigField("Boolean", "DB_ENCRYPTION_ENABLED", "true")
         }
 
         create("prod") {
             buildConfigField("String", "BASE_URL", "\"https://api.github.com\"")
             buildConfigField("String", "BASE_DOMAIN", "\"api.github.com\"")
+            buildConfigField("Boolean", "DB_ENCRYPTION_ENABLED", "true")
         }
     }
 
@@ -75,6 +78,9 @@ dependencies {
     implementation(libs.room.ktx)
     implementation(libs.room.paging)
     kapt(libs.room.compiler)
+
+    implementation(libs.sqlite.ktx)
+    implementation(libs.sqlcipher.android)
 
     implementation(libs.androidx.paging.runtime.ktx)
 
