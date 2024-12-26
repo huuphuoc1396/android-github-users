@@ -56,7 +56,7 @@ Supports deep links:
 _**Note:** `https://github-users.tyme.com` is a demo link that has not been verified, which is why it doesn't add automatically to the supported links. Please ensure you have manually added it in the app settings._
 
 &emsp;<img src="https://github.com/user-attachments/assets/53c7cf96-2c73-49ba-ad40-3ea714db4acd" width=164>
-&emsp;&#8594;&emsp;<img src="https://github.com/user-attachments/assets/b23f37db-78ac-4bf9-a31f-ebf0a2b01b77" width=164>
+&emsp;<img src="https://github.com/user-attachments/assets/b23f37db-78ac-4bf9-a31f-ebf0a2b01b77" width=164>
 
   
 ## Technical Uses
