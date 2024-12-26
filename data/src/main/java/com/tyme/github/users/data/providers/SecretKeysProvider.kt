@@ -5,12 +5,18 @@ import javax.inject.Inject
 internal interface SecretKeysProvider {
 
     fun providePiningPublicKey(): String
+
+    fun getDatabasePassword(): String
 }
 
 internal class SecretKeysProviderImpl @Inject constructor() : SecretKeysProvider {
 
     override fun providePiningPublicKey(): String {
         return getSecretKey(10001)
+    }
+
+    override fun getDatabasePassword(): String {
+        return getSecretKey(10002)
     }
 
     companion object {

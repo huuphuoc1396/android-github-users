@@ -1,5 +1,6 @@
 package com.tyme.github.users.ui.features.components
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -40,9 +41,10 @@ internal fun UserAvatar(
             model = avatarUrl,
             contentDescription = null,
             modifier = Modifier
+                .fillMaxSize()
                 .padding(8.dp)
                 .clip(CircleShape),
-            contentScale = ContentScale.Fit,
+            contentScale = ContentScale.Crop,
             error = placeholder,
             placeholder = placeholder,
         )

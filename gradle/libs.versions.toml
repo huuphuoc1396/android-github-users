@@ -20,6 +20,8 @@ hilt = "2.52"
 hiltNavigationCompose = "1.2.0"
 
 room = "2.6.1"
+sqliteKtx = "2.2.0"
+sqlcipherAndroid = "4.5.7"
 paging = "3.3.5"
 securityCryptoDatastore = "1.0.0"
 
@@ -66,6 +68,9 @@ hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-com
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-paging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+
+sqlite-ktx = { module = "androidx.sqlite:sqlite-ktx", version.ref = "sqliteKtx" }
+sqlcipher-android = { module = "net.zetetic:sqlcipher-android", version.ref = "sqlcipherAndroid" }
 
 androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "paging" }
 androidx-paging-runtime-ktx = { module = "androidx.paging:paging-runtime-ktx", version.ref = "paging" }
