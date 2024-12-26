@@ -108,9 +108,10 @@ Utilizing [JUnit](https://junit.org/junit4/), [MockK](https://mockk.io/), [Turbi
 
 ### Security
 
-- **Network:** SSL Pinning has been enabled to enhance the security of services or sites that utilize SSL Certificates. By using the pinned public key, this approach prevents websites from rotating their certificates, thereby minimizing the risk of rendering the app unusable.
-- **Database:** [SQLCipher](https://github.com/sqlcipher/sqlcipher-android) is employed to secure the local database. It is disabled in the development environment to facilitate app inspection, while it is enabled in both the staging and production environments to test functionality in real-world scenarios.
-- **[R8](https://developer.android.com/build/shrink-code):** Shrinking, obfuscation, and optimization have been enabled to improve code efficiency and security.
+- Network: SSL Pinning has been enabled to enhance the security of services or sites that utilize SSL Certificates. By using the pinned public key, this approach prevents websites from rotating their certificates, thereby minimizing the risk of rendering the app unusable.
+- Database: [SQLCipher](https://github.com/sqlcipher/sqlcipher-android) is employed to secure the local database. It is disabled in the development environment to facilitate app inspection, while it is enabled in both the staging and production environments to test functionality in real-world scenarios.
+- [DataStore](https://developer.android.com/topic/libraries/architecture/datastore): [Encrypted DataStore](https://github.com/osipxd/encrypted-datastore) to secure the sensitive data stored such as the access token, user ID, signature, etc.
+- [R8](https://developer.android.com/build/shrink-code): Shrinking, obfuscation, and optimization have been enabled to improve code efficiency and security.
 
 ### Others
 
@@ -134,12 +135,10 @@ Utilizing [JUnit](https://junit.org/junit4/), [MockK](https://mockk.io/), [Turbi
    ```bash
    git clone https://github.com/huuphuoc1396/android-github-users.git
    ```
-
 2. Open the `android-github-users/` directory in Android Studio.
-
 3. Copy the `credentials.cpp` to `data/cpp`.
-
-4. Select the Build Variants and Run `app`. 
+4. Select the Build Variants.
+5. Run `app`. 
 
 ### License
 
