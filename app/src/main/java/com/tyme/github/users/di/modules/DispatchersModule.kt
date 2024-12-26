@@ -1,7 +1,7 @@
 package com.tyme.github.users.di.modules
 
-import com.tyme.github.users.providers.dispatchers.DispatchersProvider
-import com.tyme.github.users.providers.dispatchers.DispatchersProviderImpl
+import com.tyme.github.users.providers.DispatchersProvider
+import com.tyme.github.users.providers.DispatchersProviderImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

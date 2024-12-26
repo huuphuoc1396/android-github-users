@@ -29,27 +29,18 @@ android {
     flavorDimensions += "environment"
     productFlavors {
         create("dev") {
-            buildConfigField(
-                type = "String",
-                name = "BASE_URL",
-                value = "\"https://api.github.com\"",
-            )
+            buildConfigField("String", "BASE_URL", "\"https://api.github.com\"")
+            buildConfigField("String", "BASE_DOMAIN", "\"api.github.com\"")
         }
 
         create("stag") {
-            buildConfigField(
-                type = "String",
-                name = "BASE_URL",
-                value = "\"https://api.github.com\"",
-            )
+            buildConfigField("String", "BASE_URL", "\"https://api.github.com\"")
+            buildConfigField("String", "BASE_DOMAIN", "\"api.github.com\"")
         }
 
         create("prod") {
-            buildConfigField(
-                type = "String",
-                name = "BASE_URL",
-                value = "\"https://api.github.com\"",
-            )
+            buildConfigField("String", "BASE_URL", "\"https://api.github.com\"")
+            buildConfigField("String", "BASE_DOMAIN", "\"api.github.com\"")
         }
     }
 
@@ -64,6 +55,12 @@ android {
 
     buildFeatures {
         buildConfig = true
+    }
+
+    externalNativeBuild {
+        cmake {
+            path = File("cpp/CMakeLists.txt")
+        }
     }
 }
 
