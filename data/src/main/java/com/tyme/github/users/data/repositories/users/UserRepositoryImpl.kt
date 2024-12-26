@@ -1,23 +1,47 @@
 package com.tyme.github.users.data.repositories.users
 
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.map
 import com.tyme.github.users.data.remote.services.UserService
 import com.tyme.github.users.data.repositories.users.mappers.toUserDetailsModel
 import com.tyme.github.users.data.repositories.users.mappers.toUserModel
+import com.tyme.github.users.data.repositories.users.paging.UserRemoteMediator
+import com.tyme.github.users.data.storages.databases.UserDatabase
 import com.tyme.github.users.domain.models.users.UserDetailsModel
 import com.tyme.github.users.domain.models.users.UserModel
 import com.tyme.github.users.domain.repositories.UserRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
+@OptIn(ExperimentalPagingApi::class)
 internal class UserRepositoryImpl @Inject constructor(
     private val userService: UserService,
+    private val userDatabase: UserDatabase,
 ) : UserRepository {
 
-    override fun getUserList(): Flow<List<UserModel>> = flow {
-        val userResponses = userService.getUsers()
-        val users = userResponses.map { response -> response.toUserModel() }
-        emit(users)
+    override fun getUserPaging(): Flow<PagingData<UserModel>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = PAGE_SIZE,
+                enablePlaceholders = false,
+                prefetchDistance = PAGE_SIZE / 2,
+                initialLoadSize = PAGE_SIZE,
+            ),
+            remoteMediator = UserRemoteMediator(
+                userService = userService,
+                userDatabase = userDatabase,
+            ),
+            pagingSourceFactory = {
+                userDatabase.userDao().getPagingSource()
+            },
+        )
+            .flow
+            .map { pagingData -> pagingData.map { entity -> entity.toUserModel() } }
     }
 
     override fun getUserDetails(username: String): Flow<UserDetailsModel> {
@@ -26,5 +50,9 @@ internal class UserRepositoryImpl @Inject constructor(
             val userDetails = userResponse.toUserDetailsModel()
             emit(userDetails)
         }
+    }
+
+    companion object {
+        private const val PAGE_SIZE = 20
     }
 }

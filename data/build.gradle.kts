@@ -75,8 +75,11 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
 
-    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    implementation(libs.room.paging)
     kapt(libs.room.compiler)
+
+    implementation(libs.androidx.paging.runtime.ktx)
 
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)

@@ -1,12 +1,18 @@
 package com.tyme.github.users.data.repositories.users
 
+import androidx.paging.PagingData
+import androidx.paging.PagingSource
 import app.cash.turbine.test
 import com.tyme.github.users.data.remote.responses.users.UserDetailsResponse
-import com.tyme.github.users.data.remote.responses.users.UserResponse
 import com.tyme.github.users.data.remote.services.UserService
 import com.tyme.github.users.data.repositories.users.mappers.toUserDetailsModel
-import com.tyme.github.users.data.repositories.users.mappers.toUserModel
+import com.tyme.github.users.data.storages.databases.UserDatabase
+import com.tyme.github.users.data.storages.databases.entities.UserEntity
+import com.tyme.github.users.domain.models.users.UserModel
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.beInstanceOf
+import io.kotest.matchers.types.shouldBeSameInstanceAs
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -16,21 +22,22 @@ internal class UserRepositoryImplTest {
 
     private val userService: UserService = mockk()
 
-    private val userRepository = UserRepositoryImpl(userService)
+    private val userDatabase: UserDatabase = mockk()
+
+    private val userRepository = UserRepositoryImpl(userService, userDatabase)
 
     @Test
-    fun `getUserList returns Users`() = runTest {
+    fun `getUserPaging returns Users`() = runTest {
         // Given
-        val responses = listOf(UserResponse())
-        val expected = responses.map { response -> response.toUserModel() }
-        coEvery { userService.getUsers() } returns responses
+        val pagingSource = mockk<PagingSource<Int, UserEntity>>(relaxed = true)
+        coEvery { userDatabase.userDao().getPagingSource() } returns pagingSource
 
         // When
-        val result = userRepository.getUserList()
+        val result = userRepository.getUserPaging()
 
         // Then
         result.test {
-            expectMostRecentItem() shouldBe expected
+            expectMostRecentItem() should beInstanceOf<PagingData<UserModel>>()
         }
     }
 

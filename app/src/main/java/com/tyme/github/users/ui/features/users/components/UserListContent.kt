@@ -11,16 +11,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.tyme.github.users.R
 import com.tyme.github.users.domain.models.users.UserModel
-import com.tyme.github.users.ui.features.users.models.UserListUiState
 import com.tyme.github.users.ui.theme.Theme
+import kotlinx.coroutines.flow.flowOf
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun UserListContent(
-    userList: UserListUiState,
+    pagingItems: LazyPagingItems<UserModel>,
     modifier: Modifier = Modifier,
+    isRefreshing: Boolean = false,
     onUserClick: (UserModel) -> Unit = {},
     onUrlClick: (String) -> Unit = {},
     onRefresh: () -> Unit = {},
@@ -34,12 +38,12 @@ internal fun UserListContent(
         }
     ) { paddingValues ->
         PullToRefreshBox(
-            isRefreshing = userList.isRefreshing,
+            isRefreshing = isRefreshing,
             onRefresh = onRefresh,
             modifier = Modifier.padding(paddingValues)
         ) {
             UserList(
-                users = userList.userList,
+                pagingItems = pagingItems,
                 modifier = Modifier.fillMaxSize(),
                 onUserClick = onUserClick,
                 onUrlClick = onUrlClick,
@@ -53,7 +57,7 @@ internal fun UserListContent(
 private fun UserListContentPreview() {
     Theme {
         UserListContent(
-            userList = UserListUiState(),
+            pagingItems = flowOf(PagingData.empty<UserModel>()).collectAsLazyPagingItems(),
         )
     }
 }

@@ -7,6 +7,7 @@
     <string name="error_message_unauthorized">Unauthorized. Please login again.</string>
 
     <string name="button_ok">OK</string>
+    <string name="button_retry">Retry</string>
 
     <string name="user_list_title">GitHub Users</string>
 
@@ -14,4 +15,5 @@
     <string name="user_details_followers">Followers</string>
     <string name="user_details_following">Following</string>
     <string name="user_details_blog">Blog</string>
+
 </resources>

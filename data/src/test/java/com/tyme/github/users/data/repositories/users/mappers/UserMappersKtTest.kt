@@ -1,6 +1,7 @@
 package com.tyme.github.users.data.repositories.users.mappers
 
 import com.tyme.github.users.data.remote.responses.users.UserResponse
+import com.tyme.github.users.data.storages.databases.entities.UserEntity
 import com.tyme.github.users.domain.models.users.UserModel
 import io.kotest.matchers.shouldBe
 import org.junit.Test
@@ -8,7 +9,7 @@ import org.junit.Test
 internal class UserMappersKtTest {
 
     @Test
-    fun `toUserModel returns UserModel`() {
+    fun `UserResponse toUserEntity returns UserEntity`() {
         // Given
         val userResponse = UserResponse(
             id = 1,
@@ -16,7 +17,7 @@ internal class UserMappersKtTest {
             avatarUrl = "avatarUrl",
             htmlUrl = "htmlUrl",
         )
-        val expected = UserModel(
+        val expected = UserEntity(
             id = 1,
             username = "login",
             avatarUrl = "avatarUrl",
@@ -24,21 +25,44 @@ internal class UserMappersKtTest {
         )
 
         // When
-        val result = userResponse.toUserModel()
+        val result = userResponse.toUserEntity()
 
         // Then
         result shouldBe expected
     }
 
     @Test
-    fun `toUserModel returns UserModel with default values`() {
+    fun `UserResponse toUserEntity returns UserEntity with default values`() {
         // Given
         val userResponse = UserResponse()
-        val expected = UserModel(
+        val expected = UserEntity(
             id = 0,
             username = "",
             avatarUrl = "",
             url = "",
+        )
+
+        // When
+        val result = userResponse.toUserEntity()
+
+        // Then
+        result shouldBe expected
+    }
+
+    @Test
+    fun `UserEntity toUserModel returns UserModel`() {
+        // Given
+        val userResponse = UserEntity(
+            id = 1,
+            username = "login",
+            avatarUrl = "avatarUrl",
+            url = "htmlUrl",
+        )
+        val expected = UserModel(
+            id = 1,
+            username = "login",
+            avatarUrl = "avatarUrl",
+            url = "htmlUrl",
         )
 
         // When
