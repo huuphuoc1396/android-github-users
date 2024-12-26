@@ -1,7 +1,7 @@
 package com.tyme.github.users
 
 import androidx.lifecycle.SavedStateHandle
-import com.tyme.github.users.providers.dispatchers.DispatchersProvider
+import com.tyme.github.users.providers.DispatchersProvider
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic

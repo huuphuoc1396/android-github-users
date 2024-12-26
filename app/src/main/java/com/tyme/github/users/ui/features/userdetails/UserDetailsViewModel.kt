@@ -3,7 +3,7 @@ package com.tyme.github.users.ui.features.userdetails
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
 import com.tyme.github.users.domain.usecases.users.GetUserDetailsUseCase
-import com.tyme.github.users.providers.dispatchers.DispatchersProvider
+import com.tyme.github.users.providers.DispatchersProvider
 import com.tyme.github.users.ui.features.userdetails.mappers.toUserDetailsUiState
 import com.tyme.github.users.ui.features.userdetails.models.UserDetailUiState
 import com.tyme.github.users.ui.features.userdetails.models.UserDetailsDestination

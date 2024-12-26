@@ -1,17 +1,19 @@
 package com.tyme.github.users.data.di.modules
 
 import com.tyme.github.users.data.BuildConfig
-import com.tyme.github.users.data.remote.adapters.errors.ErrorHandlingCallAdapterFactory
-import com.tyme.github.users.data.remote.interceptors.HeaderInterceptor
+import com.tyme.github.users.data.providers.CertificatePinnersProvider
+import com.tyme.github.users.data.providers.OkHttpClientsProvider
+import com.tyme.github.users.data.providers.RetrofitsProvider
+import com.tyme.github.users.data.providers.SecretKeysProvider
 import com.tyme.github.users.data.remote.services.UserService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.CertificatePinner
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -28,25 +30,26 @@ internal class RemoteModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(
-        headerInterceptor: HeaderInterceptor,
-        httpLoggingInterceptor: HttpLoggingInterceptor,
-    ): OkHttpClient {
-        return OkHttpClient.Builder()
-            .addInterceptor(headerInterceptor)
-            .addInterceptor(httpLoggingInterceptor)
-            .build()
+    fun provideCertificatePinner(
+        secretKeysProvider: SecretKeysProvider,
+        certificatePinnersProvider: CertificatePinnersProvider
+    ): CertificatePinner {
+        return certificatePinnersProvider.provideCertificatePinner(
+            domain = BuildConfig.BASE_DOMAIN,
+            publicKey = secretKeysProvider.providePiningPublicKey(),
+        )
     }
 
     @Provides
     @Singleton
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl(BuildConfig.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(ErrorHandlingCallAdapterFactory.create())
-            .client(okHttpClient)
-            .build()
+    fun provideOkHttpClient(okHttpClientsProvider: OkHttpClientsProvider): OkHttpClient {
+        return okHttpClientsProvider.provideOkHttpClient(BuildConfig.DEBUG)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRetrofit(retrofitsProvider: RetrofitsProvider): Retrofit {
+        return retrofitsProvider.provideRetrofit(BuildConfig.BASE_URL)
     }
 
     @Provides
