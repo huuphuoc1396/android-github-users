@@ -106,7 +106,8 @@ dependencies {
 
     implementation(libs.timber)
 
-    testImplementation(libs.junit)
+    debugImplementation(libs.leakcanary.android)
+
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
     testImplementation(libs.kotest)
