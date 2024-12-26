@@ -6,6 +6,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navDeepLink
+import com.tyme.github.users.deeplink.DeepLinks
 import com.tyme.github.users.ui.features.userdetails.UserDetailsScreen
 import com.tyme.github.users.ui.features.userdetails.models.UserDetailsDestination
 import com.tyme.github.users.ui.features.users.UserListScreen
@@ -22,11 +24,19 @@ internal fun MainNavHost(
         modifier = modifier,
     ) {
 
-        composable<UserListDestination> {
+        composable<UserListDestination>(
+            deepLinks = listOf(
+                navDeepLink<UserListDestination>(DeepLinks.USER_LIST_PATH),
+            ),
+        ) {
             UserListScreen(navController = navController)
         }
 
-        composable<UserDetailsDestination> {
+        composable<UserDetailsDestination>(
+            deepLinks = listOf(
+                navDeepLink<UserDetailsDestination>(DeepLinks.USER_DETAILS_PATH),
+            ),
+        ) {
             UserDetailsScreen(navController = navController)
         }
     }
