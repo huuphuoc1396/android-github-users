@@ -19,6 +19,10 @@ internal class UserListViewModel @Inject constructor(
     val userPaging = getUserPagingUseCase()
         .cachedIn(viewModelScope)
 
+    override fun setLoading(isLoading: Boolean) {
+        if (!uiState.isRefreshing) super.setLoading(isLoading)
+    }
+
     fun setRefreshing(isRefreshing: Boolean) {
         updateUiState { copy(isRefreshing = isRefreshing) }
     }

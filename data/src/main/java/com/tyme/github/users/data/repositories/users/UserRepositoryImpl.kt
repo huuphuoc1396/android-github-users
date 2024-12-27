@@ -5,11 +5,12 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
+import com.android.template.data.storages.datastore.preferences.PreferencesDataStore
 import com.tyme.github.users.data.remote.services.UserService
 import com.tyme.github.users.data.repositories.users.mappers.toUserDetailsModel
 import com.tyme.github.users.data.repositories.users.mappers.toUserModel
 import com.tyme.github.users.data.repositories.users.paging.UserRemoteMediator
-import com.tyme.github.users.data.storages.databases.UserDatabase
+import com.tyme.github.users.data.storages.databases.daos.UserDao
 import com.tyme.github.users.domain.models.users.UserDetailsModel
 import com.tyme.github.users.domain.models.users.UserModel
 import com.tyme.github.users.domain.repositories.UserRepository
@@ -21,7 +22,8 @@ import javax.inject.Inject
 @OptIn(ExperimentalPagingApi::class)
 internal class UserRepositoryImpl @Inject constructor(
     private val userService: UserService,
-    private val userDatabase: UserDatabase,
+    private val userDao: UserDao,
+    private val preferencesDataStore: PreferencesDataStore,
 ) : UserRepository {
 
     override fun getUserPaging(): Flow<PagingData<UserModel>> {
@@ -34,10 +36,11 @@ internal class UserRepositoryImpl @Inject constructor(
             ),
             remoteMediator = UserRemoteMediator(
                 userService = userService,
-                userDatabase = userDatabase,
+                userDao = userDao,
+                preferencesDataStore = preferencesDataStore,
             ),
             pagingSourceFactory = {
-                userDatabase.userDao().getPagingSource()
+                userDao.getPagingSource()
             },
         )
             .flow

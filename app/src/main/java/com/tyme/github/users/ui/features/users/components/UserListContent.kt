@@ -25,9 +25,10 @@ internal fun UserListContent(
     pagingItems: LazyPagingItems<UserModel>,
     modifier: Modifier = Modifier,
     isRefreshing: Boolean = false,
+    onRefresh: () -> Unit = {},
+    onRetryClick: () -> Unit = {},
     onUserClick: (UserModel) -> Unit = {},
     onUrlClick: (String) -> Unit = {},
-    onRefresh: () -> Unit = {},
 ) {
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -45,6 +46,7 @@ internal fun UserListContent(
             UserList(
                 pagingItems = pagingItems,
                 modifier = Modifier.fillMaxSize(),
+                onRetryClick = onRetryClick,
                 onUserClick = onUserClick,
                 onUrlClick = onUrlClick,
             )

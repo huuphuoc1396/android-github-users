@@ -25,7 +25,12 @@ internal fun UserListScreen(
             val error = (pagingItems.loadState.refresh as LoadState.Error).error
             viewModel.showError(error)
         }
-        viewModel.setRefreshing(pagingItems.loadState.refresh is LoadState.Loading)
+        if (pagingItems.loadState.refresh is LoadState.Loading) {
+            viewModel.setLoading(true)
+        } else {
+            viewModel.setLoading(false)
+            viewModel.setRefreshing(false)
+        }
     }
 
     UiStateScreen(
@@ -34,9 +39,13 @@ internal fun UserListScreen(
         UserListContent(
             pagingItems = pagingItems,
             isRefreshing = uiState.isRefreshing,
+            onRefresh = {
+                pagingItems.refresh()
+                viewModel.setRefreshing(true)
+            },
+            onRetryClick = { pagingItems.retry() },
             onUserClick = { user -> navController.navigate(user.toUserDetailsDestination()) },
             onUrlClick = { url -> context.openBrowser(url) },
-            onRefresh = { pagingItems.refresh() },
         )
     }
 }
