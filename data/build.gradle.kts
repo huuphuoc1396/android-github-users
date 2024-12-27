@@ -106,4 +106,8 @@ dependencies {
     testImplementation(libs.kotest)
     testImplementation(libs.turbine)
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.androidx.test.core.ktx)
+    testImplementation(libs.androidx.paging.testing)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.okhttp3.mockwebserver)
 }

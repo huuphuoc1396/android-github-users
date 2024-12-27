@@ -10,7 +10,6 @@ import com.tyme.github.users.data.repositories.users.mappers.toUserDetailsModel
 import com.tyme.github.users.data.repositories.users.mappers.toUserModel
 import com.tyme.github.users.data.repositories.users.paging.UserRemoteMediator
 import com.tyme.github.users.data.storages.databases.daos.UserDao
-import com.tyme.github.users.data.storages.datastores.PreferencesDataStore
 import com.tyme.github.users.domain.models.users.UserDetailsModel
 import com.tyme.github.users.domain.models.users.UserModel
 import com.tyme.github.users.domain.repositories.UserRepository
@@ -21,9 +20,9 @@ import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
 internal class UserRepositoryImpl @Inject constructor(
-    private val userService: UserService,
+    private val remoteMediator: UserRemoteMediator,
     private val userDao: UserDao,
-    private val preferencesDataStore: PreferencesDataStore,
+    private val userService: UserService,
 ) : UserRepository {
 
     override fun getUserPaging(): Flow<PagingData<UserModel>> {
@@ -34,14 +33,8 @@ internal class UserRepositoryImpl @Inject constructor(
                 prefetchDistance = PAGE_SIZE / 2,
                 initialLoadSize = PAGE_SIZE,
             ),
-            remoteMediator = UserRemoteMediator(
-                userService = userService,
-                userDao = userDao,
-                preferencesDataStore = preferencesDataStore,
-            ),
-            pagingSourceFactory = {
-                userDao.getPagingSource()
-            },
+            remoteMediator = remoteMediator,
+            pagingSourceFactory = { userDao.getPagingSource() },
         )
             .flow
             .map { pagingData -> pagingData.map { entity -> entity.toUserModel() } }
