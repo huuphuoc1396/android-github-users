@@ -13,6 +13,7 @@ import java.nio.charset.StandardCharsets
 @Database(
     entities = [UserEntity::class],
     version = 1,
+    exportSchema = true,
 )
 internal abstract class UserDatabase : RoomDatabase() {
 

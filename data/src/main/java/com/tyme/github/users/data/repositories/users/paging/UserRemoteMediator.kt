@@ -4,17 +4,21 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
-import androidx.room.withTransaction
+import com.android.template.data.storages.datastore.preferences.PreferencesDataStore
 import com.tyme.github.users.data.remote.services.UserService
 import com.tyme.github.users.data.repositories.users.mappers.toUserEntity
-import com.tyme.github.users.data.storages.databases.UserDatabase
+import com.tyme.github.users.data.storages.databases.daos.UserDao
 import com.tyme.github.users.data.storages.databases.entities.UserEntity
+import com.tyme.github.users.domain.extensions.orZero
+import kotlinx.coroutines.flow.firstOrNull
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
 internal class UserRemoteMediator @Inject constructor(
     private val userService: UserService,
-    private val userDatabase: UserDatabase,
+    private val userDao: UserDao,
+    private val preferencesDataStore: PreferencesDataStore,
 ) : RemoteMediator<Int, UserEntity>() {
 
     override suspend fun load(
@@ -23,7 +27,10 @@ internal class UserRemoteMediator @Inject constructor(
     ): MediatorResult {
         try {
             val since = when (loadType) {
-                LoadType.REFRESH -> INITIAL_SINCE
+                LoadType.REFRESH -> {
+                    INITIAL_SINCE
+                }
+
                 LoadType.PREPEND -> {
                     return MediatorResult.Success(endOfPaginationReached = true)
                 }
@@ -37,13 +44,14 @@ internal class UserRemoteMediator @Inject constructor(
                 perPage = state.config.pageSize,
                 since = since,
             )
+            val isRefresh = loadType == LoadType.REFRESH
             val entities = responses.map { response -> response.toUserEntity() }
-            val userDao = userDatabase.userDao()
-            userDatabase.withTransaction {
-                if (loadType == LoadType.REFRESH) {
-                    userDao.deleteAll()
-                }
-                userDao.upsertAll(entities)
+            userDao.upsertAndDeleteAll(
+                needToDelete = isRefresh,
+                entities = entities,
+            )
+            if (isRefresh) {
+                preferencesDataStore.setLastUpdatedUserList(System.currentTimeMillis())
             }
             return MediatorResult.Success(
                 endOfPaginationReached = responses.size < state.config.pageSize
@@ -53,7 +61,19 @@ internal class UserRemoteMediator @Inject constructor(
         }
     }
 
+    override suspend fun initialize(): InitializeAction {
+        val currentTimeMillis = System.currentTimeMillis()
+        val lastUpdated = preferencesDataStore.getLastUpdatedUserList().firstOrNull().orZero()
+        return if (currentTimeMillis - lastUpdated <= CACHE_TIMEOUT) {
+            InitializeAction.SKIP_INITIAL_REFRESH
+        } else {
+            InitializeAction.LAUNCH_INITIAL_REFRESH
+        }
+    }
+
     companion object {
+        private val CACHE_TIMEOUT = TimeUnit.MILLISECONDS.convert(1, TimeUnit.HOURS)
+
         private const val INITIAL_SINCE = 0
     }
 }

@@ -27,4 +27,9 @@ internal class DatabasesModule {
             secretKeysProvider = secretKeysProvider,
         ).create()
     }
+
+
+    @Provides
+    @Singleton
+    fun provideUserDao(userDatabase: UserDatabase) = userDatabase.userDao()
 }

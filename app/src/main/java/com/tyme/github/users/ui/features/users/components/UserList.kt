@@ -28,6 +28,7 @@ import kotlinx.coroutines.flow.flowOf
 @Composable
 internal fun UserList(
     pagingItems: LazyPagingItems<UserModel>,
+    onRetryClick: () -> Unit = {},
     onUserClick: (UserModel) -> Unit = {},
     onUrlClick: (String) -> Unit = {},
     modifier: Modifier = Modifier,
@@ -52,7 +53,7 @@ internal fun UserList(
         when (pagingItems.loadState.append) {
             is LoadState.Error -> item {
                 Button(
-                    onClick = { pagingItems.retry() },
+                    onClick = onRetryClick,
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentWidth(Alignment.CenterHorizontally)
