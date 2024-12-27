@@ -1,4 +1,4 @@
-package com.tyme.github.users.utils
+package com.tyme.github.users.ui.utils
 
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.DefaultAlpha

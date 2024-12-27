@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.kotlin.seriazation)
     alias(libs.plugins.kotlin.compose.compiler)
+    alias(libs.plugins.kotlinx.kover)
 }
 
 android {
@@ -73,7 +74,42 @@ android {
     }
 }
 
+koverReport {
+    filters {
+        excludes {
+            classes(
+                "*.*BuildConfig*",
+                "*.*Module*",
+                "*.*Factory*",
+                "*.*CallAdapter*",
+                "*.*Hilt*",
+                "*.*ComposableSingletons*",
+                "*.*Destination*",
+                "*.*Provider*",
+            )
+            packages(
+                "hilt_aggregated_deps",
+                "dagger.hilt.internal.aggregatedroot.codegen",
+                "com.tyme.github.users.*.di.*",
+                "com.tyme.github.users.extenstions",
+                "com.tyme.github.users.ui.theme",
+                "com.tyme.github.users.ui.uistate",
+                "com.tyme.github.users.ui.utils",
+            )
+            annotatedBy(
+                "dagger.hilt.android.HiltAndroidApp",
+                "dagger.hilt.android.AndroidEntryPoint",
+                "androidx.compose.runtime.Composable",
+                "androidx.compose.ui.tooling.preview.Preview",
+            )
+        }
+    }
+}
+
 dependencies {
+    kover(project(":domain"))
+    kover(project(":data"))
+
     implementation(project(":data"))
     implementation(project(":domain"))
 

@@ -5,12 +5,12 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.android.template.data.storages.datastore.preferences.PreferencesDataStore
 import com.tyme.github.users.data.remote.services.UserService
 import com.tyme.github.users.data.repositories.users.mappers.toUserDetailsModel
 import com.tyme.github.users.data.repositories.users.mappers.toUserModel
 import com.tyme.github.users.data.repositories.users.paging.UserRemoteMediator
 import com.tyme.github.users.data.storages.databases.daos.UserDao
+import com.tyme.github.users.data.storages.datastores.PreferencesDataStore
 import com.tyme.github.users.domain.models.users.UserDetailsModel
 import com.tyme.github.users.domain.models.users.UserModel
 import com.tyme.github.users.domain.repositories.UserRepository
