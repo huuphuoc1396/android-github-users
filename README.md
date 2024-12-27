@@ -48,8 +48,6 @@ Welcome to the GitHub Users application. This app allows an administrator to bro
 <img src="https://github.com/user-attachments/assets/b1b10451-4827-4ffa-b11f-5af85e4c7124" width=364>
 <img src="https://github.com/user-attachments/assets/0dbc8966-ba28-44c8-9f9c-e7309edb759e" width=364>
 
-
-
 ### Deep Links
 
 Supports deep links:
@@ -116,7 +114,7 @@ Simplifies asynchronous programming and stream handling using Kotlin [Coroutines
 
 ### Unit Testing
 
-Utilizing [JUnit](https://junit.org/junit4/), [MockK](https://mockk.io/), [Turbine](https://github.com/cashapp/turbine), and [Kotest](https://kotest.io/) to support Unit Testing. The test cases will cover:
+Utilizing [JUnit](https://junit.org/junit4/), [Robolectric](https://robolectric.org/), [MockK](https://mockk.io/), [Turbine](https://github.com/cashapp/turbine), and [Kotest](https://kotest.io/) to support Unit Testing. The test cases will cover:
 - `app`: All ViewModels, Mappers, and utility methods
 - `domain`: All UseCases and utility methods 
 - `data`: All Repositories and Mappers.
@@ -125,6 +123,8 @@ Utilizing [JUnit](https://junit.org/junit4/), [MockK](https://mockk.io/), [Turbi
   ```bash
   ./gradlew app:koverHtmlReportDevDebug
   ```
+
+<img src="https://github.com/user-attachments/assets/fccd0491-eb5c-4f5f-9c13-bfd31646d5d9" width=720>
 
 ### Security
 
