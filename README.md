@@ -43,7 +43,7 @@ Welcome to the GitHub Users application. This app allows an administrator to bro
 
 ### Adaptive Layouts
 
-- Supports adaptive layouts for both the User List and User Details.
+- Supports [adaptive layouts](https://developer.android.com/develop/ui/compose/layouts/adaptive) for both the User List and User Details.
 
 <img src="https://github.com/user-attachments/assets/b1b10451-4827-4ffa-b11f-5af85e4c7124" width=364>
 <img src="https://github.com/user-attachments/assets/0dbc8966-ba28-44c8-9f9c-e7309edb759e" width=364>

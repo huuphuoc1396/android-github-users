@@ -36,8 +36,9 @@ internal fun UserDetailsContent(
     onBackClick: () -> Unit = {},
     onBlogClick: (String) -> Unit = {},
 ) {
-    val isHeightCompact =
-        remember { windowSizeClass.windowHeightSizeClass == WindowHeightSizeClass.COMPACT }
+    val isHeightCompact = remember {
+        windowSizeClass.windowHeightSizeClass == WindowHeightSizeClass.COMPACT
+    }
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
