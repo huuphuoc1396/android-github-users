@@ -41,6 +41,15 @@ Welcome to the GitHub Users application. This app allows an administrator to bro
 <img src="https://github.com/user-attachments/assets/1a83be53-7128-4f9e-8187-1b82699d3d8b" width=164>
 <img src="https://github.com/user-attachments/assets/5ea014b1-9cb3-4882-8012-9d8cdc73be84" width=164>
 
+### Adaptive Layouts
+
+- Supports adaptive layouts for both the User List and User Details.
+
+<img src="https://github.com/user-attachments/assets/b1b10451-4827-4ffa-b11f-5af85e4c7124" width=364>
+<img src="https://github.com/user-attachments/assets/0dbc8966-ba28-44c8-9f9c-e7309edb759e" width=364>
+
+
+
 ### Deep Links
 
 Supports deep links:
