@@ -83,6 +83,8 @@ koverReport {
                 "*.*Factory*",
                 "*.*CallAdapter*",
                 "*.*Hilt*",
+                "*.*Dao_Impl*",
+                "*.*Database*",
                 "*.*ComposableSingletons*",
                 "*.*Destination*",
                 "*.*Provider*",
@@ -144,17 +146,18 @@ dependencies {
 
     implementation(libs.timber)
 
-    debugImplementation(libs.leakcanary.android)
-
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
     testImplementation(libs.kotest)
     testImplementation(libs.turbine)
     testImplementation(libs.kotlinx.coroutines.test)
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+
+    debugImplementation(libs.leakcanary.android)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }

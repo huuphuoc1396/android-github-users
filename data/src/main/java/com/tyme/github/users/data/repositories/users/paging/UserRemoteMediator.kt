@@ -16,9 +16,9 @@ import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
 internal class UserRemoteMediator @Inject constructor(
-    private val userService: UserService,
-    private val userDao: UserDao,
     private val preferencesDataStore: PreferencesDataStore,
+    private val userDao: UserDao,
+    private val userService: UserService,
 ) : RemoteMediator<Int, UserEntity>() {
 
     override suspend fun load(
