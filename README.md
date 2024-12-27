@@ -121,6 +121,11 @@ Utilizing [JUnit](https://junit.org/junit4/), [MockK](https://mockk.io/), [Turbi
 - `domain`: All UseCases and utility methods 
 - `data`: All Repositories and Mappers.
 
+[Kover](https://github.com/Kotlin/kotlinx-kover) has been used to collect test coverage for Kotlin. Run the command below to generate the Kover HTML report:
+  ```bash
+  ./gradlew app:koverHtmlReportDevDebug
+  ```
+
 ### Security
 
 - Network: SSL Pinning has been enabled to enhance the security of services or sites that utilize SSL Certificates. By using the pinned public key, this approach prevents websites from rotating their certificates, thereby minimizing the risk of rendering the app unusable.

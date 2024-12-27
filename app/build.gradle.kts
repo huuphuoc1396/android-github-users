@@ -82,7 +82,7 @@ koverReport {
                 "*.*Module*",
                 "*.*Factory*",
                 "*.*CallAdapter*",
-                "*.*Hilt_*",
+                "*.*Hilt*",
                 "*.*ComposableSingletons*",
                 "*.*Destination*",
                 "*.*Provider*",
@@ -90,7 +90,6 @@ koverReport {
             packages(
                 "hilt_aggregated_deps",
                 "dagger.hilt.internal.aggregatedroot.codegen",
-                "com.tyme.github.users.*.BuildConfig",
                 "com.tyme.github.users.*.di.*",
                 "com.tyme.github.users.extenstions",
                 "com.tyme.github.users.ui.theme",
