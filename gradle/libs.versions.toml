@@ -4,6 +4,7 @@ minSdk = "28"
 targetSdk = "35"
 agp = "8.6.1"
 kotlin = "2.0.20"
+kover = "0.7.6"
 
 kotlinCoroutines = "1.9.0"
 kotlinSerialization = "1.7.2"
@@ -111,3 +112,4 @@ hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 kotlin-seriazation = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlin-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlinx-kover = { id = "org.jetbrains.kotlinx.kover", version.ref= "kover" }

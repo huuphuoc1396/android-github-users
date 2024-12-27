@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.tyme.github.users.R
 import com.tyme.github.users.ui.theme.Theme
-import com.tyme.github.users.utils.forwardingPainter
+import com.tyme.github.users.ui.utils.forwardingPainter
 
 @Composable
 internal fun UserAvatar(

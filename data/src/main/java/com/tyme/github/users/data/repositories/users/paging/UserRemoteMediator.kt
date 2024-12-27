@@ -4,11 +4,11 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
-import com.android.template.data.storages.datastore.preferences.PreferencesDataStore
 import com.tyme.github.users.data.remote.services.UserService
 import com.tyme.github.users.data.repositories.users.mappers.toUserEntity
 import com.tyme.github.users.data.storages.databases.daos.UserDao
 import com.tyme.github.users.data.storages.databases.entities.UserEntity
+import com.tyme.github.users.data.storages.datastores.PreferencesDataStore
 import com.tyme.github.users.domain.extensions.orZero
 import kotlinx.coroutines.flow.firstOrNull
 import java.util.concurrent.TimeUnit

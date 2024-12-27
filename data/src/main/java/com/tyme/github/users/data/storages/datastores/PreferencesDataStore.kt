@@ -1,4 +1,4 @@
-package com.android.template.data.storages.datastore.preferences
+package com.tyme.github.users.data.storages.datastores
 
 import android.content.Context
 import androidx.datastore.preferences.core.edit

@@ -56,4 +56,40 @@ internal class UserListViewModelTest : ViewModelTest() {
         // Then
         userListViewModel.uiState.isRefreshing shouldBe true
     }
+
+    @Test
+    fun `setLoading doesn't call super when isRefreshing is true`() = runTest {
+        // Given
+        every { getUserPagingUseCase() } returns flowOf(PagingData.empty())
+        userListViewModel = UserListViewModel(
+            getUserPagingUseCase = getUserPagingUseCase,
+        )
+
+        // When
+        userListViewModel.setRefreshing(true)
+        userListViewModel.setLoading(true)
+
+        advanceUntilIdle()
+
+        // Then
+        userListViewModel.isLoading.value shouldBe false
+    }
+
+    @Test
+    fun `setLoading calls super when isRefreshing is false`() = runTest {
+        // Given
+        every { getUserPagingUseCase() } returns flowOf(PagingData.empty())
+        userListViewModel = UserListViewModel(
+            getUserPagingUseCase = getUserPagingUseCase,
+        )
+
+        // When
+        userListViewModel.setRefreshing(false)
+        userListViewModel.setLoading(true)
+
+        advanceUntilIdle()
+
+        // Then
+        userListViewModel.isLoading.value shouldBe true
+    }
 }

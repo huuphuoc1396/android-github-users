@@ -1,7 +1,7 @@
 package com.tyme.github.users.data.di.modules
 
-import com.android.template.data.storages.datastore.preferences.PreferencesDataStore
-import com.android.template.data.storages.datastore.preferences.PreferencesDataStoreImpl
+import com.tyme.github.users.data.storages.datastores.PreferencesDataStore
+import com.tyme.github.users.data.storages.datastores.PreferencesDataStoreImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
