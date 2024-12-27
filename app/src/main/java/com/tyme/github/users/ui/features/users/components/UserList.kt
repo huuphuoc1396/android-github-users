@@ -4,11 +4,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -19,6 +22,8 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
+import androidx.window.core.layout.WindowSizeClass
+import androidx.window.core.layout.WindowWidthSizeClass
 import com.tyme.github.users.R
 import com.tyme.github.users.domain.models.users.UserModel
 import com.tyme.github.users.ui.theme.Theme
@@ -28,14 +33,25 @@ import kotlinx.coroutines.flow.flowOf
 @Composable
 internal fun UserList(
     pagingItems: LazyPagingItems<UserModel>,
+    modifier: Modifier = Modifier,
+    windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass,
     onRetryClick: () -> Unit = {},
     onUserClick: (UserModel) -> Unit = {},
     onUrlClick: (String) -> Unit = {},
-    modifier: Modifier = Modifier,
 ) {
-    LazyColumn(
+    val arrangement = Arrangement.spacedBy(12.dp)
+    val gridCells = remember {
+        if (windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.COMPACT) {
+            GridCells.Fixed(1)
+        } else {
+            GridCells.Fixed(2)
+        }
+    }
+    LazyVerticalGrid(
+        columns = gridCells,
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = arrangement,
+        horizontalArrangement = arrangement,
         contentPadding = PaddingValues(16.dp),
     ) {
         items(
