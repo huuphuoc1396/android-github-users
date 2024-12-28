@@ -132,6 +132,7 @@ Utilizing [JUnit](https://junit.org/junit4/), [Robolectric](https://robolectric.
 - Database: [SQLCipher](https://github.com/sqlcipher/sqlcipher-android) is employed to secure the local database. It is disabled in the development environment to facilitate app inspection, while it is enabled in both the staging and production environments to test functionality.
 - [DataStore](https://developer.android.com/topic/libraries/architecture/datastore): [Encrypted DataStore](https://github.com/osipxd/encrypted-datastore) to secure the sensitive data stored such as the access token, user ID, signature, etc.
 - [R8](https://developer.android.com/build/shrink-code): Shrinking, obfuscation, and optimization have been enabled in the release build to improve code efficiency and security.
+- [CMake](https://developer.android.com/ndk/guides/cmake): Using C++ to hide sensitive keys is more secure than Java or Kotlin, which are easier to decompile compared to native C/C++ code.
 
 ### Others
 
@@ -150,6 +151,7 @@ Utilizing [JUnit](https://junit.org/junit4/), [Robolectric](https://robolectric.
 - JDK 11+
 - Android Gradle Plugin 8.6.1+
 - Kotlin 2.0.0+
+- [NDK and CMake](https://developer.android.com/studio/projects/install-ndk#default-version)
 
 ### Installation
 
