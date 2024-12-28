@@ -17,6 +17,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.tyme.github.users.R
 import com.tyme.github.users.domain.models.users.UserModel
 import com.tyme.github.users.ui.theme.Theme
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.flowOf
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,9 +58,16 @@ internal fun UserListContent(
 @Preview
 @Composable
 private fun UserListContentPreview() {
+    val userList = MutableList(10) { index ->
+        UserModel(
+            id = index,
+            username = "user$index",
+            url = "https://www.github.com/user$index",
+        )
+    }
     Theme {
         UserListContent(
-            pagingItems = flowOf(PagingData.empty<UserModel>()).collectAsLazyPagingItems(),
+            pagingItems = flowOf(PagingData.from(userList)).collectAsLazyPagingItems(),
         )
     }
 }
