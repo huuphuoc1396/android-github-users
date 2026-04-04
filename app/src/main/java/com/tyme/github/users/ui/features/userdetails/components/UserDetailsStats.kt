@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.tyme.github.users.R
-import com.tyme.github.users.ui.theme.Theme
+import com.tyme.github.users.core.ui.theme.Theme
 
 @Composable
 internal fun UserDetailsStats(

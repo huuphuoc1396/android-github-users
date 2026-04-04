@@ -16,7 +16,7 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.tyme.github.users.R
 import com.tyme.github.users.domain.models.users.UserModel
-import com.tyme.github.users.ui.theme.Theme
+import com.tyme.github.users.core.ui.theme.Theme
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.flowOf
 

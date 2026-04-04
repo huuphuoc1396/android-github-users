@@ -16,9 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tyme.github.users.domain.models.users.UserModel
-import com.tyme.github.users.ui.components.LinkText
-import com.tyme.github.users.ui.features.components.UserAvatar
-import com.tyme.github.users.ui.theme.Theme
+import com.tyme.github.users.core.ui.components.LinkText
+import com.tyme.github.users.core.ui.components.UserAvatar
+import com.tyme.github.users.core.ui.theme.Theme
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
