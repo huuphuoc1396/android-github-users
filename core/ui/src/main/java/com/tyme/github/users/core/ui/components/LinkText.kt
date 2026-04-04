@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalFoundationApi::class)
+
 package com.tyme.github.users.core.ui.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -12,7 +14,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.tyme.github.users.core.ui.extensions.bouncingClickable
 import com.tyme.github.users.core.ui.theme.Theme
 
-@ExperimentalFoundationApi
 @Composable
 fun LinkText(
     url: String,

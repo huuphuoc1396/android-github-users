@@ -16,10 +16,13 @@ fun UserDetailsScreen(
     viewModel: UserDetailsViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val isFavorite by viewModel.isFavorite.collectAsStateWithLifecycle()
     UserDetailsContent(
         uiState = uiState,
+        isFavorite = isFavorite,
         onBackClick = onNavigateBack,
         onBlogClick = onUrlClick,
+        onFavoriteToggle = viewModel::onFavoriteToggle,
         onDismissError = viewModel::dismissError,
     )
 }
@@ -27,8 +30,10 @@ fun UserDetailsScreen(
 @Composable
 private fun UserDetailsContent(
     uiState: UserDetailUiState,
+    isFavorite: Boolean,
     onBackClick: () -> Unit,
     onBlogClick: (String) -> Unit,
+    onFavoriteToggle: () -> Unit,
     onDismissError: () -> Unit,
 ) {
     when (uiState) {
@@ -36,8 +41,10 @@ private fun UserDetailsContent(
         is UserDetailUiState.Loading -> Loading()
         is UserDetailUiState.Success -> UserDetailsScaffold(
             uiState = uiState,
+            isFavorite = isFavorite,
             onBackClick = onBackClick,
             onBlogClick = onBlogClick,
+            onFavoriteToggle = onFavoriteToggle,
         )
         is UserDetailUiState.Error -> ErrorDialog(
             message = uiState.message.ifEmpty { stringResource(uiState.messageRes) },

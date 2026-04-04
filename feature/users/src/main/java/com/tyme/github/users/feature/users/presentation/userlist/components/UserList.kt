@@ -25,17 +25,19 @@ import androidx.paging.compose.itemKey
 import androidx.window.core.layout.WindowSizeClass
 import androidx.window.core.layout.WindowWidthSizeClass
 import com.tyme.github.users.core.ui.theme.Theme
-import com.tyme.github.users.feature.users.domain.model.UserModel
 import com.tyme.github.users.feature.users.R
+import com.tyme.github.users.feature.users.domain.model.UserModel
 import kotlinx.coroutines.flow.flowOf
 
 @Composable
 internal fun UserList(
     pagingItems: LazyPagingItems<UserModel>,
+    favoriteUsernames: Set<String>,
     modifier: Modifier = Modifier,
     windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass,
     onRetryClick: () -> Unit = {},
     onUserClick: (UserModel) -> Unit = {},
+    onFavoriteClick: (UserModel) -> Unit = {},
     onUrlClick: (String) -> Unit = {},
 ) {
     val arrangement = Arrangement.spacedBy(12.dp)
@@ -59,8 +61,9 @@ internal fun UserList(
         ) { index ->
             val user = pagingItems[index] ?: return@items
             UserCard(
-                user = user,
+                user = user.copy(isFavorite = user.username in favoriteUsernames),
                 onUserClick = onUserClick,
+                onFavoriteClick = onFavoriteClick,
                 onUrlClick = onUrlClick,
             )
         }
@@ -102,6 +105,6 @@ private fun UserListPreview() {
             )
         }
         val userPagingItems = flowOf(PagingData.from(userList)).collectAsLazyPagingItems()
-        UserList(pagingItems = userPagingItems)
+        UserList(pagingItems = userPagingItems, favoriteUsernames = emptySet())
     }
 }

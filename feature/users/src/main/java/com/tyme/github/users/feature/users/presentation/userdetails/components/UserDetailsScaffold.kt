@@ -8,8 +8,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
@@ -31,10 +37,12 @@ import com.tyme.github.users.feature.users.presentation.userdetails.UserDetailUi
 @Composable
 internal fun UserDetailsScaffold(
     uiState: UserDetailUiState.Success,
+    isFavorite: Boolean,
     modifier: Modifier = Modifier,
     windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass,
     onBackClick: () -> Unit = {},
     onBlogClick: (String) -> Unit = {},
+    onFavoriteToggle: () -> Unit = {},
 ) {
     val isHeightCompact = remember {
         windowSizeClass.windowHeightSizeClass == WindowHeightSizeClass.COMPACT
@@ -45,6 +53,15 @@ internal fun UserDetailsScaffold(
             CenterAlignedTopAppBar(
                 title = { Text(text = stringResource(R.string.user_details_title)) },
                 navigationIcon = { BackButton(onClick = onBackClick) },
+                actions = {
+                    IconButton(onClick = onFavoriteToggle) {
+                        Icon(
+                            imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                            contentDescription = null,
+                            tint = if (isFavorite) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                },
             )
         },
     ) { paddingValues ->
@@ -113,6 +130,7 @@ private fun UserDetailsScaffoldPreview() {
                 following = "200+",
                 url = "https://tyme.com",
             ),
+            isFavorite = false,
         )
     }
 }
