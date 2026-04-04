@@ -111,15 +111,15 @@ koverReport {
 
 dependencies {
     kover(project(":domain"))
-    kover(project(":data"))
     kover(project(":core:ui"))
     kover(project(":core:network"))
     kover(project(":core:config"))
+    kover(project(":feature:users"))
 
     implementation(project(":core:ui"))
     implementation(project(":core:config"))
-    implementation(project(":data"))
     implementation(project(":domain"))
+    implementation(project(":feature:users"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
