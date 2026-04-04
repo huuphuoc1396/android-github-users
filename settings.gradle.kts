@@ -22,6 +22,7 @@ dependencyResolutionManagement {
 rootProject.name = "GitHub Users"
 include(":app")
 include(":core:ui")
+include(":core:navigation")
 include(":core:network")
 include(":core:security")
 include(":core:config")

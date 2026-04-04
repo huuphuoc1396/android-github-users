@@ -4,9 +4,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.tyme.github.users.feature.users.domain.usecase.GetUserDetailsUseCase
 import com.tyme.github.users.feature.users.data.mapper.toUserDetailUiState
+import com.tyme.github.users.feature.users.domain.usecase.GetUserDetailsUseCase
 import com.tyme.github.users.feature.users.navigation.UserDetailsDestination
+import com.tyme.github.users.feature.users.presentation.mappers.toUserDetailError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -34,7 +35,7 @@ class UserDetailsViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.value = UserDetailUiState.Loading
             getUserDetailsUseCase(destination.username)
-                .catch { e -> _uiState.value = UserDetailUiState.Error(e.message.orEmpty()) }
+                .catch { e -> _uiState.value = e.toUserDetailError() }
                 .collect { details -> _uiState.value = details.toUserDetailUiState() }
         }
     }

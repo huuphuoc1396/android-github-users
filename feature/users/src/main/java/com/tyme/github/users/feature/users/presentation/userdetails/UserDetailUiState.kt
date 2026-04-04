@@ -1,5 +1,7 @@
 package com.tyme.github.users.feature.users.presentation.userdetails
 
+import androidx.annotation.StringRes
+
 sealed interface UserDetailUiState {
     object Idle : UserDetailUiState
     object Loading : UserDetailUiState
@@ -11,5 +13,5 @@ sealed interface UserDetailUiState {
         val following: String,
         val url: String,
     ) : UserDetailUiState
-    data class Error(val message: String) : UserDetailUiState
+    data class Error(val message: String = "", @StringRes val messageRes: Int = 0) : UserDetailUiState
 }

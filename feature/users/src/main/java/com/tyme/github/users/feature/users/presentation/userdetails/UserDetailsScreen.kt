@@ -2,6 +2,7 @@ package com.tyme.github.users.feature.users.presentation.userdetails
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tyme.github.users.core.ui.components.ErrorDialog
@@ -39,7 +40,7 @@ private fun UserDetailsContent(
             onBlogClick = onBlogClick,
         )
         is UserDetailUiState.Error -> ErrorDialog(
-            message = uiState.message,
+            message = uiState.message.ifEmpty { stringResource(uiState.messageRes) },
             onDismiss = onDismissError,
         )
     }

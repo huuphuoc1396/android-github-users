@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.LoadState
 import androidx.paging.cachedIn
 import com.tyme.github.users.feature.users.domain.usecase.GetUserPagingUseCase
+import com.tyme.github.users.feature.users.presentation.mappers.toUserListError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,7 +28,7 @@ class UserListViewModel @Inject constructor(
             when (loadState) {
                 is LoadState.Loading -> current as? UserListUiState.Success ?: UserListUiState.Loading
                 is LoadState.NotLoading -> if (current is UserListUiState.Success) current.copy(isRefreshing = false) else UserListUiState.Success()
-                is LoadState.Error -> UserListUiState.Error(loadState.error.message ?: "An error occurred")
+                is LoadState.Error -> loadState.error.toUserListError()
             }
         }
     }
