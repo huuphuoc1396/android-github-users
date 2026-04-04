@@ -2,7 +2,7 @@ package com.tyme.github.users.data.di.modules
 
 import android.content.Context
 import com.tyme.github.users.data.BuildConfig
-import com.tyme.github.users.data.providers.SecretKeysProvider
+import com.tyme.github.users.core.security.providers.SecretKeysProvider
 import com.tyme.github.users.data.storages.databases.UserDatabase
 import dagger.Module
 import dagger.Provides

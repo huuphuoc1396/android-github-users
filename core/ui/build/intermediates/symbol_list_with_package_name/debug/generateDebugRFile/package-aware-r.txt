@@ -1,4 +1,0 @@
-com.tyme.github.users.core.ui
-drawable ic_placeholder
-string button_ok
-string error_title

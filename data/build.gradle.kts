@@ -36,20 +36,14 @@ android {
     flavorDimensions += "environment"
     productFlavors {
         create("dev") {
-            buildConfigField("String", "BASE_URL", "\"https://api.github.com\"")
-            buildConfigField("String", "BASE_DOMAIN", "\"api.github.com\"")
             buildConfigField("Boolean", "DB_ENCRYPTION_ENABLED", "false")
         }
 
         create("stag") {
-            buildConfigField("String", "BASE_URL", "\"https://api.github.com\"")
-            buildConfigField("String", "BASE_DOMAIN", "\"api.github.com\"")
             buildConfigField("Boolean", "DB_ENCRYPTION_ENABLED", "true")
         }
 
         create("prod") {
-            buildConfigField("String", "BASE_URL", "\"https://api.github.com\"")
-            buildConfigField("String", "BASE_DOMAIN", "\"api.github.com\"")
             buildConfigField("Boolean", "DB_ENCRYPTION_ENABLED", "true")
         }
     }
@@ -67,16 +61,11 @@ android {
         buildConfig = true
     }
 
-    externalNativeBuild {
-        cmake {
-            path = File("cpp/CMakeLists.txt")
-        }
-    }
 }
 
 dependencies {
     implementation(project(":domain"))
-    implementation(project(":core:network"))
+    implementation(project(":core:security"))
 
     implementation(libs.kotlinx.coroutines.android)
 
