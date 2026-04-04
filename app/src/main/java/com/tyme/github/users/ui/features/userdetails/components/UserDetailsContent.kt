@@ -23,9 +23,9 @@ import androidx.compose.ui.unit.dp
 import androidx.window.core.layout.WindowHeightSizeClass
 import androidx.window.core.layout.WindowSizeClass
 import com.tyme.github.users.R
-import com.tyme.github.users.ui.features.components.BackButton
+import com.tyme.github.users.core.ui.components.BackButton
 import com.tyme.github.users.ui.features.userdetails.models.UserDetailUiState
-import com.tyme.github.users.ui.theme.Theme
+import com.tyme.github.users.core.ui.theme.Theme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

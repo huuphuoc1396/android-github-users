@@ -94,9 +94,10 @@ koverReport {
                 "dagger.hilt.internal.aggregatedroot.codegen",
                 "com.tyme.github.users.*.di.*",
                 "com.tyme.github.users.extenstions",
-                "com.tyme.github.users.ui.theme",
                 "com.tyme.github.users.ui.uistate",
-                "com.tyme.github.users.ui.utils",
+                "com.tyme.github.users.core.ui.theme",
+                "com.tyme.github.users.core.ui.utils",
+                "com.tyme.github.users.core.ui.extensions",
             )
             annotatedBy(
                 "dagger.hilt.android.HiltAndroidApp",
@@ -111,7 +112,9 @@ koverReport {
 dependencies {
     kover(project(":domain"))
     kover(project(":data"))
+    kover(project(":core:ui"))
 
+    implementation(project(":core:ui"))
     implementation(project(":data"))
     implementation(project(":domain"))
 

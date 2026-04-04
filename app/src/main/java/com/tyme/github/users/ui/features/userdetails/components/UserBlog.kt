@@ -11,8 +11,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.tyme.github.users.R
-import com.tyme.github.users.ui.components.LinkText
-import com.tyme.github.users.ui.theme.Theme
+import com.tyme.github.users.core.ui.components.LinkText
+import com.tyme.github.users.core.ui.theme.Theme
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

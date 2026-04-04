@@ -11,9 +11,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
-import com.tyme.github.users.ui.components.ErrorDialog
-import com.tyme.github.users.ui.components.FadingVisibility
-import com.tyme.github.users.ui.components.Loading
+import com.tyme.github.users.core.ui.components.ErrorDialog
+import com.tyme.github.users.core.ui.components.FadingVisibility
+import com.tyme.github.users.core.ui.components.Loading
 import com.tyme.github.users.ui.uistate.mappers.toString
 import com.tyme.github.users.ui.uistate.viewmodel.UiStateViewModel
 
