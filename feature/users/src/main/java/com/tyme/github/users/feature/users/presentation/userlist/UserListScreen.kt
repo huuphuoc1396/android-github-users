@@ -3,6 +3,7 @@ package com.tyme.github.users.feature.users.presentation.userlist
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.LazyPagingItems
@@ -61,7 +62,7 @@ private fun UserListContent(
             onUrlClick = onUrlClick,
         )
         is UserListUiState.Error -> ErrorDialog(
-            message = uiState.message,
+            message = uiState.message.ifEmpty { stringResource(uiState.messageRes) },
             onDismiss = onDismissError,
         )
     }
