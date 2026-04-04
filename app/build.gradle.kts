@@ -113,8 +113,11 @@ dependencies {
     kover(project(":domain"))
     kover(project(":data"))
     kover(project(":core:ui"))
+    kover(project(":core:network"))
+    kover(project(":core:config"))
 
     implementation(project(":core:ui"))
+    implementation(project(":core:config"))
     implementation(project(":data"))
     implementation(project(":domain"))
 
