@@ -76,6 +76,7 @@ android {
 
 dependencies {
     implementation(project(":domain"))
+    implementation(project(":core:network"))
 
     implementation(libs.kotlinx.coroutines.android)
 
@@ -92,14 +93,10 @@ dependencies {
     implementation(libs.androidx.paging.runtime.ktx)
 
     implementation(libs.retrofit)
-    implementation(libs.retrofit.converter.gson)
-    implementation(libs.okhttp3.logging)
     implementation(libs.gson)
 
     implementation(libs.security.crypto.datastore)
     implementation(libs.security.crypto.datastore.preferences)
-
-    implementation(libs.timber)
 
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
@@ -109,5 +106,4 @@ dependencies {
     testImplementation(libs.androidx.test.core.ktx)
     testImplementation(libs.androidx.paging.testing)
     testImplementation(libs.robolectric)
-    testImplementation(libs.okhttp3.mockwebserver)
 }
