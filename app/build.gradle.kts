@@ -112,11 +112,13 @@ koverReport {
 dependencies {
     kover(project(":domain"))
     kover(project(":core:ui"))
+    kover(project(":core:navigation"))
     kover(project(":core:network"))
     kover(project(":core:config"))
     kover(project(":feature:users"))
 
     implementation(project(":core:ui"))
+    implementation(project(":core:navigation"))
     implementation(project(":core:config"))
     implementation(project(":domain"))
     implementation(project(":feature:users"))
