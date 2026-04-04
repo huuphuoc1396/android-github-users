@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.tyme.github.users.data.providers.SecretKeysProvider
+import com.tyme.github.users.core.security.providers.SecretKeysProvider
 import com.tyme.github.users.data.storages.databases.daos.UserDao
 import com.tyme.github.users.data.storages.databases.entities.UserEntity
 import net.zetetic.database.sqlcipher.SupportOpenHelperFactory

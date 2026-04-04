@@ -1,3 +1,0 @@
-int drawable ic_placeholder 0x0
-int string button_ok 0x0
-int string error_title 0x0
