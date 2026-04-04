@@ -11,7 +11,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.tyme.github.users.core.ui.components.ErrorDialog
 import com.tyme.github.users.core.ui.components.Loading
 import com.tyme.github.users.feature.users.domain.model.UserModel
-import com.tyme.github.users.feature.users.presentation.userlist.components.UserListScaffold
+import com.tyme.github.users.feature.users.presentation.userlist.components.UserList
 
 @Composable
 fun UserListScreen(
@@ -20,6 +20,7 @@ fun UserListScreen(
     viewModel: UserListViewModel = hiltViewModel<UserListViewModel>(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val favoriteUsernames by viewModel.favoriteUsernames.collectAsStateWithLifecycle()
     val pagingItems = viewModel.userPaging.collectAsLazyPagingItems()
 
     LaunchedEffect(pagingItems.loadState.refresh) {
@@ -29,12 +30,14 @@ fun UserListScreen(
     UserListContent(
         uiState = uiState,
         pagingItems = pagingItems,
+        favoriteUsernames = favoriteUsernames,
         onRefresh = {
             pagingItems.refresh()
             viewModel.onRefreshTriggered()
         },
         onRetryClick = { pagingItems.retry() },
         onUserClick = { user -> onNavigateToUser(user.username, user.avatarUrl, user.url) },
+        onFavoriteClick = viewModel::onFavoriteToggle,
         onUrlClick = onUrlClick,
         onDismissError = viewModel::dismissError,
     )
@@ -44,21 +47,25 @@ fun UserListScreen(
 private fun UserListContent(
     uiState: UserListUiState,
     pagingItems: LazyPagingItems<UserModel>,
+    favoriteUsernames: Set<String>,
     onRefresh: () -> Unit,
     onRetryClick: () -> Unit,
     onUserClick: (UserModel) -> Unit,
+    onFavoriteClick: (UserModel) -> Unit,
     onUrlClick: (String) -> Unit,
     onDismissError: () -> Unit,
 ) {
     when (uiState) {
         UserListUiState.Idle -> Unit
         UserListUiState.Loading -> Loading()
-        is UserListUiState.Success -> UserListScaffold(
+        is UserListUiState.Success -> UserList(
             pagingItems = pagingItems,
+            favoriteUsernames = favoriteUsernames,
             isRefreshing = uiState.isRefreshing,
             onRefresh = onRefresh,
             onRetryClick = onRetryClick,
             onUserClick = onUserClick,
+            onFavoriteClick = onFavoriteClick,
             onUrlClick = onUrlClick,
         )
         is UserListUiState.Error -> ErrorDialog(

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="favorites_title">Favorites</string>
+    <string name="favorites_empty_message">No favorites yet.\nTap the heart icon on any user to save them here.</string>
+</resources>

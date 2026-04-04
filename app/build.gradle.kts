@@ -116,12 +116,15 @@ dependencies {
     kover(project(":core:network"))
     kover(project(":core:config"))
     kover(project(":feature:users"))
+    kover(project(":feature:favorites:api"))
+    kover(project(":feature:favorites:impl"))
 
     implementation(project(":core:ui"))
     implementation(project(":core:navigation"))
     implementation(project(":core:config"))
     implementation(project(":domain"))
     implementation(project(":feature:users"))
+    implementation(project(":feature:favorites:impl"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
