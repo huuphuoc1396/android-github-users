@@ -1,6 +1,5 @@
 package com.tyme.github.users.core.network.adapters.errors
 
-import androidx.datastore.preferences.protobuf.Any
 import com.tyme.github.users.domain.models.errors.NoConnectionException
 import io.mockk.every
 import io.mockk.mockk
