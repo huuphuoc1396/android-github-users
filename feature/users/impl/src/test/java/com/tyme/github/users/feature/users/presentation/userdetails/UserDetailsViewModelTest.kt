@@ -11,6 +11,7 @@ import com.tyme.github.users.feature.users.api.repository.FavoriteRepository
 import com.tyme.github.users.feature.users.data.mapper.toUserDetailUiState
 import com.tyme.github.users.feature.users.domain.model.UserDetailsModel
 import com.tyme.github.users.feature.users.domain.usecase.GetUserDetailsUseCase
+import com.tyme.github.users.feature.users.domain.usecase.ObserveFavoriteUseCase
 import com.tyme.github.users.feature.users.navigation.UserDetailsDestination
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
@@ -42,6 +43,7 @@ internal class UserDetailsViewModelTest {
     private val testDispatcher = UnconfinedTestDispatcher()
     private val savedStateHandle: SavedStateHandle = mockk(relaxed = true)
     private val getUserDetailsUseCase: GetUserDetailsUseCase = mockk()
+    private val observeFavoriteUseCase: ObserveFavoriteUseCase = mockk()
     private val favoriteRepository: FavoriteRepository = mockk()
     private val navigator: AppNavigator = mockk()
     private val dispatchers: DispatchersProvider = mockk()
@@ -69,6 +71,7 @@ internal class UserDetailsViewModelTest {
         every { dispatchers.immediate } returns testDispatcher
         mockkStatic("androidx.navigation.SavedStateHandleKt")
         every { savedStateHandle.toRoute<UserDetailsDestination>() } returns destination
+        every { observeFavoriteUseCase(destination.username) } returns flowOf(false)
         every { favoriteRepository.isFavorite(destination.username) } returns flowOf(false)
         every { getUserDetailsUseCase(destination.username) } returns flowOf(userDetails)
     }
@@ -82,6 +85,7 @@ internal class UserDetailsViewModelTest {
     private fun createViewModel() = UserDetailsViewModel(
         savedStateHandle = savedStateHandle,
         getUserDetailsUseCase = getUserDetailsUseCase,
+        observeFavoriteUseCase = observeFavoriteUseCase,
         favoriteRepository = favoriteRepository,
         navigator = navigator,
         dispatchers = dispatchers,
@@ -123,7 +127,7 @@ internal class UserDetailsViewModelTest {
     @Test
     fun `onFavoriteClick when isFavorite shows remove confirm dialog`() = runTest {
         // Given
-        every { favoriteRepository.isFavorite(destination.username) } returns flowOf(true)
+        every { observeFavoriteUseCase(destination.username) } returns flowOf(true)
         val viewModel = createViewModel()
         backgroundScope.launch { viewModel.isFavorite.collect {} }
         advanceUntilIdle()
@@ -156,7 +160,7 @@ internal class UserDetailsViewModelTest {
     @Test
     fun `onConfirmRemoveFavorite calls removeFavorite and hides dialog`() = runTest {
         // Given
-        every { favoriteRepository.isFavorite(destination.username) } returns flowOf(true)
+        every { observeFavoriteUseCase(destination.username) } returns flowOf(true)
         coEvery { favoriteRepository.removeFavorite(destination.username) } just runs
         val viewModel = createViewModel()
         backgroundScope.launch { viewModel.isFavorite.collect {} }
@@ -174,7 +178,7 @@ internal class UserDetailsViewModelTest {
     @Test
     fun `onDismissRemoveFavorite hides dialog`() = runTest {
         // Given
-        every { favoriteRepository.isFavorite(destination.username) } returns flowOf(true)
+        every { observeFavoriteUseCase(destination.username) } returns flowOf(true)
         val viewModel = createViewModel()
         backgroundScope.launch { viewModel.isFavorite.collect {} }
         advanceUntilIdle()
@@ -216,7 +220,7 @@ internal class UserDetailsViewModelTest {
     @Test
     fun `isFavorite emits value from repository`() = runTest {
         // Given
-        every { favoriteRepository.isFavorite(destination.username) } returns flowOf(true)
+        every { observeFavoriteUseCase(destination.username) } returns flowOf(true)
 
         // When
         val viewModel = createViewModel()
