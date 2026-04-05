@@ -2,9 +2,12 @@ package com.tyme.github.users.feature.favorites.impl.presentation.favorites
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tyme.github.users.feature.users.api.model.UserModel
+import com.tyme.github.users.core.navigation.AppNavigator
+import com.tyme.github.users.core.navigation.NavigationIntent
 import com.tyme.github.users.feature.favorites.impl.domain.usecase.GetFavoritesUseCase
 import com.tyme.github.users.feature.favorites.impl.domain.usecase.RemoveFavoriteUseCase
+import com.tyme.github.users.feature.users.api.model.UserModel
+import com.tyme.github.users.feature.users.navigation.UserDetailsDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -18,6 +21,7 @@ import javax.inject.Inject
 class FavoritesViewModel @Inject constructor(
     getFavoritesUseCase: GetFavoritesUseCase,
     private val removeFavoriteUseCase: RemoveFavoriteUseCase,
+    private val navigator: AppNavigator,
 ) : ViewModel() {
 
     private val _pendingRemoval = MutableStateFlow<UserModel?>(null)
@@ -47,5 +51,19 @@ class FavoritesViewModel @Inject constructor(
 
     fun onDismissRemoveFavorite() {
         _pendingRemoval.value = null
+    }
+
+    fun onNavigateToUser(user: UserModel) {
+        viewModelScope.launch {
+            navigator.navigate(
+                NavigationIntent.NavigateTo(
+                    route = UserDetailsDestination(
+                        username = user.username,
+                        avatarUrl = user.avatarUrl,
+                        url = user.url,
+                    )
+                )
+            )
+        }
     }
 }

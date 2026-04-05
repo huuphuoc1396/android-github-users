@@ -4,6 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.tyme.github.users.core.navigation.AppNavigator
+import com.tyme.github.users.core.navigation.NavigationIntent
 import com.tyme.github.users.feature.users.api.model.UserModel
 import com.tyme.github.users.feature.users.api.repository.FavoriteRepository
 import com.tyme.github.users.feature.users.data.mapper.toUserDetailUiState
@@ -26,6 +28,7 @@ class UserDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getUserDetailsUseCase: GetUserDetailsUseCase,
     private val favoriteRepository: FavoriteRepository,
+    private val navigator: AppNavigator,
 ) : ViewModel() {
 
     private val destination: UserDetailsDestination = savedStateHandle.toRoute()
@@ -86,5 +89,9 @@ class UserDetailsViewModel @Inject constructor(
 
     fun dismissError() {
         _uiState.value = UserDetailUiState.Idle
+    }
+
+    fun onNavigateBack() {
+        viewModelScope.launch { navigator.navigate(NavigationIntent.NavigateUp) }
     }
 }

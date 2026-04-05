@@ -12,7 +12,6 @@ import com.tyme.github.users.feature.users.presentation.userdetails.components.U
 
 @Composable
 fun UserDetailsScreen(
-    onNavigateBack: () -> Unit,
     onUrlClick: (String) -> Unit,
     viewModel: UserDetailsViewModel = hiltViewModel(),
 ) {
@@ -21,7 +20,7 @@ fun UserDetailsScreen(
     UserDetailsContent(
         uiState = uiState,
         isFavorite = isFavorite,
-        onBackClick = onNavigateBack,
+        onBackClick = viewModel::onNavigateBack,
         onBlogClick = onUrlClick,
         onFavoriteToggle = viewModel::onFavoriteClick,
         onConfirmRemoveFavorite = viewModel::onConfirmRemoveFavorite,
