@@ -26,7 +26,6 @@ import com.tyme.github.users.feature.users.presentation.userlist.components.User
 
 @Composable
 fun UserListScreen(
-    onNavigateToUser: (username: String, avatarUrl: String, url: String) -> Unit,
     onUrlClick: (String) -> Unit,
     viewModel: UserListViewModel = hiltViewModel<UserListViewModel>(),
 ) {
@@ -47,7 +46,7 @@ fun UserListScreen(
             viewModel.onRefreshTriggered()
         },
         onRetryClick = { pagingItems.retry() },
-        onUserClick = { user -> onNavigateToUser(user.username, user.avatarUrl, user.url) },
+        onUserClick = viewModel::onNavigateToUser,
         onFavoriteClick = viewModel::onFavoriteClick,
         onConfirmRemoveFavorite = viewModel::onConfirmRemoveFavorite,
         onDismissRemoveFavorite = viewModel::onDismissRemoveFavorite,

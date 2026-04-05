@@ -36,14 +36,13 @@ import com.tyme.github.users.feature.favorites.impl.R
 
 @Composable
 fun FavoritesScreen(
-    onNavigateToUser: (username: String, avatarUrl: String, url: String) -> Unit,
     onUrlClick: (String) -> Unit,
     viewModel: FavoritesViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     FavoritesContent(
         uiState = uiState,
-        onUserClick = { user -> onNavigateToUser(user.username, user.avatarUrl, user.url) },
+        onUserClick = viewModel::onNavigateToUser,
         onRemoveFavoriteClick = viewModel::onRemoveFavoriteClick,
         onConfirmRemoveFavorite = viewModel::onConfirmRemoveFavorite,
         onDismissRemoveFavorite = viewModel::onDismissRemoveFavorite,

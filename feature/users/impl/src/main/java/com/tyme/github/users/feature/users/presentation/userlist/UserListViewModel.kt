@@ -4,9 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.LoadState
 import androidx.paging.cachedIn
+import com.tyme.github.users.core.navigation.AppNavigator
+import com.tyme.github.users.core.navigation.NavigationIntent
 import com.tyme.github.users.feature.users.api.model.UserModel
 import com.tyme.github.users.feature.users.api.repository.FavoriteRepository
 import com.tyme.github.users.feature.users.domain.usecase.GetUserPagingUseCase
+import com.tyme.github.users.feature.users.navigation.UserDetailsDestination
 import com.tyme.github.users.feature.users.presentation.mappers.toUserListError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,6 +26,7 @@ import javax.inject.Inject
 class UserListViewModel @Inject constructor(
     getUserPagingUseCase: GetUserPagingUseCase,
     private val favoriteRepository: FavoriteRepository,
+    private val navigator: AppNavigator,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<UserListUiState>(UserListUiState.Idle)
@@ -79,6 +83,20 @@ class UserListViewModel @Inject constructor(
     fun onDismissRemoveFavorite() {
         _uiState.update { current ->
             if (current is UserListUiState.Success) current.copy(pendingRemoval = null) else current
+        }
+    }
+
+    fun onNavigateToUser(user: UserModel) {
+        viewModelScope.launch {
+            navigator.navigate(
+                NavigationIntent.NavigateTo(
+                    route = UserDetailsDestination(
+                        username = user.username,
+                        avatarUrl = user.avatarUrl,
+                        url = user.url,
+                    )
+                )
+            )
         }
     }
 }

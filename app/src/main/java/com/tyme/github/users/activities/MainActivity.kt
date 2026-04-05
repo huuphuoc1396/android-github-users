@@ -1,4 +1,4 @@
-package com.tyme.github.users
+package com.tyme.github.users.activities
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.tyme.github.users.core.navigation.AppNavigator
 import com.tyme.github.users.core.ui.theme.Theme
+import com.tyme.github.users.navigation.AppNavHost
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -20,7 +21,7 @@ internal class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Theme {
-                MainNavHost(navigator = navigator)
+                AppNavHost(navigator = navigator)
             }
         }
     }
