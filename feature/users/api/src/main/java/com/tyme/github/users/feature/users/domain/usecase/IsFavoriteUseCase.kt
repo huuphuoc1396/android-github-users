@@ -4,7 +4,7 @@ import com.tyme.github.users.feature.users.api.repository.FavoriteRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class ObserveFavoriteUseCase @Inject constructor(
+class IsFavoriteUseCase @Inject constructor(
     private val favoriteRepository: FavoriteRepository,
 ) {
 

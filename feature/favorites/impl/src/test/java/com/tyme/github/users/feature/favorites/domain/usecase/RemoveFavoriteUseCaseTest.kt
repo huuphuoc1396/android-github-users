@@ -1,6 +1,7 @@
 package com.tyme.github.users.feature.favorites.domain.usecase
 
 import com.tyme.github.users.feature.users.api.repository.FavoriteRepository
+import com.tyme.github.users.feature.users.domain.usecase.RemoveFavoriteUseCase
 import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.mockk

@@ -4,10 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tyme.github.users.core.navigation.AppNavigator
 import com.tyme.github.users.core.navigation.NavigationIntent
-import com.tyme.github.users.domain.providers.DispatchersProvider
-import com.tyme.github.users.feature.favorites.domain.usecase.GetFavoritesUseCase
-import com.tyme.github.users.feature.favorites.domain.usecase.RemoveFavoriteUseCase
 import com.tyme.github.users.domain.models.UserModel
+import com.tyme.github.users.domain.providers.DispatchersProvider
+import com.tyme.github.users.feature.users.domain.usecase.GetFavoritesUseCase
+import com.tyme.github.users.feature.users.domain.usecase.RemoveFavoriteUseCase
 import com.tyme.github.users.feature.users.navigation.UserDetailsDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
