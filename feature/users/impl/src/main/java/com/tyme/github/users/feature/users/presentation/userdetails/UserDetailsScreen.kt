@@ -1,14 +1,31 @@
 package com.tyme.github.users.feature.users.presentation.userdetails
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.only
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.tyme.github.users.core.ui.components.BackButton
 import com.tyme.github.users.core.ui.components.ErrorDialog
 import com.tyme.github.users.core.ui.components.Loading
 import com.tyme.github.users.core.ui.components.RemoveFavoriteDialog
-import com.tyme.github.users.feature.users.presentation.userdetails.components.UserDetailsScaffold
+import com.tyme.github.users.feature.users.R
+import com.tyme.github.users.feature.users.presentation.userdetails.components.UserDetails
 
 @Composable
 fun UserDetailsScreen(
@@ -29,6 +46,7 @@ fun UserDetailsScreen(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun UserDetailsContent(
     uiState: UserDetailUiState,
@@ -40,28 +58,42 @@ private fun UserDetailsContent(
     onDismissRemoveFavorite: () -> Unit,
     onDismissError: () -> Unit,
 ) {
-    when (uiState) {
-        is UserDetailUiState.Idle -> Unit
-        is UserDetailUiState.Loading -> Loading()
-        is UserDetailUiState.Success -> {
-            UserDetailsScaffold(
+    Column(modifier = Modifier.fillMaxSize()) {
+        CenterAlignedTopAppBar(
+            title = { Text(text = stringResource(R.string.user_details_title)) },
+            navigationIcon = { BackButton(onClick = onBackClick) },
+            windowInsets = TopAppBarDefaults.windowInsets.only(WindowInsetsSides.Horizontal),
+            actions = {
+                if (uiState is UserDetailUiState.Success) {
+                    IconButton(onClick = onFavoriteToggle) {
+                        Icon(
+                            imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                            contentDescription = null,
+                            tint = if (isFavorite) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
+            },
+        )
+        when (uiState) {
+            is UserDetailUiState.Idle -> Unit
+            is UserDetailUiState.Loading -> Loading()
+            is UserDetailUiState.Success -> UserDetails(
                 uiState = uiState,
-                isFavorite = isFavorite,
-                onBackClick = onBackClick,
                 onBlogClick = onBlogClick,
-                onFavoriteToggle = onFavoriteToggle,
+                modifier = Modifier.fillMaxSize(),
             )
-            if (uiState.showRemoveConfirmDialog) {
-                RemoveFavoriteDialog(
-                    username = uiState.username,
-                    onConfirm = onConfirmRemoveFavorite,
-                    onDismiss = onDismissRemoveFavorite,
-                )
-            }
+            is UserDetailUiState.Error -> ErrorDialog(
+                message = uiState.message.ifEmpty { stringResource(uiState.messageRes) },
+                onDismiss = onDismissError,
+            )
         }
-        is UserDetailUiState.Error -> ErrorDialog(
-            message = uiState.message.ifEmpty { stringResource(uiState.messageRes) },
-            onDismiss = onDismissError,
+    }
+    if (uiState is UserDetailUiState.Success && uiState.showRemoveConfirmDialog) {
+        RemoveFavoriteDialog(
+            username = uiState.username,
+            onConfirm = onConfirmRemoveFavorite,
+            onDismiss = onDismissRemoveFavorite,
         )
     }
 }
