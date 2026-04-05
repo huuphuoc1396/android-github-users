@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.tyme.github.users.feature.users.api"
+    namespace = "com.tyme.github.users.feature.favorites.api"
     compileSdk = libs.versions.compileSdk.get().toInt()
     defaultConfig { minSdk = libs.versions.minSdk.get().toInt() }
 
@@ -25,6 +25,5 @@ android {
 }
 
 dependencies {
-    implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization.json)
 }
