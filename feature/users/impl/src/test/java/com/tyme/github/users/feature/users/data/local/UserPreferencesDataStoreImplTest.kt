@@ -15,16 +15,16 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-internal class PreferencesDataStoreImplTest {
+internal class UserPreferencesDataStoreImplTest {
 
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("github_users.preferences_pb")
 
-    private lateinit var preferencesDataStore: PreferencesDataStoreImpl
+    private lateinit var preferencesDataStore: UserPreferencesDataStoreImpl
 
     @Before
     fun setUp() {
         val context = ApplicationProvider.getApplicationContext<Application>()
-        preferencesDataStore = PreferencesDataStoreImpl(context.dataStore)
+        preferencesDataStore = UserPreferencesDataStoreImpl(context.dataStore)
     }
 
     @Test

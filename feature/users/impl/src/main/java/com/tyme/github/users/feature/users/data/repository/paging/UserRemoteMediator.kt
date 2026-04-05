@@ -5,7 +5,7 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import com.tyme.github.users.domain.extensions.orZero
-import com.tyme.github.users.feature.users.data.local.PreferencesDataStore
+import com.tyme.github.users.feature.users.data.local.UserPreferencesDataStore
 import com.tyme.github.users.feature.users.data.local.UserDao
 import com.tyme.github.users.feature.users.data.local.UserEntity
 import com.tyme.github.users.feature.users.data.mapper.toUserEntity
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
 internal class UserRemoteMediator @Inject constructor(
-    private val preferencesDataStore: PreferencesDataStore,
+    private val preferencesDataStore: UserPreferencesDataStore,
     private val userDao: UserDao,
     private val userService: UserService,
 ) : RemoteMediator<Int, UserEntity>() {
