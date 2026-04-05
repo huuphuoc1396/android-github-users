@@ -11,7 +11,7 @@ import com.tyme.github.users.feature.users.data.mapper.toUserModel
 import com.tyme.github.users.feature.users.data.remote.UserService
 import com.tyme.github.users.feature.users.data.repository.paging.UserRemoteMediator
 import com.tyme.github.users.feature.users.domain.model.UserDetailsModel
-import com.tyme.github.users.feature.users.api.model.UserModel
+import com.tyme.github.users.domain.models.UserModel
 import com.tyme.github.users.feature.users.domain.repository.UserRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

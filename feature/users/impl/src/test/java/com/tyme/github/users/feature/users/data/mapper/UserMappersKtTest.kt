@@ -2,7 +2,7 @@ package com.tyme.github.users.feature.users.data.mapper
 
 import com.tyme.github.users.feature.users.data.local.UserEntity
 import com.tyme.github.users.feature.users.data.remote.dto.UserResponse
-import com.tyme.github.users.feature.users.api.model.UserModel
+import com.tyme.github.users.domain.models.UserModel
 import io.kotest.matchers.shouldBe
 import org.junit.Test
 

@@ -1,7 +1,7 @@
 package com.tyme.github.users.feature.users.domain.usecase
 
 import androidx.paging.PagingData
-import com.tyme.github.users.feature.users.api.model.UserModel
+import com.tyme.github.users.domain.models.UserModel
 import com.tyme.github.users.feature.users.domain.repository.UserRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

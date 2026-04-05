@@ -1,7 +1,7 @@
 package com.tyme.github.users.feature.users.presentation.userlist
 
 import androidx.annotation.StringRes
-import com.tyme.github.users.feature.users.api.model.UserModel
+import com.tyme.github.users.domain.models.UserModel
 
 sealed interface UserListUiState {
     data object Idle : UserListUiState

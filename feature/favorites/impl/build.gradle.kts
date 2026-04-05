@@ -50,7 +50,7 @@ android {
 }
 
 dependencies {
-    api(project(":feature:favorites:api"))
+    implementation(project(":feature:favorites:api"))
     implementation(project(":feature:users:api"))
     implementation(project(":core:ui"))
     implementation(project(":core:navigation"))

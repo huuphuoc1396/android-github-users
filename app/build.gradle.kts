@@ -124,7 +124,9 @@ dependencies {
     implementation(project(":core:navigation"))
     implementation(project(":core:config"))
     implementation(project(":domain"))
+    implementation(project(":feature:users:api"))
     implementation(project(":feature:users:impl"))
+    implementation(project(":feature:favorites:api"))
     implementation(project(":feature:favorites:impl"))
 
     implementation(libs.androidx.core.ktx)

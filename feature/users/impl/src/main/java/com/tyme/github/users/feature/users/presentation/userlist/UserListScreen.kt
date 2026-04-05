@@ -20,9 +20,9 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.tyme.github.users.core.ui.components.ErrorDialog
 import com.tyme.github.users.core.ui.components.Loading
 import com.tyme.github.users.core.ui.components.RemoveFavoriteDialog
+import com.tyme.github.users.core.ui.components.UserList
 import com.tyme.github.users.feature.users.R
-import com.tyme.github.users.feature.users.api.model.UserModel
-import com.tyme.github.users.feature.users.presentation.userlist.components.UserList
+import com.tyme.github.users.domain.models.UserModel
 
 @Composable
 fun UserListScreen(
