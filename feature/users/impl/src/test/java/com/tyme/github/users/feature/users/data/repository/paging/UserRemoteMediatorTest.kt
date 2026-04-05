@@ -7,7 +7,7 @@ import androidx.paging.PagingSource.LoadResult.Page
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator.InitializeAction
 import androidx.paging.RemoteMediator.MediatorResult
-import com.tyme.github.users.feature.users.data.local.PreferencesDataStore
+import com.tyme.github.users.feature.users.data.local.UserPreferencesDataStore
 import com.tyme.github.users.feature.users.data.local.UserDao
 import com.tyme.github.users.feature.users.data.local.UserEntity
 import com.tyme.github.users.feature.users.data.mapper.toUserEntity
@@ -29,7 +29,7 @@ internal class UserRemoteMediatorTest {
 
     private val userService: UserService = mockk()
     private var userDao: UserDao = mockk()
-    private val preferencesDataStore: PreferencesDataStore = mockk()
+    private val preferencesDataStore: UserPreferencesDataStore = mockk()
     private var userRemoteMediator: UserRemoteMediator = UserRemoteMediator(
         preferencesDataStore = preferencesDataStore,
         userDao = userDao,

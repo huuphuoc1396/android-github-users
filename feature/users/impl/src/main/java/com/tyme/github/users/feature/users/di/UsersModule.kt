@@ -3,8 +3,8 @@ package com.tyme.github.users.feature.users.di
 import android.content.Context
 import com.tyme.github.users.core.security.providers.SecretKeysProvider
 import com.tyme.github.users.feature.users.BuildConfig
-import com.tyme.github.users.feature.users.data.local.PreferencesDataStore
-import com.tyme.github.users.feature.users.data.local.PreferencesDataStoreImpl
+import com.tyme.github.users.feature.users.data.local.UserPreferencesDataStore
+import com.tyme.github.users.feature.users.data.local.UserPreferencesDataStoreImpl
 import com.tyme.github.users.feature.users.data.local.UserDao
 import com.tyme.github.users.feature.users.data.local.UserDatabase
 import com.tyme.github.users.feature.users.data.remote.UserService
@@ -60,8 +60,8 @@ internal abstract class UsersModule {
 
         @Provides
         @Singleton
-        fun providePreferencesDataStore(
+        fun provideUserPreferencesDataStore(
             @ApplicationContext context: Context,
-        ): PreferencesDataStore = PreferencesDataStoreImpl(context.preferences)
+        ): UserPreferencesDataStore = UserPreferencesDataStoreImpl(context.preferences)
     }
 }

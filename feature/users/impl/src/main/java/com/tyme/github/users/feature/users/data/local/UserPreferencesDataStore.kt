@@ -9,16 +9,16 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-internal interface PreferencesDataStore {
+internal interface UserPreferencesDataStore {
 
     suspend fun setLastUpdatedUserList(lastUpdated: Long)
 
     fun getLastUpdatedUserList(): Flow<Long>
 }
 
-internal class PreferencesDataStoreImpl @Inject constructor(
+internal class UserPreferencesDataStoreImpl @Inject constructor(
     private val dataStore: DataStore<Preferences>,
-) : PreferencesDataStore {
+) : UserPreferencesDataStore {
 
     override suspend fun setLastUpdatedUserList(lastUpdated: Long) {
         dataStore.edit { preferences -> preferences[KEY_LAST_UPDATED_USER_LIST] = lastUpdated }
