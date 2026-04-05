@@ -1,4 +1,8 @@
 <resources>
     <string name="error_title">Error</string>
     <string name="button_ok">OK</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="remove_favorite_dialog_title">Remove Favorite</string>
+    <string name="remove_favorite_dialog_message">Remove %1$s from your favorites?</string>
+    <string name="remove_favorite_dialog_confirm">Remove</string>
 </resources>
