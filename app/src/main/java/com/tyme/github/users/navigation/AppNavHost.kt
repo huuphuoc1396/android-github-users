@@ -25,8 +25,8 @@ import com.tyme.github.users.R
 import com.tyme.github.users.core.navigation.AppNavigator
 import com.tyme.github.users.core.navigation.NavigationEffects
 import com.tyme.github.users.core.navigation.NavigationIntent
-import com.tyme.github.users.feature.favorites.impl.navigation.FavoritesDestination
-import com.tyme.github.users.feature.favorites.impl.navigation.favoritesNavGraph
+import com.tyme.github.users.feature.favorites.navigation.FavoritesDestination
+import com.tyme.github.users.feature.favorites.navigation.favoritesNavGraph
 import com.tyme.github.users.feature.users.navigation.UserListDestination
 import com.tyme.github.users.feature.users.navigation.usersNavGraph
 import kotlinx.coroutines.launch
