@@ -3,10 +3,13 @@
 package com.tyme.github.users.feature.users.presentation.userlist
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.only
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -21,8 +24,8 @@ import com.tyme.github.users.core.ui.components.ErrorDialog
 import com.tyme.github.users.core.ui.components.Loading
 import com.tyme.github.users.core.ui.components.RemoveFavoriteDialog
 import com.tyme.github.users.core.ui.components.UserList
-import com.tyme.github.users.feature.users.R
 import com.tyme.github.users.domain.models.UserModel
+import com.tyme.github.users.feature.users.R
 
 @Composable
 fun UserListScreen(
@@ -73,6 +76,7 @@ private fun UserListContent(
     Column(modifier = modifier.fillMaxSize()) {
         CenterAlignedTopAppBar(
             title = { Text(text = stringResource(R.string.user_list_title)) },
+            windowInsets = TopAppBarDefaults.windowInsets.only(WindowInsetsSides.Horizontal),
         )
 
         when (uiState) {

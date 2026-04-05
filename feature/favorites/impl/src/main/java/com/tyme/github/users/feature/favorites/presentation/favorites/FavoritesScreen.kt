@@ -2,11 +2,14 @@ package com.tyme.github.users.feature.favorites.presentation.favorites
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -53,6 +56,7 @@ private fun FavoritesContent(
     Column(modifier = Modifier.fillMaxSize()) {
         CenterAlignedTopAppBar(
             title = { Text(text = stringResource(R.string.favorites_title)) },
+            windowInsets = TopAppBarDefaults.windowInsets.only(WindowInsetsSides.Horizontal),
         )
         when (uiState) {
             FavoritesUiState.Loading -> Loading()
@@ -67,6 +71,7 @@ private fun FavoritesContent(
                     textAlign = TextAlign.Center,
                 )
             }
+
             is FavoritesUiState.Success -> {
                 UserList(
                     users = uiState.favorites,
