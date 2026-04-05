@@ -9,11 +9,11 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-internal class ObserveFavoriteUseCaseTest {
+internal class IsFavoriteUseCaseTest {
 
     private val favoriteRepository = mockk<FavoriteRepository>()
 
-    private val useCase = ObserveFavoriteUseCase(favoriteRepository)
+    private val useCase = IsFavoriteUseCase(favoriteRepository)
 
     @Test
     fun `invoke emits true when username is favorite`() = runTest {

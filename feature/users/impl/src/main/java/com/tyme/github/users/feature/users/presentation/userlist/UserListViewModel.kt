@@ -6,10 +6,12 @@ import androidx.paging.LoadState
 import androidx.paging.cachedIn
 import com.tyme.github.users.core.navigation.AppNavigator
 import com.tyme.github.users.core.navigation.NavigationIntent
-import com.tyme.github.users.domain.providers.DispatchersProvider
 import com.tyme.github.users.domain.models.UserModel
-import com.tyme.github.users.feature.users.api.repository.FavoriteRepository
+import com.tyme.github.users.domain.providers.DispatchersProvider
+import com.tyme.github.users.feature.users.domain.usecase.AddFavoriteUseCase
+import com.tyme.github.users.feature.users.domain.usecase.GetFavoritesUseCase
 import com.tyme.github.users.feature.users.domain.usecase.GetUserPagingUseCase
+import com.tyme.github.users.feature.users.domain.usecase.RemoveFavoriteUseCase
 import com.tyme.github.users.feature.users.navigation.UserDetailsDestination
 import com.tyme.github.users.feature.users.presentation.mappers.toUserListError
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,7 +28,9 @@ import javax.inject.Inject
 @HiltViewModel
 class UserListViewModel @Inject constructor(
     getUserPagingUseCase: GetUserPagingUseCase,
-    private val favoriteRepository: FavoriteRepository,
+    private val getFavoritesUseCase: GetFavoritesUseCase,
+    private val addFavoriteUseCase: AddFavoriteUseCase,
+    private val removeFavoriteUseCase: RemoveFavoriteUseCase,
     private val navigator: AppNavigator,
     private val dispatchers: DispatchersProvider,
 ) : ViewModel() {
@@ -36,7 +40,7 @@ class UserListViewModel @Inject constructor(
 
     val userPaging = getUserPagingUseCase().cachedIn(viewModelScope)
 
-    val favoriteUsernames: StateFlow<Set<String>> = favoriteRepository.getFavorites()
+    val favoriteUsernames: StateFlow<Set<String>> = getFavoritesUseCase()
         .map { list -> list.map { it.username }.toSet() }
         .stateIn(
             scope = viewModelScope,
@@ -70,7 +74,7 @@ class UserListViewModel @Inject constructor(
                 if (current is UserListUiState.Success) current.copy(pendingRemoval = user) else current
             }
         } else {
-            viewModelScope.launch(dispatchers.io) { favoriteRepository.addFavorite(user) }
+            viewModelScope.launch(dispatchers.io) { addFavoriteUseCase(user) }
         }
     }
 
@@ -79,7 +83,7 @@ class UserListViewModel @Inject constructor(
         _uiState.update { current ->
             if (current is UserListUiState.Success) current.copy(pendingRemoval = null) else current
         }
-        viewModelScope.launch(dispatchers.io) { favoriteRepository.removeFavorite(user.username) }
+        viewModelScope.launch(dispatchers.io) { removeFavoriteUseCase(user.username) }
     }
 
     fun onDismissRemoveFavorite() {

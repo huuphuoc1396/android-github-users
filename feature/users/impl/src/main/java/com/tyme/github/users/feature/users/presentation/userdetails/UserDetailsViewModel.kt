@@ -6,12 +6,13 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.tyme.github.users.core.navigation.AppNavigator
 import com.tyme.github.users.core.navigation.NavigationIntent
-import com.tyme.github.users.domain.providers.DispatchersProvider
 import com.tyme.github.users.domain.models.UserModel
-import com.tyme.github.users.feature.users.api.repository.FavoriteRepository
+import com.tyme.github.users.domain.providers.DispatchersProvider
 import com.tyme.github.users.feature.users.data.mapper.toUserDetailUiState
+import com.tyme.github.users.feature.users.domain.usecase.AddFavoriteUseCase
 import com.tyme.github.users.feature.users.domain.usecase.GetUserDetailsUseCase
-import com.tyme.github.users.feature.users.domain.usecase.ObserveFavoriteUseCase
+import com.tyme.github.users.feature.users.domain.usecase.IsFavoriteUseCase
+import com.tyme.github.users.feature.users.domain.usecase.RemoveFavoriteUseCase
 import com.tyme.github.users.feature.users.navigation.UserDetailsDestination
 import com.tyme.github.users.feature.users.presentation.mappers.toUserDetailError
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,8 +30,9 @@ import javax.inject.Inject
 class UserDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getUserDetailsUseCase: GetUserDetailsUseCase,
-    private val observeFavoriteUseCase: ObserveFavoriteUseCase,
-    private val favoriteRepository: FavoriteRepository,
+    private val isFavoriteUseCase: IsFavoriteUseCase,
+    private val addFavoriteUseCase: AddFavoriteUseCase,
+    private val removeFavoriteUseCase: RemoveFavoriteUseCase,
     private val navigator: AppNavigator,
     private val dispatchers: DispatchersProvider,
 ) : ViewModel() {
@@ -40,7 +42,7 @@ class UserDetailsViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<UserDetailUiState>(UserDetailUiState.Loading)
     val uiState: StateFlow<UserDetailUiState> = _uiState.asStateFlow()
 
-    val isFavorite: StateFlow<Boolean> = observeFavoriteUseCase(destination.username)
+    val isFavorite: StateFlow<Boolean> = isFavoriteUseCase(destination.username)
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
@@ -67,7 +69,7 @@ class UserDetailsViewModel @Inject constructor(
             }
         } else {
             viewModelScope.launch(dispatchers.io) {
-                favoriteRepository.addFavorite(
+                addFavoriteUseCase(
                     UserModel(
                         username = destination.username,
                         avatarUrl = destination.avatarUrl,
@@ -82,7 +84,7 @@ class UserDetailsViewModel @Inject constructor(
         _uiState.update { current ->
             if (current is UserDetailUiState.Success) current.copy(showRemoveConfirmDialog = false) else current
         }
-        viewModelScope.launch(dispatchers.io) { favoriteRepository.removeFavorite(destination.username) }
+        viewModelScope.launch(dispatchers.io) { removeFavoriteUseCase(destination.username) }
     }
 
     fun onDismissRemoveFavorite() {

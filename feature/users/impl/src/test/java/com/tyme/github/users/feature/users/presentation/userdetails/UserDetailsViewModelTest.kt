@@ -5,23 +5,23 @@ import androidx.navigation.toRoute
 import app.cash.turbine.test
 import com.tyme.github.users.core.navigation.AppNavigator
 import com.tyme.github.users.core.navigation.NavigationIntent
-import com.tyme.github.users.domain.providers.DispatchersProvider
 import com.tyme.github.users.domain.models.UserModel
-import com.tyme.github.users.feature.users.api.repository.FavoriteRepository
+import com.tyme.github.users.domain.providers.DispatchersProvider
 import com.tyme.github.users.feature.users.data.mapper.toUserDetailUiState
 import com.tyme.github.users.feature.users.domain.model.UserDetailsModel
+import com.tyme.github.users.feature.users.domain.usecase.AddFavoriteUseCase
 import com.tyme.github.users.feature.users.domain.usecase.GetUserDetailsUseCase
-import com.tyme.github.users.feature.users.domain.usecase.ObserveFavoriteUseCase
+import com.tyme.github.users.feature.users.domain.usecase.IsFavoriteUseCase
+import com.tyme.github.users.feature.users.domain.usecase.RemoveFavoriteUseCase
 import com.tyme.github.users.feature.users.navigation.UserDetailsDestination
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import io.mockk.coEvery
+import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.every
-import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
-import io.mockk.runs
 import io.mockk.unmockkStatic
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -43,8 +43,9 @@ internal class UserDetailsViewModelTest {
     private val testDispatcher = UnconfinedTestDispatcher()
     private val savedStateHandle: SavedStateHandle = mockk(relaxed = true)
     private val getUserDetailsUseCase: GetUserDetailsUseCase = mockk()
-    private val observeFavoriteUseCase: ObserveFavoriteUseCase = mockk()
-    private val favoriteRepository: FavoriteRepository = mockk()
+    private val isFavoriteUseCase: IsFavoriteUseCase = mockk()
+    private val addFavoriteUseCase: AddFavoriteUseCase = mockk()
+    private val removeFavoriteUseCase: RemoveFavoriteUseCase = mockk()
     private val navigator: AppNavigator = mockk()
     private val dispatchers: DispatchersProvider = mockk()
 
@@ -71,8 +72,7 @@ internal class UserDetailsViewModelTest {
         every { dispatchers.immediate } returns testDispatcher
         mockkStatic("androidx.navigation.SavedStateHandleKt")
         every { savedStateHandle.toRoute<UserDetailsDestination>() } returns destination
-        every { observeFavoriteUseCase(destination.username) } returns flowOf(false)
-        every { favoriteRepository.isFavorite(destination.username) } returns flowOf(false)
+        every { isFavoriteUseCase(destination.username) } returns flowOf(false)
         every { getUserDetailsUseCase(destination.username) } returns flowOf(userDetails)
     }
 
@@ -85,8 +85,9 @@ internal class UserDetailsViewModelTest {
     private fun createViewModel() = UserDetailsViewModel(
         savedStateHandle = savedStateHandle,
         getUserDetailsUseCase = getUserDetailsUseCase,
-        observeFavoriteUseCase = observeFavoriteUseCase,
-        favoriteRepository = favoriteRepository,
+        isFavoriteUseCase = isFavoriteUseCase,
+        addFavoriteUseCase = addFavoriteUseCase,
+        removeFavoriteUseCase = removeFavoriteUseCase,
         navigator = navigator,
         dispatchers = dispatchers,
     )
@@ -127,7 +128,7 @@ internal class UserDetailsViewModelTest {
     @Test
     fun `onFavoriteClick when isFavorite shows remove confirm dialog`() = runTest {
         // Given
-        every { observeFavoriteUseCase(destination.username) } returns flowOf(true)
+        every { isFavoriteUseCase(destination.username) } returns flowOf(true)
         val viewModel = createViewModel()
         backgroundScope.launch { viewModel.isFavorite.collect {} }
         advanceUntilIdle()
@@ -147,21 +148,21 @@ internal class UserDetailsViewModelTest {
             avatarUrl = destination.avatarUrl,
             url = destination.url,
         )
-        coEvery { favoriteRepository.addFavorite(expectedUser) } just runs
+        coJustRun { addFavoriteUseCase(expectedUser) }
         val viewModel = createViewModel()
 
         // When
         viewModel.onFavoriteClick()
 
         // Then
-        coVerify { favoriteRepository.addFavorite(expectedUser) }
+        coVerify { addFavoriteUseCase(expectedUser) }
     }
 
     @Test
     fun `onConfirmRemoveFavorite calls removeFavorite and hides dialog`() = runTest {
         // Given
-        every { observeFavoriteUseCase(destination.username) } returns flowOf(true)
-        coEvery { favoriteRepository.removeFavorite(destination.username) } just runs
+        every { isFavoriteUseCase(destination.username) } returns flowOf(true)
+        coJustRun { removeFavoriteUseCase(destination.username) }
         val viewModel = createViewModel()
         backgroundScope.launch { viewModel.isFavorite.collect {} }
         advanceUntilIdle()
@@ -171,14 +172,14 @@ internal class UserDetailsViewModelTest {
         viewModel.onConfirmRemoveFavorite()
 
         // Then
-        coVerify { favoriteRepository.removeFavorite(destination.username) }
+        coVerify { removeFavoriteUseCase(destination.username) }
         (viewModel.uiState.value as UserDetailUiState.Success).showRemoveConfirmDialog shouldBe false
     }
 
     @Test
     fun `onDismissRemoveFavorite hides dialog`() = runTest {
         // Given
-        every { observeFavoriteUseCase(destination.username) } returns flowOf(true)
+        every { isFavoriteUseCase(destination.username) } returns flowOf(true)
         val viewModel = createViewModel()
         backgroundScope.launch { viewModel.isFavorite.collect {} }
         advanceUntilIdle()
@@ -207,7 +208,7 @@ internal class UserDetailsViewModelTest {
     @Test
     fun `onNavigateBack navigates up`() = runTest {
         // Given
-        coEvery { navigator.navigate(any()) } just runs
+        coEvery { navigator.navigate(any()) } returns Unit
         val viewModel = createViewModel()
 
         // When
@@ -218,9 +219,9 @@ internal class UserDetailsViewModelTest {
     }
 
     @Test
-    fun `isFavorite emits value from repository`() = runTest {
+    fun `isFavorite emits value from use case`() = runTest {
         // Given
-        every { observeFavoriteUseCase(destination.username) } returns flowOf(true)
+        every { isFavoriteUseCase(destination.username) } returns flowOf(true)
 
         // When
         val viewModel = createViewModel()

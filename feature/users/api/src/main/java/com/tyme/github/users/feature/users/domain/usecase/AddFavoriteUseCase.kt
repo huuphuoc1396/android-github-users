@@ -1,4 +1,4 @@
-package com.tyme.github.users.feature.favorites.domain.usecase
+package com.tyme.github.users.feature.users.domain.usecase
 
 import com.tyme.github.users.domain.models.UserModel
 import com.tyme.github.users.feature.users.api.repository.FavoriteRepository
