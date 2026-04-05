@@ -6,6 +6,7 @@ import androidx.paging.LoadState
 import androidx.paging.cachedIn
 import com.tyme.github.users.core.navigation.AppNavigator
 import com.tyme.github.users.core.navigation.NavigationIntent
+import com.tyme.github.users.domain.providers.DispatchersProvider
 import com.tyme.github.users.feature.users.api.model.UserModel
 import com.tyme.github.users.feature.users.api.repository.FavoriteRepository
 import com.tyme.github.users.feature.users.domain.usecase.GetUserPagingUseCase
@@ -27,6 +28,7 @@ class UserListViewModel @Inject constructor(
     getUserPagingUseCase: GetUserPagingUseCase,
     private val favoriteRepository: FavoriteRepository,
     private val navigator: AppNavigator,
+    private val dispatchers: DispatchersProvider,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<UserListUiState>(UserListUiState.Idle)
@@ -68,7 +70,7 @@ class UserListViewModel @Inject constructor(
                 if (current is UserListUiState.Success) current.copy(pendingRemoval = user) else current
             }
         } else {
-            viewModelScope.launch { favoriteRepository.addFavorite(user) }
+            viewModelScope.launch(dispatchers.io) { favoriteRepository.addFavorite(user) }
         }
     }
 
@@ -77,7 +79,7 @@ class UserListViewModel @Inject constructor(
         _uiState.update { current ->
             if (current is UserListUiState.Success) current.copy(pendingRemoval = null) else current
         }
-        viewModelScope.launch { favoriteRepository.removeFavorite(user.username) }
+        viewModelScope.launch(dispatchers.io) { favoriteRepository.removeFavorite(user.username) }
     }
 
     fun onDismissRemoveFavorite() {
