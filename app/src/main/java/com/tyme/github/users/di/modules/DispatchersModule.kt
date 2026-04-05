@@ -1,6 +1,6 @@
 package com.tyme.github.users.di.modules
 
-import com.tyme.github.users.providers.DispatchersProvider
+import com.tyme.github.users.domain.providers.DispatchersProvider
 import com.tyme.github.users.providers.DispatchersProviderImpl
 import dagger.Binds
 import dagger.Module

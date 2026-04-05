@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tyme.github.users.core.navigation.AppNavigator
 import com.tyme.github.users.core.navigation.NavigationIntent
+import com.tyme.github.users.domain.providers.DispatchersProvider
 import com.tyme.github.users.feature.favorites.impl.domain.usecase.GetFavoritesUseCase
 import com.tyme.github.users.feature.favorites.impl.domain.usecase.RemoveFavoriteUseCase
 import com.tyme.github.users.feature.users.api.model.UserModel
@@ -22,6 +23,7 @@ class FavoritesViewModel @Inject constructor(
     getFavoritesUseCase: GetFavoritesUseCase,
     private val removeFavoriteUseCase: RemoveFavoriteUseCase,
     private val navigator: AppNavigator,
+    private val dispatchers: DispatchersProvider,
 ) : ViewModel() {
 
     private val _pendingRemoval = MutableStateFlow<UserModel?>(null)
@@ -44,7 +46,7 @@ class FavoritesViewModel @Inject constructor(
     fun onConfirmRemoveFavorite() {
         val user = _pendingRemoval.value ?: return
         _pendingRemoval.value = null
-        viewModelScope.launch {
+        viewModelScope.launch(dispatchers.io) {
             removeFavoriteUseCase(user.username)
         }
     }

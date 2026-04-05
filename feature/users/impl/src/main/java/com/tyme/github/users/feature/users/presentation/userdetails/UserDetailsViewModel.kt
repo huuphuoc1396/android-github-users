@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.tyme.github.users.core.navigation.AppNavigator
 import com.tyme.github.users.core.navigation.NavigationIntent
+import com.tyme.github.users.domain.providers.DispatchersProvider
 import com.tyme.github.users.feature.users.api.model.UserModel
 import com.tyme.github.users.feature.users.api.repository.FavoriteRepository
 import com.tyme.github.users.feature.users.data.mapper.toUserDetailUiState
@@ -29,6 +30,7 @@ class UserDetailsViewModel @Inject constructor(
     private val getUserDetailsUseCase: GetUserDetailsUseCase,
     private val favoriteRepository: FavoriteRepository,
     private val navigator: AppNavigator,
+    private val dispatchers: DispatchersProvider,
 ) : ViewModel() {
 
     private val destination: UserDetailsDestination = savedStateHandle.toRoute()
@@ -48,7 +50,7 @@ class UserDetailsViewModel @Inject constructor(
     }
 
     fun loadUserDetails() {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatchers.io) {
             _uiState.value = UserDetailUiState.Loading
             getUserDetailsUseCase(destination.username)
                 .catch { e -> _uiState.value = e.toUserDetailError() }
@@ -62,7 +64,7 @@ class UserDetailsViewModel @Inject constructor(
                 if (current is UserDetailUiState.Success) current.copy(showRemoveConfirmDialog = true) else current
             }
         } else {
-            viewModelScope.launch {
+            viewModelScope.launch(dispatchers.io) {
                 favoriteRepository.addFavorite(
                     UserModel(
                         username = destination.username,
@@ -78,7 +80,7 @@ class UserDetailsViewModel @Inject constructor(
         _uiState.update { current ->
             if (current is UserDetailUiState.Success) current.copy(showRemoveConfirmDialog = false) else current
         }
-        viewModelScope.launch { favoriteRepository.removeFavorite(destination.username) }
+        viewModelScope.launch(dispatchers.io) { favoriteRepository.removeFavorite(destination.username) }
     }
 
     fun onDismissRemoveFavorite() {
