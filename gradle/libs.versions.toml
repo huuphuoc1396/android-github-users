@@ -21,9 +21,9 @@ coreTest = "1.6.1"
 hilt = "2.52"
 hiltNavigationCompose = "1.2.0"
 
-room = "2.6.1"
-sqliteKtx = "2.2.0"
-sqlcipherAndroid = "4.5.7"
+room = "2.8.4"
+sqliteKtx = "2.6.2"
+sqlcipherAndroid = "4.14.0"
 paging = "3.3.5"
 securityCryptoDatastore = "1.0.0"
 
