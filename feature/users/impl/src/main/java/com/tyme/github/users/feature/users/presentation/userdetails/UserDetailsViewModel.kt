@@ -7,10 +7,11 @@ import androidx.navigation.toRoute
 import com.tyme.github.users.core.navigation.AppNavigator
 import com.tyme.github.users.core.navigation.NavigationIntent
 import com.tyme.github.users.domain.providers.DispatchersProvider
-import com.tyme.github.users.feature.users.api.model.UserModel
+import com.tyme.github.users.domain.models.UserModel
 import com.tyme.github.users.feature.users.api.repository.FavoriteRepository
 import com.tyme.github.users.feature.users.data.mapper.toUserDetailUiState
 import com.tyme.github.users.feature.users.domain.usecase.GetUserDetailsUseCase
+import com.tyme.github.users.feature.users.domain.usecase.ObserveFavoriteUseCase
 import com.tyme.github.users.feature.users.navigation.UserDetailsDestination
 import com.tyme.github.users.feature.users.presentation.mappers.toUserDetailError
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,6 +29,7 @@ import javax.inject.Inject
 class UserDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getUserDetailsUseCase: GetUserDetailsUseCase,
+    private val observeFavoriteUseCase: ObserveFavoriteUseCase,
     private val favoriteRepository: FavoriteRepository,
     private val navigator: AppNavigator,
     private val dispatchers: DispatchersProvider,
@@ -38,7 +40,7 @@ class UserDetailsViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<UserDetailUiState>(UserDetailUiState.Loading)
     val uiState: StateFlow<UserDetailUiState> = _uiState.asStateFlow()
 
-    val isFavorite: StateFlow<Boolean> = favoriteRepository.isFavorite(destination.username)
+    val isFavorite: StateFlow<Boolean> = observeFavoriteUseCase(destination.username)
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),

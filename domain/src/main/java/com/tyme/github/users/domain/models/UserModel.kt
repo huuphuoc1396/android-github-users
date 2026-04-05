@@ -1,4 +1,4 @@
-package com.tyme.github.users.feature.users.api.model
+package com.tyme.github.users.domain.models
 
 data class UserModel(
     val id: Int = 0,

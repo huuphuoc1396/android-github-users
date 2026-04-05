@@ -67,7 +67,7 @@ dependencies {
     implementation(project(":core:navigation"))
     implementation(project(":core:security"))
     implementation(project(":domain"))
-    api(project(":feature:users:api"))
+    implementation(project(":feature:users:api"))
 
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)

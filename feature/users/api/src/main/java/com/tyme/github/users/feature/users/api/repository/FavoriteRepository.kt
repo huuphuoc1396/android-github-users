@@ -1,6 +1,6 @@
 package com.tyme.github.users.feature.users.api.repository
 
-import com.tyme.github.users.feature.users.api.model.UserModel
+import com.tyme.github.users.domain.models.UserModel
 import kotlinx.coroutines.flow.Flow
 
 interface FavoriteRepository {

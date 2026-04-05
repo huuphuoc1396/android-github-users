@@ -15,14 +15,26 @@ android {
     }
     kotlinOptions { jvmTarget = "1.8" }
     buildFeatures { compose = true }
+
+    flavorDimensions += "environment"
+    productFlavors {
+        create("dev") {}
+        create("stag") {}
+        create("prod") {}
+    }
 }
 
 dependencies {
+    implementation(project(":domain"))
+
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.material3.adaptive)
+    implementation(libs.androidx.material3.window.size.clazz)
+    implementation(libs.androidx.paging.compose)
     implementation(libs.coil)
     implementation(libs.coil.network.okhttp)
     implementation(libs.coil.compose)
