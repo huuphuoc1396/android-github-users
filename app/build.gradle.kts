@@ -110,7 +110,7 @@ koverReport {
 }
 
 dependencies {
-    kover(project(":domain"))
+    kover(project(":core:common"))
     kover(project(":core:ui"))
     kover(project(":core:navigation"))
     kover(project(":core:network"))
@@ -120,7 +120,7 @@ dependencies {
     kover(project(":feature:favorites:api"))
     kover(project(":feature:favorites:impl"))
 
-    implementation(project(":domain"))
+    implementation(project(":core:common"))
     implementation(project(":core:ui"))
     implementation(project(":core:navigation"))
     implementation(project(":core:config"))

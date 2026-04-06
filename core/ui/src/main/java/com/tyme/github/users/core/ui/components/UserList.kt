@@ -27,7 +27,7 @@ import androidx.window.core.layout.WindowSizeClass
 import androidx.window.core.layout.WindowWidthSizeClass
 import com.tyme.github.users.core.ui.R
 import com.tyme.github.users.core.ui.theme.Theme
-import com.tyme.github.users.domain.models.UserModel
+import com.tyme.github.users.core.common.models.UserModel
 import kotlinx.coroutines.flow.flowOf
 
 @Composable

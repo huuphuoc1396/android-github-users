@@ -1,8 +1,8 @@
 package com.tyme.github.users.feature.users.presentation.mappers
 
-import com.tyme.github.users.domain.models.errors.ApiException
-import com.tyme.github.users.domain.models.errors.NoConnectionException
-import com.tyme.github.users.domain.models.errors.UnauthorizedException
+import com.tyme.github.users.core.network.models.errors.ApiException
+import com.tyme.github.users.core.network.models.errors.NoConnectionException
+import com.tyme.github.users.core.network.models.errors.UnauthorizedException
 import com.tyme.github.users.feature.users.R
 import com.tyme.github.users.feature.users.presentation.userdetails.UserDetailUiState
 import com.tyme.github.users.feature.users.presentation.userlist.UserListUiState

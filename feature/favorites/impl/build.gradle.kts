@@ -54,7 +54,7 @@ dependencies {
     implementation(project(":feature:users:api"))
     implementation(project(":core:ui"))
     implementation(project(":core:navigation"))
-    implementation(project(":domain"))
+    implementation(project(":core:common"))
 
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)

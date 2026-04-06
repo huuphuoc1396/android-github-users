@@ -1,7 +1,7 @@
 package com.tyme.github.users.feature.users.data.repository
 
 import app.cash.turbine.test
-import com.tyme.github.users.domain.models.UserModel
+import com.tyme.github.users.core.common.models.UserModel
 import com.tyme.github.users.feature.users.data.local.UserDao
 import com.tyme.github.users.feature.users.data.local.UserEntity
 import com.tyme.github.users.feature.users.data.mapper.toUserModel

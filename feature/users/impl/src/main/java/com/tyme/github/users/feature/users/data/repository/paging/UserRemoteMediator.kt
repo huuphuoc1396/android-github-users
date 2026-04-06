@@ -4,7 +4,7 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
-import com.tyme.github.users.domain.extensions.orZero
+import com.tyme.github.users.core.common.extensions.orZero
 import com.tyme.github.users.feature.users.data.local.UserPreferencesDataStore
 import com.tyme.github.users.feature.users.data.local.UserDao
 import com.tyme.github.users.feature.users.data.local.UserEntity

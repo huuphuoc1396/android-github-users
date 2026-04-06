@@ -5,8 +5,8 @@ import androidx.navigation.toRoute
 import app.cash.turbine.test
 import com.tyme.github.users.core.navigation.AppNavigator
 import com.tyme.github.users.core.navigation.NavigationIntent
-import com.tyme.github.users.domain.models.UserModel
-import com.tyme.github.users.domain.providers.DispatchersProvider
+import com.tyme.github.users.core.common.models.UserModel
+import com.tyme.github.users.core.common.providers.DispatchersProvider
 import com.tyme.github.users.feature.users.data.mapper.toUserDetailUiState
 import com.tyme.github.users.feature.users.domain.model.UserDetailsModel
 import com.tyme.github.users.feature.users.domain.usecase.AddFavoriteUseCase

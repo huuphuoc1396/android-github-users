@@ -1,7 +1,7 @@
 package com.tyme.github.users.feature.users.data.mapper
 
-import com.tyme.github.users.domain.extensions.orZero
-import com.tyme.github.users.domain.models.UserModel
+import com.tyme.github.users.core.common.extensions.orZero
+import com.tyme.github.users.core.common.models.UserModel
 import com.tyme.github.users.feature.users.data.local.UserEntity
 import com.tyme.github.users.feature.users.data.remote.dto.UserResponse
 
