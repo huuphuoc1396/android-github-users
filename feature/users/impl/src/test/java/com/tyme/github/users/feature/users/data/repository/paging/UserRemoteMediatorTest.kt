@@ -7,9 +7,9 @@ import androidx.paging.PagingSource.LoadResult.Page
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator.InitializeAction
 import androidx.paging.RemoteMediator.MediatorResult
+import com.tyme.github.users.core.database.dao.UserDao
+import com.tyme.github.users.core.database.entity.UserEntity
 import com.tyme.github.users.feature.users.data.local.UserPreferencesDataStore
-import com.tyme.github.users.feature.users.data.local.UserDao
-import com.tyme.github.users.feature.users.data.local.UserEntity
 import com.tyme.github.users.feature.users.data.mapper.toUserEntity
 import com.tyme.github.users.feature.users.data.remote.UserService
 import com.tyme.github.users.feature.users.data.remote.dto.UserResponse

@@ -9,8 +9,8 @@ import androidx.paging.RemoteMediator.MediatorResult
 import androidx.paging.testing.asPagingSourceFactory
 import androidx.paging.testing.asSnapshot
 import app.cash.turbine.test
-import com.tyme.github.users.feature.users.data.local.UserDao
-import com.tyme.github.users.feature.users.data.local.UserEntity
+import com.tyme.github.users.core.database.dao.UserDao
+import com.tyme.github.users.core.database.entity.UserEntity
 import com.tyme.github.users.feature.users.data.mapper.toUserDetailsModel
 import com.tyme.github.users.feature.users.data.mapper.toUserModel
 import com.tyme.github.users.feature.users.data.remote.UserService

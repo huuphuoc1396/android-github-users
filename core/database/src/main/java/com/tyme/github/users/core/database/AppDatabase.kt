@@ -1,4 +1,4 @@
-package com.tyme.github.users.feature.users.data.local
+package com.tyme.github.users.core.database
 
 import android.content.Context
 import androidx.room.Database
@@ -6,6 +6,9 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.tyme.github.users.core.database.dao.FavoriteDao
+import com.tyme.github.users.core.database.dao.UserDao
+import com.tyme.github.users.core.database.entity.UserEntity
 import com.tyme.github.users.core.security.providers.SecretKeysProvider
 import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
 import java.nio.charset.StandardCharsets
@@ -15,9 +18,11 @@ import java.nio.charset.StandardCharsets
     version = 2,
     exportSchema = true,
 )
-internal abstract class UserDatabase : RoomDatabase() {
+abstract class AppDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao
+
+    abstract fun favoriteDao(): FavoriteDao
 
     companion object {
         private const val DATABASE_NAME = "github_users.db"
@@ -34,7 +39,7 @@ internal abstract class UserDatabase : RoomDatabase() {
         private val isEncrypted: Boolean,
         private val secretKeysProvider: SecretKeysProvider,
     ) {
-        fun create(): UserDatabase {
+        fun create(): AppDatabase {
             if (isEncrypted) {
                 System.loadLibrary("sqlcipher")
                 val password = secretKeysProvider.getDatabasePassword()
@@ -42,7 +47,7 @@ internal abstract class UserDatabase : RoomDatabase() {
                 val factory = SupportOpenHelperFactory(password.toByteArray(StandardCharsets.UTF_8))
                 return Room.databaseBuilder(
                     context,
-                    UserDatabase::class.java,
+                    AppDatabase::class.java,
                     databaseFile.absolutePath,
                 )
                     .openHelperFactory(factory)
@@ -51,7 +56,7 @@ internal abstract class UserDatabase : RoomDatabase() {
             }
             return Room.databaseBuilder(
                 context,
-                UserDatabase::class.java,
+                AppDatabase::class.java,
                 DATABASE_NAME,
             )
                 .addMigrations(MIGRATION_1_2)
