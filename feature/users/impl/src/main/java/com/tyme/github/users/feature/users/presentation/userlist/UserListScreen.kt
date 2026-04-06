@@ -24,7 +24,7 @@ import com.tyme.github.users.core.ui.components.ErrorDialog
 import com.tyme.github.users.core.ui.components.Loading
 import com.tyme.github.users.core.ui.components.RemoveFavoriteDialog
 import com.tyme.github.users.core.ui.components.UserList
-import com.tyme.github.users.core.common.models.UserModel
+import com.tyme.github.users.core.ui.components.UserListItem
 import com.tyme.github.users.feature.users.R
 
 @Composable
@@ -62,12 +62,12 @@ fun UserListScreen(
 private fun UserListContent(
     modifier: Modifier = Modifier,
     uiState: UserListUiState,
-    pagingItems: LazyPagingItems<UserModel>,
+    pagingItems: LazyPagingItems<UserListItem>,
     favoriteUsernames: Set<String>,
     onRefresh: () -> Unit,
     onRetryClick: () -> Unit,
-    onUserClick: (UserModel) -> Unit,
-    onFavoriteClick: (UserModel) -> Unit,
+    onUserClick: (UserListItem) -> Unit,
+    onFavoriteClick: (UserListItem) -> Unit,
     onConfirmRemoveFavorite: () -> Unit,
     onDismissRemoveFavorite: () -> Unit,
     onUrlClick: (String) -> Unit,

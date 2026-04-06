@@ -23,8 +23,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tyme.github.users.core.ui.components.Loading
 import com.tyme.github.users.core.ui.components.RemoveFavoriteDialog
 import com.tyme.github.users.core.ui.components.UserList
+import com.tyme.github.users.core.ui.components.UserListItem
 import com.tyme.github.users.core.ui.theme.Theme
-import com.tyme.github.users.core.common.models.UserModel
 import com.tyme.github.users.feature.favorites.impl.R
 
 @Composable
@@ -47,8 +47,8 @@ fun FavoritesScreen(
 @Composable
 private fun FavoritesContent(
     uiState: FavoritesUiState,
-    onUserClick: (UserModel) -> Unit = {},
-    onRemoveFavoriteClick: (UserModel) -> Unit = {},
+    onUserClick: (UserListItem) -> Unit = {},
+    onRemoveFavoriteClick: (UserListItem) -> Unit = {},
     onConfirmRemoveFavorite: () -> Unit = {},
     onDismissRemoveFavorite: () -> Unit = {},
     onUrlClick: (String) -> Unit = {},
@@ -106,8 +106,8 @@ private fun FavoritesSuccessPreview() {
         FavoritesContent(
             uiState = FavoritesUiState.Success(
                 favorites = listOf(
-                    UserModel(1, "JohnDoe", "", "https://github.com/johndoe"),
-                    UserModel(2, "JaneSmith", "", "https://github.com/janesmith"),
+                    UserListItem(1, "JohnDoe", "", "https://github.com/johndoe"),
+                    UserListItem(2, "JaneSmith", "", "https://github.com/janesmith"),
                 ),
             ),
         )

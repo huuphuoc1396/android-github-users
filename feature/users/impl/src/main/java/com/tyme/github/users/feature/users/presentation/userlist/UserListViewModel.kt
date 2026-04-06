@@ -4,15 +4,18 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.LoadState
 import androidx.paging.cachedIn
+import androidx.paging.map
 import com.tyme.github.users.core.navigation.AppNavigator
 import com.tyme.github.users.core.navigation.NavigationIntent
-import com.tyme.github.users.core.common.models.UserModel
 import com.tyme.github.users.core.common.providers.DispatchersProvider
+import com.tyme.github.users.core.ui.components.UserListItem
 import com.tyme.github.users.feature.users.domain.usecase.AddFavoriteUseCase
 import com.tyme.github.users.feature.users.domain.usecase.GetFavoritesUseCase
 import com.tyme.github.users.feature.users.domain.usecase.GetUserPagingUseCase
 import com.tyme.github.users.feature.users.domain.usecase.RemoveFavoriteUseCase
 import com.tyme.github.users.feature.users.navigation.UserDetailsDestination
+import com.tyme.github.users.feature.users.presentation.mappers.toUserListItem
+import com.tyme.github.users.feature.users.presentation.mappers.toUserModel
 import com.tyme.github.users.feature.users.presentation.mappers.toUserListError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,7 +41,9 @@ class UserListViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<UserListUiState>(UserListUiState.Idle)
     val uiState: StateFlow<UserListUiState> = _uiState.asStateFlow()
 
-    val userPaging = getUserPagingUseCase().cachedIn(viewModelScope)
+    val userPaging = getUserPagingUseCase()
+        .map { pagingData -> pagingData.map { it.toUserListItem() } }
+        .cachedIn(viewModelScope)
 
     val favoriteUsernames: StateFlow<Set<String>> = getFavoritesUseCase()
         .map { list -> list.map { it.username }.toSet() }
@@ -68,13 +73,13 @@ class UserListViewModel @Inject constructor(
         _uiState.update { UserListUiState.Success() }
     }
 
-    fun onFavoriteClick(user: UserModel) {
+    fun onFavoriteClick(user: UserListItem) {
         if (user.username in favoriteUsernames.value) {
             _uiState.update { current ->
                 if (current is UserListUiState.Success) current.copy(pendingRemoval = user) else current
             }
         } else {
-            viewModelScope.launch(dispatchers.io) { addFavoriteUseCase(user) }
+            viewModelScope.launch(dispatchers.io) { addFavoriteUseCase(user.toUserModel()) }
         }
     }
 
@@ -92,7 +97,7 @@ class UserListViewModel @Inject constructor(
         }
     }
 
-    fun onNavigateToUser(user: UserModel) {
+    fun onNavigateToUser(user: UserListItem) {
         viewModelScope.launch {
             navigator.navigate(
                 NavigationIntent.NavigateTo(

@@ -4,8 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tyme.github.users.core.navigation.AppNavigator
 import com.tyme.github.users.core.navigation.NavigationIntent
-import com.tyme.github.users.core.common.models.UserModel
 import com.tyme.github.users.core.common.providers.DispatchersProvider
+import com.tyme.github.users.core.ui.components.UserListItem
+import com.tyme.github.users.feature.favorites.presentation.mappers.toUserListItem
 import com.tyme.github.users.feature.users.domain.usecase.GetFavoritesUseCase
 import com.tyme.github.users.feature.users.domain.usecase.RemoveFavoriteUseCase
 import com.tyme.github.users.feature.users.navigation.UserDetailsDestination
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,10 +28,13 @@ class FavoritesViewModel @Inject constructor(
     private val dispatchers: DispatchersProvider,
 ) : ViewModel() {
 
-    private val _pendingRemoval = MutableStateFlow<UserModel?>(null)
+    private val _pendingRemoval = MutableStateFlow<UserListItem?>(null)
 
     val uiState: StateFlow<FavoritesUiState> =
-        combine(getFavoritesUseCase(), _pendingRemoval) { favorites, pending ->
+        combine(
+            getFavoritesUseCase().map { list -> list.map { it.toUserListItem() } },
+            _pendingRemoval,
+        ) { favorites, pending ->
             if (favorites.isEmpty()) FavoritesUiState.Empty
             else FavoritesUiState.Success(favorites = favorites, pendingRemoval = pending)
         }
@@ -39,7 +44,7 @@ class FavoritesViewModel @Inject constructor(
             initialValue = FavoritesUiState.Loading,
         )
 
-    fun onRemoveFavoriteClick(user: UserModel) {
+    fun onRemoveFavoriteClick(user: UserListItem) {
         _pendingRemoval.value = user
     }
 
@@ -55,7 +60,7 @@ class FavoritesViewModel @Inject constructor(
         _pendingRemoval.value = null
     }
 
-    fun onNavigateToUser(user: UserModel) {
+    fun onNavigateToUser(user: UserListItem) {
         viewModelScope.launch {
             navigator.navigate(
                 NavigationIntent.NavigateTo(

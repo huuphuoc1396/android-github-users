@@ -27,18 +27,17 @@ import androidx.window.core.layout.WindowSizeClass
 import androidx.window.core.layout.WindowWidthSizeClass
 import com.tyme.github.users.core.ui.R
 import com.tyme.github.users.core.ui.theme.Theme
-import com.tyme.github.users.core.common.models.UserModel
 import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun UserList(
-    pagingItems: LazyPagingItems<UserModel>,
+    pagingItems: LazyPagingItems<UserListItem>,
     favoriteUsernames: Set<String>,
     modifier: Modifier = Modifier,
     windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass,
     onRetryClick: () -> Unit = {},
-    onUserClick: (UserModel) -> Unit = {},
-    onFavoriteClick: (UserModel) -> Unit = {},
+    onUserClick: (UserListItem) -> Unit = {},
+    onFavoriteClick: (UserListItem) -> Unit = {},
     onUrlClick: (String) -> Unit = {},
 ) {
     val arrangement = Arrangement.spacedBy(12.dp)
@@ -99,11 +98,11 @@ fun UserList(
 
 @Composable
 fun UserList(
-    users: List<UserModel>,
+    users: List<UserListItem>,
     modifier: Modifier = Modifier,
     windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass,
-    onUserClick: (UserModel) -> Unit = {},
-    onFavoriteClick: (UserModel) -> Unit = {},
+    onUserClick: (UserListItem) -> Unit = {},
+    onFavoriteClick: (UserListItem) -> Unit = {},
     onUrlClick: (String) -> Unit = {},
 ) {
     val arrangement = Arrangement.spacedBy(12.dp)
@@ -140,7 +139,7 @@ fun UserList(
 private fun UserListPagingPreview() {
     Theme {
         val userList = MutableList(10) { index ->
-            UserModel(
+            UserListItem(
                 id = index,
                 username = "user$index",
                 url = "https://www.github.com/user$index",
@@ -156,7 +155,7 @@ private fun UserListPagingPreview() {
 private fun UserListStaticPreview() {
     Theme {
         val users = List(5) { index ->
-            UserModel(
+            UserListItem(
                 id = index,
                 username = "user$index",
                 url = "https://www.github.com/user$index",

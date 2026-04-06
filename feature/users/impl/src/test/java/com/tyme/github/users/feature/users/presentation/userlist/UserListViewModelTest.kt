@@ -6,6 +6,7 @@ import com.tyme.github.users.core.navigation.AppNavigator
 import com.tyme.github.users.core.navigation.NavigationIntent
 import com.tyme.github.users.core.common.models.UserModel
 import com.tyme.github.users.core.common.providers.DispatchersProvider
+import com.tyme.github.users.core.ui.components.UserListItem
 import com.tyme.github.users.feature.users.domain.usecase.AddFavoriteUseCase
 import com.tyme.github.users.feature.users.domain.usecase.GetFavoritesUseCase
 import com.tyme.github.users.feature.users.domain.usecase.GetUserPagingUseCase
@@ -180,65 +181,69 @@ internal class UserListViewModelTest {
     @Test
     fun `onFavoriteClick when user is favorite sets pendingRemoval`() = runTest {
         // Given
-        val user = UserModel(username = "user1")
-        every { getFavoritesUseCase() } returns flowOf(listOf(user))
+        val userModel = UserModel(username = "user1")
+        val userListItem = UserListItem(username = "user1")
+        every { getFavoritesUseCase() } returns flowOf(listOf(userModel))
         val viewModel = createViewModel()
         viewModel.onRefreshLoadState(LoadState.NotLoading(false))
         backgroundScope.launch { viewModel.favoriteUsernames.collect {} }
         advanceUntilIdle()
 
         // When
-        viewModel.onFavoriteClick(user)
+        viewModel.onFavoriteClick(userListItem)
 
         // Then
-        (viewModel.uiState.value as UserListUiState.Success).pendingRemoval shouldBe user
+        (viewModel.uiState.value as UserListUiState.Success).pendingRemoval shouldBe userListItem
     }
 
     @Test
     fun `onFavoriteClick when user is not favorite calls addFavorite`() = runTest {
         // Given
-        val user = UserModel(username = "user1")
-        coJustRun { addFavoriteUseCase(user) }
+        val userListItem = UserListItem(username = "user1")
+        val userModel = UserModel(username = "user1")
+        coJustRun { addFavoriteUseCase(userModel) }
         val viewModel = createViewModel()
         viewModel.onRefreshLoadState(LoadState.NotLoading(false))
 
         // When
-        viewModel.onFavoriteClick(user)
+        viewModel.onFavoriteClick(userListItem)
 
         // Then
-        coVerify { addFavoriteUseCase(user) }
+        coVerify { addFavoriteUseCase(userModel) }
     }
 
     @Test
     fun `onConfirmRemoveFavorite calls removeFavorite and clears pendingRemoval`() = runTest {
         // Given
-        val user = UserModel(username = "user1")
-        every { getFavoritesUseCase() } returns flowOf(listOf(user))
-        coJustRun { removeFavoriteUseCase(user.username) }
+        val userModel = UserModel(username = "user1")
+        val userListItem = UserListItem(username = "user1")
+        every { getFavoritesUseCase() } returns flowOf(listOf(userModel))
+        coJustRun { removeFavoriteUseCase(userListItem.username) }
         val viewModel = createViewModel()
         viewModel.onRefreshLoadState(LoadState.NotLoading(false))
         backgroundScope.launch { viewModel.favoriteUsernames.collect {} }
         advanceUntilIdle()
-        viewModel.onFavoriteClick(user)
+        viewModel.onFavoriteClick(userListItem)
 
         // When
         viewModel.onConfirmRemoveFavorite()
 
         // Then
-        coVerify { removeFavoriteUseCase(user.username) }
+        coVerify { removeFavoriteUseCase(userListItem.username) }
         (viewModel.uiState.value as UserListUiState.Success).pendingRemoval shouldBe null
     }
 
     @Test
     fun `onDismissRemoveFavorite clears pendingRemoval`() = runTest {
         // Given
-        val user = UserModel(username = "user1")
-        every { getFavoritesUseCase() } returns flowOf(listOf(user))
+        val userModel = UserModel(username = "user1")
+        val userListItem = UserListItem(username = "user1")
+        every { getFavoritesUseCase() } returns flowOf(listOf(userModel))
         val viewModel = createViewModel()
         viewModel.onRefreshLoadState(LoadState.NotLoading(false))
         backgroundScope.launch { viewModel.favoriteUsernames.collect {} }
         advanceUntilIdle()
-        viewModel.onFavoriteClick(user)
+        viewModel.onFavoriteClick(userListItem)
 
         // When
         viewModel.onDismissRemoveFavorite()
@@ -250,7 +255,7 @@ internal class UserListViewModelTest {
     @Test
     fun `onNavigateToUser navigates to UserDetailsDestination`() = runTest {
         // Given
-        val user = UserModel(username = "user1", avatarUrl = "avatar", url = "https://github.com/user1")
+        val user = UserListItem(username = "user1", avatarUrl = "avatar", url = "https://github.com/user1")
         coEvery { navigator.navigate(any()) } returns Unit
         val viewModel = createViewModel()
 
