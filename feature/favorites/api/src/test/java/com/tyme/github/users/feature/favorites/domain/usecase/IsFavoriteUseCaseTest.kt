@@ -1,4 +1,4 @@
-package com.tyme.github.users.feature.users.domain.usecase
+package com.tyme.github.users.feature.favorites.domain.usecase
 
 import app.cash.turbine.test
 import com.tyme.github.users.feature.favorites.api.repository.FavoriteRepository
