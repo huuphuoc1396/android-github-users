@@ -94,4 +94,6 @@ dependencies {
     testImplementation(libs.turbine)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.androidx.paging.testing)
+    testImplementation(libs.androidx.test.core.ktx)
+    testImplementation(libs.robolectric)
 }

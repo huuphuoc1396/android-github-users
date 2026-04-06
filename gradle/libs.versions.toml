@@ -111,7 +111,6 @@ mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 kotest = { group = "io.kotest", name = "kotest-runner-junit5", version.ref = "kotest" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
-mediation-test-suite = { group = "com.google.android.ads", name = "mediation-test-suite", version.ref = "mediationTestSuite" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
