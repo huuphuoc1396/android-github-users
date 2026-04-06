@@ -1,15 +1,15 @@
-package com.tyme.github.users.feature.users.data.repository
+package com.tyme.github.users.feature.favorites.data.repository
 
 import com.tyme.github.users.core.common.models.UserModel
+import com.tyme.github.users.core.database.dao.FavoriteDao
 import com.tyme.github.users.feature.favorites.api.repository.FavoriteRepository
-import com.tyme.github.users.feature.users.data.local.UserDao
-import com.tyme.github.users.feature.users.data.mapper.toUserModel
+import com.tyme.github.users.feature.favorites.data.mapper.toUserModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 internal class FavoriteRepositoryImpl @Inject constructor(
-    private val dao: UserDao,
+    private val dao: FavoriteDao,
 ) : FavoriteRepository {
 
     override suspend fun addFavorite(user: UserModel) {

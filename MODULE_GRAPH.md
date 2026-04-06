@@ -18,6 +18,7 @@ graph TD
         core_net(":core:network")
         core_sec(":core:security")
         core_cfg(":core:config")
+        core_db(":core:database")
     end
 
     %% app dependencies
@@ -36,7 +37,7 @@ graph TD
     fu_impl --> core_ui
     fu_impl --> core_nav
     fu_impl --> core_net
-    fu_impl --> core_sec
+    fu_impl --> core_db
     fu_impl --> core_common
 
     %% feature:favorites:api dependencies
@@ -47,6 +48,7 @@ graph TD
     ff_impl --> fu_api
     ff_impl --> core_ui
     ff_impl --> core_nav
+    ff_impl --> core_db
     ff_impl --> core_common
 
     %% core:ui dependencies
@@ -54,6 +56,9 @@ graph TD
 
     %% core:network dependencies
     core_net --> core_common
+
+    %% core:database dependencies
+    core_db --> core_sec
 
     %% core:config dependencies
     core_cfg --> core_net

@@ -1,15 +1,11 @@
 package com.tyme.github.users.feature.users.di
 
 import android.content.Context
-import com.tyme.github.users.core.security.providers.SecretKeysProvider
-import com.tyme.github.users.feature.users.BuildConfig
+import com.tyme.github.users.core.database.AppDatabase
+import com.tyme.github.users.core.database.dao.UserDao
 import com.tyme.github.users.feature.users.data.local.UserPreferencesDataStore
 import com.tyme.github.users.feature.users.data.local.UserPreferencesDataStoreImpl
-import com.tyme.github.users.feature.users.data.local.UserDao
-import com.tyme.github.users.feature.users.data.local.UserDatabase
 import com.tyme.github.users.feature.users.data.remote.UserService
-import com.tyme.github.users.feature.favorites.api.repository.FavoriteRepository
-import com.tyme.github.users.feature.users.data.repository.FavoriteRepositoryImpl
 import com.tyme.github.users.feature.users.data.repository.UserRepositoryImpl
 import com.tyme.github.users.feature.users.domain.repository.UserRepository
 import dagger.Binds
@@ -32,26 +28,7 @@ internal abstract class UsersModule {
     @Singleton
     abstract fun bindUserRepository(impl: UserRepositoryImpl): UserRepository
 
-    @Binds
-    @Singleton
-    abstract fun bindFavoriteRepository(impl: FavoriteRepositoryImpl): FavoriteRepository
-
     companion object {
-
-        @Provides
-        @Singleton
-        fun provideUserDatabase(
-            @ApplicationContext context: Context,
-            secretKeysProvider: SecretKeysProvider,
-        ): UserDatabase = UserDatabase.Factory(
-            context = context,
-            isEncrypted = BuildConfig.DB_ENCRYPTION_ENABLED,
-            secretKeysProvider = secretKeysProvider,
-        ).create()
-
-        @Provides
-        @Singleton
-        fun provideUserDao(db: UserDatabase): UserDao = db.userDao()
 
         @Provides
         @Singleton

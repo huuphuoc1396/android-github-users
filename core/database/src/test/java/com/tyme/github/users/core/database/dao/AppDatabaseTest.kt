@@ -1,4 +1,4 @@
-package com.tyme.github.users.feature.users.data.local
+package com.tyme.github.users.core.database.dao
 
 import android.content.Context
 import androidx.paging.PagingConfig
@@ -6,6 +6,8 @@ import androidx.paging.PagingSource
 import androidx.paging.testing.TestPager
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
+import com.tyme.github.users.core.database.AppDatabase
+import com.tyme.github.users.core.database.entity.UserEntity
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -17,16 +19,18 @@ import org.robolectric.RobolectricTestRunner
 import java.io.IOException
 
 @RunWith(RobolectricTestRunner::class)
-internal class UserDaoTest {
+internal class AppDatabaseTest {
 
     private lateinit var userDao: UserDao
-    private lateinit var db: UserDatabase
+    private lateinit var favoriteDao: FavoriteDao
+    private lateinit var db: AppDatabase
 
     @Before
     fun createDb() {
         val context = ApplicationProvider.getApplicationContext<Context>()
-        db = Room.inMemoryDatabaseBuilder(context, UserDatabase::class.java).build()
+        db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
         userDao = db.userDao()
+        favoriteDao = db.favoriteDao()
     }
 
     @After
@@ -60,7 +64,7 @@ internal class UserDaoTest {
         userDao.upsertAll(listOf(entity.copy(avatarUrl = "new_avatar")))
 
         // Then
-        userDao.getFavorites().first() shouldBe listOf(entity.copy(avatarUrl = "new_avatar"))
+        favoriteDao.getFavorites().first() shouldBe listOf(entity.copy(avatarUrl = "new_avatar"))
     }
 
     // endregion
@@ -107,10 +111,10 @@ internal class UserDaoTest {
         userDao.upsertAll(listOf(entity))
 
         // When
-        userDao.setFavorite(username = "user1", isFavorite = true)
+        favoriteDao.setFavorite(username = "user1", isFavorite = true)
 
         // Then
-        userDao.isFavorite("user1").first() shouldBe true
+        favoriteDao.isFavorite("user1").first() shouldBe true
     }
 
     @Test
@@ -120,10 +124,10 @@ internal class UserDaoTest {
         userDao.upsertAll(listOf(entity))
 
         // When
-        userDao.setFavorite(username = "user1", isFavorite = false)
+        favoriteDao.setFavorite(username = "user1", isFavorite = false)
 
         // Then
-        userDao.isFavorite("user1").first() shouldBe false
+        favoriteDao.isFavorite("user1").first() shouldBe false
     }
 
     // endregion
@@ -137,7 +141,7 @@ internal class UserDaoTest {
         userDao.upsertAll(listOf(entity))
 
         // When / Then
-        userDao.isFavorite("user1").first() shouldBe false
+        favoriteDao.isFavorite("user1").first() shouldBe false
     }
 
     @Test
@@ -147,13 +151,13 @@ internal class UserDaoTest {
         userDao.upsertAll(listOf(entity))
 
         // When / Then
-        userDao.isFavorite("user1").first() shouldBe true
+        favoriteDao.isFavorite("user1").first() shouldBe true
     }
 
     @Test
     fun `isFavorite returns false for unknown username`() = runTest {
         // When / Then
-        userDao.isFavorite("unknown").first() shouldBe false
+        favoriteDao.isFavorite("unknown").first() shouldBe false
     }
 
     // endregion
@@ -168,7 +172,7 @@ internal class UserDaoTest {
         userDao.upsertAll(nonFavorites + favorites)
 
         // When / Then
-        userDao.getFavorites().first() shouldBe favorites
+        favoriteDao.getFavorites().first() shouldBe favorites
     }
 
     @Test
@@ -178,7 +182,7 @@ internal class UserDaoTest {
         userDao.upsertAll(entities)
 
         // When / Then
-        userDao.getFavorites().first() shouldBe emptyList()
+        favoriteDao.getFavorites().first() shouldBe emptyList()
     }
 
     // endregion
@@ -226,7 +230,7 @@ internal class UserDaoTest {
         userDao.upsertAndDeleteAll(needToDelete = true, listOf(updatedEntity))
 
         // Then
-        userDao.getFavorites().first() shouldBe listOf(updatedEntity.copy(isFavorite = true))
+        favoriteDao.getFavorites().first() shouldBe listOf(updatedEntity.copy(isFavorite = true))
     }
 
     @Test
@@ -243,7 +247,7 @@ internal class UserDaoTest {
 
         // Then — favoriteEntity (id=99) is NOT in newEntities but was a favorite,
         // so it should survive deleteNonFavorites
-        userDao.getFavorites().first() shouldBe listOf(favoriteEntity)
+        favoriteDao.getFavorites().first() shouldBe listOf(favoriteEntity)
     }
 
     // endregion

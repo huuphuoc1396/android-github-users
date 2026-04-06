@@ -114,6 +114,7 @@ dependencies {
     kover(project(":core:ui"))
     kover(project(":core:navigation"))
     kover(project(":core:network"))
+    kover(project(":core:database"))
     kover(project(":core:config"))
     kover(project(":feature:users:impl"))
     kover(project(":feature:users:api"))

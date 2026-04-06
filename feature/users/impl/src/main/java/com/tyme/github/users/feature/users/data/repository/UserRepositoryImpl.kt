@@ -5,7 +5,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.tyme.github.users.feature.users.data.local.UserDao
+import com.tyme.github.users.core.database.dao.UserDao
 import com.tyme.github.users.feature.users.data.mapper.toUserDetailsModel
 import com.tyme.github.users.feature.users.data.mapper.toUserModel
 import com.tyme.github.users.feature.users.data.remote.UserService

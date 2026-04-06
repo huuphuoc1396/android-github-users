@@ -16,12 +16,6 @@ android {
         minSdk = libs.versions.minSdk.get().toInt()
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-
-        kapt {
-            arguments {
-                arg("room.schemaLocation", "$projectDir/schemas")
-            }
-        }
     }
 
     buildTypes {
@@ -36,15 +30,9 @@ android {
 
     flavorDimensions += "environment"
     productFlavors {
-        create("dev") {
-            buildConfigField("Boolean", "DB_ENCRYPTION_ENABLED", "false")
-        }
-        create("stag") {
-            buildConfigField("Boolean", "DB_ENCRYPTION_ENABLED", "true")
-        }
-        create("prod") {
-            buildConfigField("Boolean", "DB_ENCRYPTION_ENABLED", "true")
-        }
+        create("dev") {}
+        create("stag") {}
+        create("prod") {}
     }
 
     compileOptions {
@@ -58,7 +46,6 @@ android {
 
     buildFeatures {
         compose = true
-        buildConfig = true
     }
 }
 
@@ -66,7 +53,7 @@ dependencies {
     implementation(project(":core:ui"))
     implementation(project(":core:navigation"))
     implementation(project(":core:network"))
-    implementation(project(":core:security"))
+    implementation(project(":core:database"))
     implementation(project(":core:common"))
     implementation(project(":feature:users:api"))
     implementation(project(":feature:favorites:api"))
@@ -93,13 +80,6 @@ dependencies {
     implementation(libs.androidx.paging.compose)
     implementation(libs.androidx.paging.runtime.ktx)
 
-    implementation(libs.room.ktx)
-    implementation(libs.room.paging)
-    kapt(libs.room.compiler)
-
-    implementation(libs.sqlite.ktx)
-    implementation(libs.sqlcipher.android)
-
     implementation(libs.retrofit)
     implementation(libs.gson)
 
@@ -114,6 +94,4 @@ dependencies {
     testImplementation(libs.turbine)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.androidx.paging.testing)
-    testImplementation(libs.androidx.test.core.ktx)
-    testImplementation(libs.robolectric)
 }

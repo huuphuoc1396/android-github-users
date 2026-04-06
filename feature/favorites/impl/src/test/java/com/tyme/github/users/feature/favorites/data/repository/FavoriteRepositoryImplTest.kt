@@ -1,10 +1,10 @@
-package com.tyme.github.users.feature.users.data.repository
+package com.tyme.github.users.feature.favorites.data.repository
 
 import app.cash.turbine.test
 import com.tyme.github.users.core.common.models.UserModel
-import com.tyme.github.users.feature.users.data.local.UserDao
-import com.tyme.github.users.feature.users.data.local.UserEntity
-import com.tyme.github.users.feature.users.data.mapper.toUserModel
+import com.tyme.github.users.core.database.dao.FavoriteDao
+import com.tyme.github.users.core.database.entity.UserEntity
+import com.tyme.github.users.feature.favorites.data.mapper.toUserModel
 import io.kotest.matchers.shouldBe
 import io.mockk.coJustRun
 import io.mockk.coVerify
@@ -16,7 +16,7 @@ import org.junit.Test
 
 internal class FavoriteRepositoryImplTest {
 
-    private val dao = mockk<UserDao>()
+    private val dao = mockk<FavoriteDao>()
 
     private val repository = FavoriteRepositoryImpl(dao)
 

@@ -1,11 +1,11 @@
-package com.tyme.github.users.feature.users.data.local
+package com.tyme.github.users.core.database.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-internal data class UserEntity(
+data class UserEntity(
     @PrimaryKey
     @ColumnInfo("id")
     val id: Int = 0,
