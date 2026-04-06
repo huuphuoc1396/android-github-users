@@ -8,7 +8,7 @@ import com.tyme.github.users.feature.users.data.local.UserPreferencesDataStoreIm
 import com.tyme.github.users.feature.users.data.local.UserDao
 import com.tyme.github.users.feature.users.data.local.UserDatabase
 import com.tyme.github.users.feature.users.data.remote.UserService
-import com.tyme.github.users.feature.users.api.repository.FavoriteRepository
+import com.tyme.github.users.feature.favorites.api.repository.FavoriteRepository
 import com.tyme.github.users.feature.users.data.repository.FavoriteRepositoryImpl
 import com.tyme.github.users.feature.users.data.repository.UserRepositoryImpl
 import com.tyme.github.users.feature.users.domain.repository.UserRepository

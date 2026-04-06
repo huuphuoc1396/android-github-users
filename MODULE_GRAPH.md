@@ -32,14 +32,15 @@ graph TD
 
     %% feature:users:impl dependencies
     fu_impl --> fu_api
+    fu_impl --> ff_api
     fu_impl --> core_ui
     fu_impl --> core_nav
     fu_impl --> core_net
     fu_impl --> core_sec
     fu_impl --> core_common
 
-    %% feature:users:api dependencies
-    fu_api --> core_common
+    %% feature:favorites:api dependencies
+    ff_api --> core_common
 
     %% feature:favorites:impl dependencies
     ff_impl --> ff_api

@@ -1,7 +1,7 @@
-package com.tyme.github.users.feature.users.domain.usecase
+package com.tyme.github.users.feature.favorites.domain.usecase
 
 import com.tyme.github.users.core.common.models.UserModel
-import com.tyme.github.users.feature.users.api.repository.FavoriteRepository
+import com.tyme.github.users.feature.favorites.api.repository.FavoriteRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

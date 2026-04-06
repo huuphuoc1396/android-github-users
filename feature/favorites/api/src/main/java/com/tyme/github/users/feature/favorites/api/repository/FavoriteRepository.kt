@@ -1,4 +1,4 @@
-package com.tyme.github.users.feature.users.api.repository
+package com.tyme.github.users.feature.favorites.api.repository
 
 import com.tyme.github.users.core.common.models.UserModel
 import kotlinx.coroutines.flow.Flow

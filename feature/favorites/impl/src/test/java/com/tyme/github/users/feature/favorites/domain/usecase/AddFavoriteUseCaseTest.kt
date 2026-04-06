@@ -1,8 +1,8 @@
 package com.tyme.github.users.feature.favorites.domain.usecase
 
 import com.tyme.github.users.core.common.models.UserModel
-import com.tyme.github.users.feature.users.api.repository.FavoriteRepository
-import com.tyme.github.users.feature.users.domain.usecase.AddFavoriteUseCase
+import com.tyme.github.users.feature.favorites.api.repository.FavoriteRepository
+import com.tyme.github.users.feature.favorites.domain.usecase.AddFavoriteUseCase
 import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.mockk

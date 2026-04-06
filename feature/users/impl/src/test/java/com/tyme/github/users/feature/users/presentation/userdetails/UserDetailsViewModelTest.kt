@@ -9,10 +9,10 @@ import com.tyme.github.users.core.common.models.UserModel
 import com.tyme.github.users.core.common.providers.DispatchersProvider
 import com.tyme.github.users.feature.users.data.mapper.toUserDetailUiState
 import com.tyme.github.users.feature.users.domain.model.UserDetailsModel
-import com.tyme.github.users.feature.users.domain.usecase.AddFavoriteUseCase
+import com.tyme.github.users.feature.favorites.domain.usecase.AddFavoriteUseCase
 import com.tyme.github.users.feature.users.domain.usecase.GetUserDetailsUseCase
-import com.tyme.github.users.feature.users.domain.usecase.IsFavoriteUseCase
-import com.tyme.github.users.feature.users.domain.usecase.RemoveFavoriteUseCase
+import com.tyme.github.users.feature.favorites.domain.usecase.IsFavoriteUseCase
+import com.tyme.github.users.feature.favorites.domain.usecase.RemoveFavoriteUseCase
 import com.tyme.github.users.feature.users.navigation.UserDetailsDestination
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
