@@ -24,7 +24,7 @@ import com.tyme.github.users.core.ui.components.Loading
 import com.tyme.github.users.core.ui.components.RemoveFavoriteDialog
 import com.tyme.github.users.core.ui.components.UserList
 import com.tyme.github.users.core.ui.theme.Theme
-import com.tyme.github.users.domain.models.UserModel
+import com.tyme.github.users.core.common.models.UserModel
 import com.tyme.github.users.feature.favorites.impl.R
 
 @Composable

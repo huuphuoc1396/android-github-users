@@ -1,6 +1,6 @@
 package com.tyme.github.users.feature.users.data.mapper
 
-import com.tyme.github.users.domain.extensions.orZero
+import com.tyme.github.users.core.common.extensions.orZero
 import com.tyme.github.users.feature.users.data.remote.dto.UserDetailsResponse
 import com.tyme.github.users.feature.users.domain.model.UserDetailsModel
 import com.tyme.github.users.feature.users.presentation.userdetails.UserDetailUiState

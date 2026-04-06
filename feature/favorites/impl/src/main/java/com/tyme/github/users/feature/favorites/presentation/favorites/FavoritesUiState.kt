@@ -1,6 +1,6 @@
 package com.tyme.github.users.feature.favorites.presentation.favorites
 
-import com.tyme.github.users.domain.models.UserModel
+import com.tyme.github.users.core.common.models.UserModel
 
 sealed interface FavoritesUiState {
     data object Loading : FavoritesUiState

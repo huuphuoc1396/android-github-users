@@ -1,6 +1,6 @@
 package com.tyme.github.users.feature.users.data.repository
 
-import com.tyme.github.users.domain.models.UserModel
+import com.tyme.github.users.core.common.models.UserModel
 import com.tyme.github.users.feature.users.api.repository.FavoriteRepository
 import com.tyme.github.users.feature.users.data.local.UserDao
 import com.tyme.github.users.feature.users.data.mapper.toUserModel

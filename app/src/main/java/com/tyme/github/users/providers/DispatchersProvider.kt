@@ -1,6 +1,6 @@
 package com.tyme.github.users.providers
 
-import com.tyme.github.users.domain.providers.DispatchersProvider
+import com.tyme.github.users.core.common.providers.DispatchersProvider
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject

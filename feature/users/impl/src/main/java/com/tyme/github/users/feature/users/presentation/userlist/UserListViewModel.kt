@@ -6,8 +6,8 @@ import androidx.paging.LoadState
 import androidx.paging.cachedIn
 import com.tyme.github.users.core.navigation.AppNavigator
 import com.tyme.github.users.core.navigation.NavigationIntent
-import com.tyme.github.users.domain.models.UserModel
-import com.tyme.github.users.domain.providers.DispatchersProvider
+import com.tyme.github.users.core.common.models.UserModel
+import com.tyme.github.users.core.common.providers.DispatchersProvider
 import com.tyme.github.users.feature.users.domain.usecase.AddFavoriteUseCase
 import com.tyme.github.users.feature.users.domain.usecase.GetFavoritesUseCase
 import com.tyme.github.users.feature.users.domain.usecase.GetUserPagingUseCase

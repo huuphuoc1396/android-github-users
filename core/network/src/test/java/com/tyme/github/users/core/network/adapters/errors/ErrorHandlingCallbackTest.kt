@@ -1,6 +1,6 @@
 package com.tyme.github.users.core.network.adapters.errors
 
-import com.tyme.github.users.domain.models.errors.NoConnectionException
+import com.tyme.github.users.core.network.models.errors.NoConnectionException
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
