@@ -3,10 +3,11 @@ package com.tyme.github.users.feature.favorites.presentation.favorites
 import app.cash.turbine.test
 import com.tyme.github.users.core.navigation.AppNavigator
 import com.tyme.github.users.core.navigation.NavigationIntent
+import com.tyme.github.users.core.common.models.UserModel
 import com.tyme.github.users.core.common.providers.DispatchersProvider
+import com.tyme.github.users.core.ui.components.UserListItem
 import com.tyme.github.users.feature.users.domain.usecase.GetFavoritesUseCase
 import com.tyme.github.users.feature.users.domain.usecase.RemoveFavoriteUseCase
-import com.tyme.github.users.core.common.models.UserModel
 import com.tyme.github.users.feature.users.navigation.UserDetailsDestination
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
@@ -66,7 +67,6 @@ internal class FavoritesViewModelTest {
 
         // Then
         viewModel.uiState.test {
-            // Loading is the initialValue before combine emits
             awaitItem() // skip first emission (Loading or Empty depending on timing)
             cancelAndIgnoreRemainingEvents()
         }
@@ -94,7 +94,12 @@ internal class FavoritesViewModelTest {
 
         // When / Then
         viewModel.uiState.test {
-            awaitItem() shouldBe FavoritesUiState.Success(favorites = favorites)
+            awaitItem() shouldBe FavoritesUiState.Success(
+                favorites = listOf(
+                    UserListItem(username = "user1"),
+                    UserListItem(username = "user2"),
+                )
+            )
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -102,16 +107,17 @@ internal class FavoritesViewModelTest {
     @Test
     fun `onRemoveFavoriteClick sets pendingRemoval in Success state`() = runTest {
         // Given
-        val user = UserModel(username = "user1")
-        every { getFavoritesUseCase() } returns flowOf(listOf(user))
+        val userModel = UserModel(username = "user1")
+        val userListItem = UserListItem(username = "user1")
+        every { getFavoritesUseCase() } returns flowOf(listOf(userModel))
         val viewModel = createViewModel()
 
         // When
-        viewModel.onRemoveFavoriteClick(user)
+        viewModel.onRemoveFavoriteClick(userListItem)
 
         // Then
         viewModel.uiState.test {
-            (awaitItem() as FavoritesUiState.Success).pendingRemoval shouldBe user
+            (awaitItem() as FavoritesUiState.Success).pendingRemoval shouldBe userListItem
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -119,17 +125,18 @@ internal class FavoritesViewModelTest {
     @Test
     fun `onConfirmRemoveFavorite calls removeFavoriteUseCase and clears pendingRemoval`() = runTest {
         // Given
-        val user = UserModel(username = "user1")
-        every { getFavoritesUseCase() } returns flowOf(listOf(user))
-        coEvery { removeFavoriteUseCase(user.username) } just runs
+        val userModel = UserModel(username = "user1")
+        val userListItem = UserListItem(username = "user1")
+        every { getFavoritesUseCase() } returns flowOf(listOf(userModel))
+        coEvery { removeFavoriteUseCase(userListItem.username) } just runs
         val viewModel = createViewModel()
-        viewModel.onRemoveFavoriteClick(user)
+        viewModel.onRemoveFavoriteClick(userListItem)
 
         // When
         viewModel.onConfirmRemoveFavorite()
 
         // Then
-        coVerify { removeFavoriteUseCase(user.username) }
+        coVerify { removeFavoriteUseCase(userListItem.username) }
         viewModel.uiState.test {
             (awaitItem() as FavoritesUiState.Success).pendingRemoval shouldBe null
             cancelAndIgnoreRemainingEvents()
@@ -152,10 +159,11 @@ internal class FavoritesViewModelTest {
     @Test
     fun `onDismissRemoveFavorite clears pendingRemoval`() = runTest {
         // Given
-        val user = UserModel(username = "user1")
-        every { getFavoritesUseCase() } returns flowOf(listOf(user))
+        val userModel = UserModel(username = "user1")
+        val userListItem = UserListItem(username = "user1")
+        every { getFavoritesUseCase() } returns flowOf(listOf(userModel))
         val viewModel = createViewModel()
-        viewModel.onRemoveFavoriteClick(user)
+        viewModel.onRemoveFavoriteClick(userListItem)
 
         // When
         viewModel.onDismissRemoveFavorite()
@@ -170,22 +178,23 @@ internal class FavoritesViewModelTest {
     @Test
     fun `onNavigateToUser navigates to UserDetailsDestination`() = runTest {
         // Given
-        val user = UserModel(username = "user1", avatarUrl = "avatar", url = "https://github.com/user1")
-        every { getFavoritesUseCase() } returns flowOf(listOf(user))
+        val userModel = UserModel(username = "user1", avatarUrl = "avatar", url = "https://github.com/user1")
+        val userListItem = UserListItem(username = "user1", avatarUrl = "avatar", url = "https://github.com/user1")
+        every { getFavoritesUseCase() } returns flowOf(listOf(userModel))
         coEvery { navigator.navigate(any()) } just runs
         val viewModel = createViewModel()
 
         // When
-        viewModel.onNavigateToUser(user)
+        viewModel.onNavigateToUser(userListItem)
 
         // Then
         coVerify {
             navigator.navigate(
                 NavigationIntent.NavigateTo(
                     route = UserDetailsDestination(
-                        username = user.username,
-                        avatarUrl = user.avatarUrl,
-                        url = user.url,
+                        username = userListItem.username,
+                        avatarUrl = userListItem.avatarUrl,
+                        url = userListItem.url,
                     )
                 )
             )
