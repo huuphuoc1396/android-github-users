@@ -69,6 +69,7 @@ dependencies {
     implementation(project(":core:security"))
     implementation(project(":core:common"))
     implementation(project(":feature:users:api"))
+    implementation(project(":feature:favorites:api"))
 
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)

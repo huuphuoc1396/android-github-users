@@ -7,10 +7,10 @@ import com.tyme.github.users.core.navigation.NavigationIntent
 import com.tyme.github.users.core.common.models.UserModel
 import com.tyme.github.users.core.common.providers.DispatchersProvider
 import com.tyme.github.users.core.ui.components.UserListItem
-import com.tyme.github.users.feature.users.domain.usecase.AddFavoriteUseCase
-import com.tyme.github.users.feature.users.domain.usecase.GetFavoritesUseCase
+import com.tyme.github.users.feature.favorites.domain.usecase.AddFavoriteUseCase
+import com.tyme.github.users.feature.favorites.domain.usecase.GetFavoritesUseCase
 import com.tyme.github.users.feature.users.domain.usecase.GetUserPagingUseCase
-import com.tyme.github.users.feature.users.domain.usecase.RemoveFavoriteUseCase
+import com.tyme.github.users.feature.favorites.domain.usecase.RemoveFavoriteUseCase
 import com.tyme.github.users.feature.users.navigation.UserDetailsDestination
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
