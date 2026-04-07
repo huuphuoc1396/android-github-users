@@ -1,8 +1,13 @@
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.kotlin.compose.compiler)
     alias(libs.plugins.kotlinx.kover)
+}
+
+kotlin {
+    compilerOptions {
+        languageVersion = org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0
+    }
 }
 
 android {
@@ -10,10 +15,9 @@ android {
     compileSdk = libs.versions.compileSdk.get().toInt()
     defaultConfig { minSdk = libs.versions.minSdk.get().toInt() }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions { jvmTarget = "1.8" }
     buildFeatures { compose = true }
 
     flavorDimensions += "environment"
@@ -29,6 +33,7 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.compose.material.icons)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.material3.adaptive)
     implementation(libs.androidx.material3.window.size.clazz)

@@ -1,11 +1,16 @@
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.hilt.android)
-    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.seriazation)
     alias(libs.plugins.kotlin.compose.compiler)
     alias(libs.plugins.kotlinx.kover)
+}
+
+kotlin {
+    compilerOptions {
+        languageVersion = org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0
+    }
 }
 
 android {
@@ -36,12 +41,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = "1.8"
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 
     buildFeatures {
@@ -64,6 +65,7 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.compose.material.icons)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.material3.adaptive)
     implementation(libs.androidx.material3.window.size.clazz)
@@ -72,7 +74,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
 
     debugImplementation(libs.androidx.ui.tooling)

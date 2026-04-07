@@ -1,11 +1,16 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.hilt.android)
-    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.seriazation)
     alias(libs.plugins.kotlin.compose.compiler)
     alias(libs.plugins.kotlinx.kover)
+}
+
+kotlin {
+    compilerOptions {
+        languageVersion = org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0
+    }
 }
 
 android {
@@ -50,12 +55,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = "1.8"
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 
     buildFeatures {
@@ -74,37 +75,39 @@ android {
     }
 }
 
-koverReport {
-    filters {
-        excludes {
-            classes(
-                "*.*BuildConfig*",
-                "*.*Module*",
-                "*.*Factory*",
-                "*.*CallAdapter*",
-                "*.*Hilt*",
-                "*.*Dao_Impl*",
-                "*.*Database*",
-                "*.*ComposableSingletons*",
-                "*.*Destination*",
-                "*.*Provider*",
-            )
-            packages(
-                "hilt_aggregated_deps",
-                "dagger.hilt.internal.aggregatedroot.codegen",
-                "com.tyme.github.users.*.di.*",
-                "com.tyme.github.users.extenstions",
-                "com.tyme.github.users.ui.uistate",
-                "com.tyme.github.users.core.ui.theme",
-                "com.tyme.github.users.core.ui.utils",
-                "com.tyme.github.users.core.ui.extensions",
-            )
-            annotatedBy(
-                "dagger.hilt.android.HiltAndroidApp",
-                "dagger.hilt.android.AndroidEntryPoint",
-                "androidx.compose.runtime.Composable",
-                "androidx.compose.ui.tooling.preview.Preview",
-            )
+kover {
+    reports {
+        filters {
+            excludes {
+                classes(
+                    "*.*BuildConfig*",
+                    "*.*Module*",
+                    "*.*Factory*",
+                    "*.*CallAdapter*",
+                    "*.*Hilt*",
+                    "*.*Dao_Impl*",
+                    "*.*Database*",
+                    "*.*ComposableSingletons*",
+                    "*.*Destination*",
+                    "*.*Provider*",
+                )
+                packages(
+                    "hilt_aggregated_deps",
+                    "dagger.hilt.internal.aggregatedroot.codegen",
+                    "com.tyme.github.users.*.di.*",
+                    "com.tyme.github.users.extenstions",
+                    "com.tyme.github.users.ui.uistate",
+                    "com.tyme.github.users.core.ui.theme",
+                    "com.tyme.github.users.core.ui.utils",
+                    "com.tyme.github.users.core.ui.extensions",
+                )
+                annotatedBy(
+                    "dagger.hilt.android.HiltAndroidApp",
+                    "dagger.hilt.android.AndroidEntryPoint",
+                    "androidx.compose.runtime.Composable",
+                    "androidx.compose.ui.tooling.preview.Preview",
+                )
+            }
         }
     }
 }
@@ -139,6 +142,7 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.compose.material.icons)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.material3.adaptive)
     implementation(libs.androidx.material3.window.size.clazz)
@@ -149,7 +153,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
 
     implementation(libs.androidx.paging.compose)
