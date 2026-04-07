@@ -15,7 +15,6 @@ import com.tyme.github.users.feature.users.navigation.UserDetailsDestination
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import io.mockk.coEvery
-import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
@@ -201,7 +200,7 @@ internal class UserListViewModelTest {
         // Given
         val userListItem = UserListItem(username = "user1")
         val userModel = UserModel(username = "user1")
-        coJustRun { addFavoriteUseCase(userModel) }
+        coEvery { addFavoriteUseCase(userModel) } returns Result.success(Unit)
         val viewModel = createViewModel()
         viewModel.onRefreshLoadState(LoadState.NotLoading(false))
 
@@ -218,7 +217,7 @@ internal class UserListViewModelTest {
         val userModel = UserModel(username = "user1")
         val userListItem = UserListItem(username = "user1")
         every { getFavoritesUseCase() } returns flowOf(listOf(userModel))
-        coJustRun { removeFavoriteUseCase(userListItem.username) }
+        coEvery { removeFavoriteUseCase(userListItem.username) } returns Result.success(Unit)
         val viewModel = createViewModel()
         viewModel.onRefreshLoadState(LoadState.NotLoading(false))
         backgroundScope.launch { viewModel.favoriteUsernames.collect {} }

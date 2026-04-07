@@ -12,11 +12,11 @@ internal class FavoriteRepositoryImpl @Inject constructor(
     private val dao: FavoriteDao,
 ) : FavoriteRepository {
 
-    override suspend fun addFavorite(user: UserModel) {
+    override suspend fun addFavorite(user: UserModel): Result<Unit> = runCatching {
         dao.setFavorite(user.username, true)
     }
 
-    override suspend fun removeFavorite(username: String) {
+    override suspend fun removeFavorite(username: String): Result<Unit> = runCatching {
         dao.setFavorite(username, false)
     }
 

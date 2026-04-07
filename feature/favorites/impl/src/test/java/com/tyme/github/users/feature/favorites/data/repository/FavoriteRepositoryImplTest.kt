@@ -6,6 +6,7 @@ import com.tyme.github.users.core.database.dao.FavoriteDao
 import com.tyme.github.users.core.database.entity.UserEntity
 import com.tyme.github.users.feature.favorites.data.mapper.toUserModel
 import io.kotest.matchers.shouldBe
+import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.every
@@ -21,29 +22,57 @@ internal class FavoriteRepositoryImplTest {
     private val repository = FavoriteRepositoryImpl(dao)
 
     @Test
-    fun `addFavorite calls dao setFavorite with isFavorite true`() = runTest {
+    fun `addFavorite calls dao setFavorite with isFavorite true and returns success`() = runTest {
         // Given
         val user = UserModel(username = "user1", avatarUrl = "avatar", url = "https://github.com/user1")
         coJustRun { dao.setFavorite(user.username, true) }
 
         // When
-        repository.addFavorite(user)
+        val result = repository.addFavorite(user)
 
         // Then
         coVerify { dao.setFavorite(user.username, true) }
+        result.isSuccess shouldBe true
     }
 
     @Test
-    fun `removeFavorite calls dao setFavorite with isFavorite false`() = runTest {
+    fun `addFavorite returns failure when dao throws`() = runTest {
+        // Given
+        val user = UserModel(username = "user1", avatarUrl = "avatar", url = "https://github.com/user1")
+        coEvery { dao.setFavorite(user.username, true) } throws RuntimeException("db error")
+
+        // When
+        val result = repository.addFavorite(user)
+
+        // Then
+        result.isFailure shouldBe true
+    }
+
+    @Test
+    fun `removeFavorite calls dao setFavorite with isFavorite false and returns success`() = runTest {
         // Given
         val username = "user1"
         coJustRun { dao.setFavorite(username, false) }
 
         // When
-        repository.removeFavorite(username)
+        val result = repository.removeFavorite(username)
 
         // Then
         coVerify { dao.setFavorite(username, false) }
+        result.isSuccess shouldBe true
+    }
+
+    @Test
+    fun `removeFavorite returns failure when dao throws`() = runTest {
+        // Given
+        val username = "user1"
+        coEvery { dao.setFavorite(username, false) } throws RuntimeException("db error")
+
+        // When
+        val result = repository.removeFavorite(username)
+
+        // Then
+        result.isFailure shouldBe true
     }
 
     @Test

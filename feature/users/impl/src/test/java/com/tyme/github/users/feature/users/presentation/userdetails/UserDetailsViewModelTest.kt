@@ -17,7 +17,6 @@ import com.tyme.github.users.feature.users.navigation.UserDetailsDestination
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import io.mockk.coEvery
-import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
@@ -148,7 +147,7 @@ internal class UserDetailsViewModelTest {
             avatarUrl = destination.avatarUrl,
             url = destination.url,
         )
-        coJustRun { addFavoriteUseCase(expectedUser) }
+        coEvery { addFavoriteUseCase(expectedUser) } returns Result.success(Unit)
         val viewModel = createViewModel()
 
         // When
@@ -162,7 +161,7 @@ internal class UserDetailsViewModelTest {
     fun `onConfirmRemoveFavorite calls removeFavorite and hides dialog`() = runTest {
         // Given
         every { isFavoriteUseCase(destination.username) } returns flowOf(true)
-        coJustRun { removeFavoriteUseCase(destination.username) }
+        coEvery { removeFavoriteUseCase(destination.username) } returns Result.success(Unit)
         val viewModel = createViewModel()
         backgroundScope.launch { viewModel.isFavorite.collect {} }
         advanceUntilIdle()

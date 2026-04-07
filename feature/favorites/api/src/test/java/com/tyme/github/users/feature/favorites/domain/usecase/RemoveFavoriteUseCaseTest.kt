@@ -2,7 +2,7 @@ package com.tyme.github.users.feature.favorites.domain.usecase
 
 import com.tyme.github.users.feature.favorites.api.repository.FavoriteRepository
 import com.tyme.github.users.feature.favorites.domain.usecase.RemoveFavoriteUseCase
-import io.mockk.coJustRun
+import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -18,7 +18,7 @@ internal class RemoveFavoriteUseCaseTest {
     fun `invoke calls repository removeFavorite with given username`() = runTest {
         // Given
         val username = "user1"
-        coJustRun { repository.removeFavorite(username) }
+        coEvery { repository.removeFavorite(username) } returns Result.success(Unit)
 
         // When
         useCase(username)

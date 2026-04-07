@@ -3,7 +3,7 @@ package com.tyme.github.users.feature.favorites.domain.usecase
 import com.tyme.github.users.core.common.models.UserModel
 import com.tyme.github.users.feature.favorites.api.repository.FavoriteRepository
 import com.tyme.github.users.feature.favorites.domain.usecase.AddFavoriteUseCase
-import io.mockk.coJustRun
+import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -23,7 +23,7 @@ internal class AddFavoriteUseCaseTest {
             avatarUrl = "https://avatars.githubusercontent.com/u/1",
             url = "https://github.com/user1",
         )
-        coJustRun { repository.addFavorite(user) }
+        coEvery { repository.addFavorite(user) } returns Result.success(Unit)
 
         // When
         useCase(user)

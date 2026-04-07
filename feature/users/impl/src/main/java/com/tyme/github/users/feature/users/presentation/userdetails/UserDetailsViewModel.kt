@@ -43,6 +43,7 @@ class UserDetailsViewModel @Inject constructor(
     val uiState: StateFlow<UserDetailUiState> = _uiState.asStateFlow()
 
     val isFavorite: StateFlow<Boolean> = isFavoriteUseCase(destination.username)
+        .catch { emit(false) }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
@@ -75,7 +76,7 @@ class UserDetailsViewModel @Inject constructor(
                         avatarUrl = destination.avatarUrl,
                         url = destination.url,
                     )
-                )
+                ).onFailure { e -> _uiState.value = e.toUserDetailError() }
             }
         }
     }
@@ -84,7 +85,10 @@ class UserDetailsViewModel @Inject constructor(
         _uiState.update { current ->
             if (current is UserDetailUiState.Success) current.copy(showRemoveConfirmDialog = false) else current
         }
-        viewModelScope.launch(dispatchers.io) { removeFavoriteUseCase(destination.username) }
+        viewModelScope.launch(dispatchers.io) {
+            removeFavoriteUseCase(destination.username)
+                .onFailure { e -> _uiState.value = e.toUserDetailError() }
+        }
     }
 
     fun onDismissRemoveFavorite() {
