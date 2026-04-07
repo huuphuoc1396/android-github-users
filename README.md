@@ -10,28 +10,31 @@ An Android application for browsing GitHub users and their details, with the abi
 - Offline support — previously loaded users are cached locally and accessible without a network connection.
 - Mark and unmark any user as a favorite directly from the list.
 
-<img src="https://github.com/user-attachments/assets/7e409eb9-a6bd-4938-9343-dd95d365aa4b" width=164>
-<img src="https://github.com/user-attachments/assets/d3d1ab82-61af-4365-8e40-bf546275a64a" width=164>
+<img width="164" alt="Screenshot_1775559168" src="https://github.com/user-attachments/assets/95cd06aa-618f-4a15-9f4e-71a1217e3d73" />
+
 
 &nbsp;
 
 - If loading the next page fails, an inline retry option is shown.
 
-<img src="https://github.com/user-attachments/assets/79450fe3-8cdc-460c-8196-406880678693" width=164>
+<img width="164" alt="Screenshot_1775559177" src="https://github.com/user-attachments/assets/e260f4ff-00a8-4c7c-9d06-e953ff0d637f" />
+
 
 ### User Details
 
 - View profile information: avatar, location, follower and following counts, and GitHub profile link.
 - Add or remove the user from favorites with a single tap.
-- Offline access to previously loaded profiles.
+- 
+<img width="164" height="2400" alt="Screenshot_1775559294" src="https://github.com/user-attachments/assets/1b57b39e-a7ee-44d3-9ff1-0771674cbcda" />
 
-<img src="https://github.com/user-attachments/assets/819db123-34c7-4c89-9b05-a53ae237c7f3" width=164>
-<img src="https://github.com/user-attachments/assets/c58f79c4-5891-496f-a809-b1bef3173ae5" width=164>
 
 ### Favorites
 
 - View all saved favorite users in a dedicated screen.
 - Remove favorites with a confirmation dialog to prevent accidental deletion.
+
+<img width=164 alt="Screenshot_1775559098" src="https://github.com/user-attachments/assets/60d87a55-aa18-4672-a1f4-ab86d7f00b2e" />
+
 
 ### Theme
 
