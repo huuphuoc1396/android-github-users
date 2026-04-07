@@ -128,7 +128,7 @@ internal class FavoritesViewModelTest {
         val userModel = UserModel(username = "user1")
         val userListItem = UserListItem(username = "user1")
         every { getFavoritesUseCase() } returns flowOf(listOf(userModel))
-        coEvery { removeFavoriteUseCase(userListItem.username) } just runs
+        coEvery { removeFavoriteUseCase(userListItem.username) } returns Result.success(Unit)
         val viewModel = createViewModel()
         viewModel.onRemoveFavoriteClick(userListItem)
 

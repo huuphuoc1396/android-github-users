@@ -6,5 +6,5 @@ import javax.inject.Inject
 class RemoveFavoriteUseCase @Inject constructor(
     private val repository: FavoriteRepository,
 ) {
-    suspend operator fun invoke(username: String) = repository.removeFavorite(username)
+    suspend operator fun invoke(username: String): Result<Unit> = repository.removeFavorite(username)
 }

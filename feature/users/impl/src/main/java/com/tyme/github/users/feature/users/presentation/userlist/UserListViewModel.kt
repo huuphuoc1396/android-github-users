@@ -18,6 +18,7 @@ import com.tyme.github.users.feature.users.presentation.mappers.toUserListItem
 import com.tyme.github.users.feature.users.presentation.mappers.toUserModel
 import com.tyme.github.users.feature.users.presentation.mappers.toUserListError
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -47,6 +48,7 @@ class UserListViewModel @Inject constructor(
 
     val favoriteUsernames: StateFlow<Set<String>> = getFavoritesUseCase()
         .map { list -> list.map { it.username }.toSet() }
+        .catch { emit(emptySet()) }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
@@ -79,7 +81,10 @@ class UserListViewModel @Inject constructor(
                 if (current is UserListUiState.Success) current.copy(pendingRemoval = user) else current
             }
         } else {
-            viewModelScope.launch(dispatchers.io) { addFavoriteUseCase(user.toUserModel()) }
+            viewModelScope.launch(dispatchers.io) {
+                addFavoriteUseCase(user.toUserModel())
+                    .onFailure { e -> _uiState.update { e.toUserListError() } }
+            }
         }
     }
 
@@ -88,7 +93,10 @@ class UserListViewModel @Inject constructor(
         _uiState.update { current ->
             if (current is UserListUiState.Success) current.copy(pendingRemoval = null) else current
         }
-        viewModelScope.launch(dispatchers.io) { removeFavoriteUseCase(user.username) }
+        viewModelScope.launch(dispatchers.io) {
+            removeFavoriteUseCase(user.username)
+                .onFailure { e -> _uiState.update { e.toUserListError() } }
+        }
     }
 
     fun onDismissRemoveFavorite() {
