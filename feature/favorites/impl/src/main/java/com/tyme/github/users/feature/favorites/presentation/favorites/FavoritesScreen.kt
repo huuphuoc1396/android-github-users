@@ -20,12 +20,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
+import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import com.tyme.github.users.core.ui.components.ErrorDialog
 import com.tyme.github.users.core.ui.components.Loading
 import com.tyme.github.users.core.ui.components.RemoveFavoriteDialog
 import com.tyme.github.users.core.ui.components.UserList
 import com.tyme.github.users.core.ui.components.UserListItem
 import com.tyme.github.users.core.ui.theme.Theme
 import com.tyme.github.users.feature.favorites.impl.R
+import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun FavoritesScreen(
@@ -33,12 +39,15 @@ fun FavoritesScreen(
     viewModel: FavoritesViewModel = hiltViewModel<FavoritesViewModel>(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val favorites = viewModel.favorites.collectAsLazyPagingItems()
     FavoritesContent(
+        favorites = favorites,
         uiState = uiState,
         onUserClick = viewModel::onNavigateToUser,
         onRemoveFavoriteClick = viewModel::onRemoveFavoriteClick,
         onConfirmRemoveFavorite = viewModel::onConfirmRemoveFavorite,
         onDismissRemoveFavorite = viewModel::onDismissRemoveFavorite,
+        onDismissError = viewModel::onDismissError,
         onUrlClick = onUrlClick,
     )
 }
@@ -46,11 +55,13 @@ fun FavoritesScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun FavoritesContent(
+    favorites: LazyPagingItems<UserListItem>,
     uiState: FavoritesUiState,
     onUserClick: (UserListItem) -> Unit = {},
     onRemoveFavoriteClick: (UserListItem) -> Unit = {},
     onConfirmRemoveFavorite: () -> Unit = {},
     onDismissRemoveFavorite: () -> Unit = {},
+    onDismissError: () -> Unit = {},
     onUrlClick: (String) -> Unit = {},
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
@@ -58,9 +69,9 @@ private fun FavoritesContent(
             title = { Text(text = stringResource(R.string.favorites_title)) },
             windowInsets = TopAppBarDefaults.windowInsets.only(WindowInsetsSides.Horizontal),
         )
-        when (uiState) {
-            FavoritesUiState.Loading -> Loading()
-            FavoritesUiState.Empty -> Box(
+        when {
+            favorites.loadState.refresh is LoadState.Loading -> Loading()
+            favorites.itemCount == 0 -> Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(32.dp),
@@ -72,22 +83,27 @@ private fun FavoritesContent(
                 )
             }
 
-            is FavoritesUiState.Success -> {
-                UserList(
-                    users = uiState.favorites,
-                    onUserClick = onUserClick,
-                    onFavoriteClick = onRemoveFavoriteClick,
-                    onUrlClick = onUrlClick,
-                )
-                if (uiState.pendingRemoval != null) {
-                    RemoveFavoriteDialog(
-                        username = uiState.pendingRemoval.username,
-                        onConfirm = onConfirmRemoveFavorite,
-                        onDismiss = onDismissRemoveFavorite,
-                    )
-                }
-            }
+            else -> UserList(
+                pagingItems = favorites,
+                onRetryClick = favorites::retry,
+                onUserClick = onUserClick,
+                onFavoriteClick = onRemoveFavoriteClick,
+                onUrlClick = onUrlClick,
+            )
         }
+    }
+
+    when (uiState) {
+        is FavoritesUiState.ConfirmRemoval -> RemoveFavoriteDialog(
+            username = uiState.item.username,
+            onConfirm = onConfirmRemoveFavorite,
+            onDismiss = onDismissRemoveFavorite,
+        )
+        is FavoritesUiState.RemovalError -> {
+            val message = uiState.message.ifEmpty { stringResource(uiState.messageRes) }
+            ErrorDialog(message = message, onDismiss = onDismissError)
+        }
+        FavoritesUiState.Idle -> Unit
     }
 }
 
@@ -95,7 +111,11 @@ private fun FavoritesContent(
 @Composable
 private fun FavoritesEmptyPreview() {
     Theme {
-        FavoritesContent(uiState = FavoritesUiState.Empty)
+        val emptyPaging = flowOf(PagingData.empty<UserListItem>()).collectAsLazyPagingItems()
+        FavoritesContent(
+            favorites = emptyPaging,
+            uiState = FavoritesUiState.Idle,
+        )
     }
 }
 
@@ -103,13 +123,14 @@ private fun FavoritesEmptyPreview() {
 @Composable
 private fun FavoritesSuccessPreview() {
     Theme {
+        val items = listOf(
+            UserListItem(1, "JohnDoe", "", "https://github.com/johndoe"),
+            UserListItem(2, "JaneSmith", "", "https://github.com/janesmith"),
+        )
+        val pagingItems = flowOf(PagingData.from(items)).collectAsLazyPagingItems()
         FavoritesContent(
-            uiState = FavoritesUiState.Success(
-                favorites = listOf(
-                    UserListItem(1, "JohnDoe", "", "https://github.com/johndoe"),
-                    UserListItem(2, "JaneSmith", "", "https://github.com/janesmith"),
-                ),
-            ),
+            favorites = pagingItems,
+            uiState = FavoritesUiState.Idle,
         )
     }
 }

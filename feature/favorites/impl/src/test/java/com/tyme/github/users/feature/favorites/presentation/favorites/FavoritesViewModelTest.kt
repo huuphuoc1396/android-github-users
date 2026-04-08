@@ -1,15 +1,16 @@
 package com.tyme.github.users.feature.favorites.presentation.favorites
 
+import androidx.paging.PagingData
 import app.cash.turbine.test
 import com.tyme.github.users.core.navigation.AppNavigator
 import com.tyme.github.users.core.navigation.NavigationIntent
-import com.tyme.github.users.core.common.models.UserModel
 import com.tyme.github.users.core.common.providers.DispatchersProvider
 import com.tyme.github.users.core.ui.components.UserListItem
-import com.tyme.github.users.feature.favorites.domain.usecase.GetFavoritesUseCase
+import com.tyme.github.users.feature.favorites.domain.usecase.GetFavoritePagingUseCase
 import com.tyme.github.users.feature.favorites.domain.usecase.RemoveFavoriteUseCase
 import com.tyme.github.users.feature.users.navigation.UserDetailsDestination
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -31,7 +32,7 @@ import org.junit.Test
 internal class FavoritesViewModelTest {
 
     private val testDispatcher = UnconfinedTestDispatcher()
-    private val getFavoritesUseCase: GetFavoritesUseCase = mockk()
+    private val getFavoritePagingUseCase: GetFavoritePagingUseCase = mockk()
     private val removeFavoriteUseCase: RemoveFavoriteUseCase = mockk()
     private val navigator: AppNavigator = mockk()
     private val dispatchers: DispatchersProvider = mockk()
@@ -43,6 +44,7 @@ internal class FavoritesViewModelTest {
         every { dispatchers.main } returns testDispatcher
         every { dispatchers.default } returns testDispatcher
         every { dispatchers.immediate } returns testDispatcher
+        every { getFavoritePagingUseCase() } returns flowOf(PagingData.empty())
     }
 
     @After
@@ -51,143 +53,117 @@ internal class FavoritesViewModelTest {
     }
 
     private fun createViewModel() = FavoritesViewModel(
-        getFavoritesUseCase = getFavoritesUseCase,
+        getFavoritePagingUseCase = getFavoritePagingUseCase,
         removeFavoriteUseCase = removeFavoriteUseCase,
         navigator = navigator,
         dispatchers = dispatchers,
     )
 
     @Test
-    fun `uiState emits Loading initially`() = runTest {
-        // Given
-        every { getFavoritesUseCase() } returns flowOf(emptyList())
-
-        // When
+    fun `uiState starts as Idle`() = runTest {
         val viewModel = createViewModel()
 
-        // Then
         viewModel.uiState.test {
-            awaitItem() // skip first emission (Loading or Empty depending on timing)
+            awaitItem() shouldBe FavoritesUiState.Idle
             cancelAndIgnoreRemainingEvents()
         }
     }
 
     @Test
-    fun `uiState emits Empty when favorites list is empty`() = runTest {
-        // Given
-        every { getFavoritesUseCase() } returns flowOf(emptyList())
-        val viewModel = createViewModel()
-
-        // When / Then
-        viewModel.uiState.test {
-            awaitItem() shouldBe FavoritesUiState.Empty
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `uiState emits Success when favorites list is not empty`() = runTest {
-        // Given
-        val favorites = listOf(UserModel(username = "user1"), UserModel(username = "user2"))
-        every { getFavoritesUseCase() } returns flowOf(favorites)
-        val viewModel = createViewModel()
-
-        // When / Then
-        viewModel.uiState.test {
-            awaitItem() shouldBe FavoritesUiState.Success(
-                favorites = listOf(
-                    UserListItem(username = "user1"),
-                    UserListItem(username = "user2"),
-                )
-            )
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `onRemoveFavoriteClick sets pendingRemoval in Success state`() = runTest {
-        // Given
-        val userModel = UserModel(username = "user1")
+    fun `onRemoveFavoriteClick sets ConfirmRemoval state`() = runTest {
         val userListItem = UserListItem(username = "user1")
-        every { getFavoritesUseCase() } returns flowOf(listOf(userModel))
         val viewModel = createViewModel()
 
-        // When
         viewModel.onRemoveFavoriteClick(userListItem)
 
-        // Then
         viewModel.uiState.test {
-            (awaitItem() as FavoritesUiState.Success).pendingRemoval shouldBe userListItem
+            awaitItem() shouldBe FavoritesUiState.ConfirmRemoval(userListItem)
             cancelAndIgnoreRemainingEvents()
         }
     }
 
     @Test
-    fun `onConfirmRemoveFavorite calls removeFavoriteUseCase and clears pendingRemoval`() = runTest {
-        // Given
-        val userModel = UserModel(username = "user1")
+    fun `onConfirmRemoveFavorite calls removeFavoriteUseCase and resets to Idle`() = runTest {
         val userListItem = UserListItem(username = "user1")
-        every { getFavoritesUseCase() } returns flowOf(listOf(userModel))
         coEvery { removeFavoriteUseCase(userListItem.username) } returns Result.success(Unit)
         val viewModel = createViewModel()
         viewModel.onRemoveFavoriteClick(userListItem)
 
-        // When
         viewModel.onConfirmRemoveFavorite()
 
-        // Then
         coVerify { removeFavoriteUseCase(userListItem.username) }
         viewModel.uiState.test {
-            (awaitItem() as FavoritesUiState.Success).pendingRemoval shouldBe null
+            awaitItem() shouldBe FavoritesUiState.Idle
             cancelAndIgnoreRemainingEvents()
         }
     }
 
     @Test
-    fun `onConfirmRemoveFavorite does nothing when pendingRemoval is null`() = runTest {
-        // Given
-        every { getFavoritesUseCase() } returns flowOf(emptyList())
+    fun `onConfirmRemoveFavorite emits RemovalError when removal fails`() = runTest {
+        val userListItem = UserListItem(username = "user1")
+        coEvery { removeFavoriteUseCase(userListItem.username) } returns Result.failure(RuntimeException("db error"))
         val viewModel = createViewModel()
+        viewModel.onRemoveFavoriteClick(userListItem)
 
-        // When
         viewModel.onConfirmRemoveFavorite()
 
-        // Then
+        viewModel.uiState.test {
+            awaitItem().shouldBeInstanceOf<FavoritesUiState.RemovalError>()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `onConfirmRemoveFavorite does nothing when state is Idle`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.onConfirmRemoveFavorite()
+
         coVerify(exactly = 0) { removeFavoriteUseCase(any()) }
     }
 
     @Test
-    fun `onDismissRemoveFavorite clears pendingRemoval`() = runTest {
-        // Given
-        val userModel = UserModel(username = "user1")
+    fun `onDismissRemoveFavorite resets state to Idle`() = runTest {
         val userListItem = UserListItem(username = "user1")
-        every { getFavoritesUseCase() } returns flowOf(listOf(userModel))
         val viewModel = createViewModel()
         viewModel.onRemoveFavoriteClick(userListItem)
 
-        // When
         viewModel.onDismissRemoveFavorite()
 
-        // Then
         viewModel.uiState.test {
-            (awaitItem() as FavoritesUiState.Success).pendingRemoval shouldBe null
+            awaitItem() shouldBe FavoritesUiState.Idle
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `onDismissError resets state to Idle`() = runTest {
+        val userListItem = UserListItem(username = "user1")
+        coEvery { removeFavoriteUseCase(userListItem.username) } returns Result.failure(RuntimeException())
+        val viewModel = createViewModel()
+        viewModel.onRemoveFavoriteClick(userListItem)
+        viewModel.onConfirmRemoveFavorite()
+
+        viewModel.onDismissError()
+
+        viewModel.uiState.test {
+            awaitItem() shouldBe FavoritesUiState.Idle
             cancelAndIgnoreRemainingEvents()
         }
     }
 
     @Test
     fun `onNavigateToUser navigates to UserDetailsDestination`() = runTest {
-        // Given
-        val userModel = UserModel(username = "user1", avatarUrl = "avatar", url = "https://github.com/user1")
-        val userListItem = UserListItem(username = "user1", avatarUrl = "avatar", url = "https://github.com/user1")
-        every { getFavoritesUseCase() } returns flowOf(listOf(userModel))
+        val userListItem = UserListItem(
+            username = "user1",
+            avatarUrl = "avatar",
+            url = "https://github.com/user1",
+        )
         coEvery { navigator.navigate(any()) } just runs
         val viewModel = createViewModel()
 
-        // When
         viewModel.onNavigateToUser(userListItem)
 
-        // Then
         coVerify {
             navigator.navigate(
                 NavigationIntent.NavigateTo(

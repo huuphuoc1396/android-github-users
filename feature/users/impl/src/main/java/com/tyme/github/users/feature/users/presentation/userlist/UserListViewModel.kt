@@ -10,7 +10,6 @@ import com.tyme.github.users.core.navigation.NavigationIntent
 import com.tyme.github.users.core.common.providers.DispatchersProvider
 import com.tyme.github.users.core.ui.components.UserListItem
 import com.tyme.github.users.feature.favorites.domain.usecase.AddFavoriteUseCase
-import com.tyme.github.users.feature.favorites.domain.usecase.GetFavoritesUseCase
 import com.tyme.github.users.feature.users.domain.usecase.GetUserPagingUseCase
 import com.tyme.github.users.feature.favorites.domain.usecase.RemoveFavoriteUseCase
 import com.tyme.github.users.feature.users.navigation.UserDetailsDestination
@@ -18,13 +17,10 @@ import com.tyme.github.users.feature.users.presentation.mappers.toUserListItem
 import com.tyme.github.users.feature.users.presentation.mappers.toUserModel
 import com.tyme.github.users.feature.users.presentation.mappers.toUserListError
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -32,7 +28,6 @@ import javax.inject.Inject
 @HiltViewModel
 class UserListViewModel @Inject constructor(
     getUserPagingUseCase: GetUserPagingUseCase,
-    private val getFavoritesUseCase: GetFavoritesUseCase,
     private val addFavoriteUseCase: AddFavoriteUseCase,
     private val removeFavoriteUseCase: RemoveFavoriteUseCase,
     private val navigator: AppNavigator,
@@ -45,15 +40,6 @@ class UserListViewModel @Inject constructor(
     val userPaging = getUserPagingUseCase()
         .map { pagingData -> pagingData.map { it.toUserListItem() } }
         .cachedIn(viewModelScope)
-
-    val favoriteUsernames: StateFlow<Set<String>> = getFavoritesUseCase()
-        .map { list -> list.map { it.username }.toSet() }
-        .catch { emit(emptySet()) }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = emptySet(),
-        )
 
     fun onRefreshLoadState(loadState: LoadState) {
         _uiState.update { current ->
@@ -76,7 +62,7 @@ class UserListViewModel @Inject constructor(
     }
 
     fun onFavoriteClick(user: UserListItem) {
-        if (user.username in favoriteUsernames.value) {
+        if (user.isFavorite) {
             _uiState.update { current ->
                 if (current is UserListUiState.Success) current.copy(pendingRemoval = user) else current
             }
