@@ -18,7 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tyme.github.users.core.ui.components.Loading
 import com.tyme.github.users.core.ui.components.RemoveFavoriteDialog
@@ -30,7 +30,7 @@ import com.tyme.github.users.feature.favorites.impl.R
 @Composable
 fun FavoritesScreen(
     onUrlClick: (String) -> Unit,
-    viewModel: FavoritesViewModel = hiltViewModel(),
+    viewModel: FavoritesViewModel = hiltViewModel<FavoritesViewModel>(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     FavoritesContent(
