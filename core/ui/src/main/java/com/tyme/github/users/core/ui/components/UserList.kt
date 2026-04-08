@@ -12,7 +12,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -24,7 +23,6 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import androidx.window.core.layout.WindowSizeClass
-import androidx.window.core.layout.WindowWidthSizeClass
 import com.tyme.github.users.core.ui.R
 import com.tyme.github.users.core.ui.theme.Theme
 import kotlinx.coroutines.flow.flowOf
@@ -34,22 +32,14 @@ fun UserList(
     pagingItems: LazyPagingItems<UserListItem>,
     favoriteUsernames: Set<String>,
     modifier: Modifier = Modifier,
-    windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass,
     onRetryClick: () -> Unit = {},
     onUserClick: (UserListItem) -> Unit = {},
     onFavoriteClick: (UserListItem) -> Unit = {},
     onUrlClick: (String) -> Unit = {},
 ) {
     val arrangement = Arrangement.spacedBy(12.dp)
-    val gridCells = remember(windowSizeClass) {
-        if (windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.COMPACT) {
-            GridCells.Fixed(1)
-        } else {
-            GridCells.Fixed(2)
-        }
-    }
     LazyVerticalGrid(
-        columns = gridCells,
+        columns = GridCells.Adaptive(256.dp),
         modifier = modifier,
         verticalArrangement = arrangement,
         horizontalArrangement = arrangement,
@@ -106,15 +96,8 @@ fun UserList(
     onUrlClick: (String) -> Unit = {},
 ) {
     val arrangement = Arrangement.spacedBy(12.dp)
-    val gridCells = remember(windowSizeClass) {
-        if (windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.COMPACT) {
-            GridCells.Fixed(1)
-        } else {
-            GridCells.Fixed(2)
-        }
-    }
     LazyVerticalGrid(
-        columns = gridCells,
+        columns = GridCells.Adaptive(300.dp),
         modifier = modifier,
         verticalArrangement = arrangement,
         horizontalArrangement = arrangement,
