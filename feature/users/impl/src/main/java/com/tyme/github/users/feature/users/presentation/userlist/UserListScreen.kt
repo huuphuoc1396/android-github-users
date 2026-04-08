@@ -16,8 +16,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.material3.Surface
+import androidx.paging.LoadState
+import androidx.paging.LoadStates
+import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.tyme.github.users.core.ui.components.ErrorDialog
@@ -25,7 +30,9 @@ import com.tyme.github.users.core.ui.components.Loading
 import com.tyme.github.users.core.ui.components.RemoveFavoriteDialog
 import com.tyme.github.users.core.ui.components.UserList
 import com.tyme.github.users.core.ui.components.UserListItem
+import com.tyme.github.users.core.ui.theme.Theme
 import com.tyme.github.users.feature.users.R
+import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun UserListScreen(
@@ -36,6 +43,11 @@ fun UserListScreen(
     val favoriteUsernames by viewModel.favoriteUsernames.collectAsStateWithLifecycle()
     val pagingItems = viewModel.userPaging.collectAsLazyPagingItems()
 
+    fun onRefresh() {
+        pagingItems.refresh()
+        viewModel.onRefreshTriggered()
+    }
+
     LaunchedEffect(pagingItems.loadState.refresh) {
         viewModel.onRefreshLoadState(pagingItems.loadState.refresh)
     }
@@ -44,10 +56,7 @@ fun UserListScreen(
         uiState = uiState,
         pagingItems = pagingItems,
         favoriteUsernames = favoriteUsernames,
-        onRefresh = {
-            pagingItems.refresh()
-            viewModel.onRefreshTriggered()
-        },
+        onRefresh = ::onRefresh,
         onRetryClick = { pagingItems.retry() },
         onUserClick = viewModel::onNavigateToUser,
         onFavoriteClick = viewModel::onFavoriteClick,
@@ -108,6 +117,94 @@ private fun UserListContent(
             is UserListUiState.Error -> ErrorDialog(
                 message = uiState.message.ifEmpty { stringResource(uiState.messageRes) },
                 onDismiss = onDismissError,
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun UserListContentSuccessPreview() {
+    Theme {
+        Surface {
+            val userList = List(10) { index ->
+                UserListItem(
+                    id = index,
+                    username = "User $index",
+                    avatarUrl = "https://avatars.githubusercontent.com/u/${index + 1}?v=4",
+                    url = "https://github.com/user$index"
+                )
+            }
+            val pagingItems = flowOf(
+                PagingData.from(
+                    userList,
+                    sourceLoadStates = LoadStates(
+                        refresh = LoadState.NotLoading(false),
+                        prepend = LoadState.NotLoading(false),
+                        append = LoadState.NotLoading(false)
+                    )
+                )
+            ).collectAsLazyPagingItems()
+            UserListContent(
+                uiState = UserListUiState.Success(),
+                pagingItems = pagingItems,
+                favoriteUsernames = setOf("User 1", "User 3"),
+                onRefresh = {},
+                onRetryClick = {},
+                onUserClick = {},
+                onFavoriteClick = {},
+                onConfirmRemoveFavorite = {},
+                onDismissRemoveFavorite = {},
+                onUrlClick = {},
+                onDismissError = {},
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun UserListContentLoadingPreview() {
+    Theme {
+        Surface {
+            val pagingItems =
+                flowOf(PagingData.empty<UserListItem>()).collectAsLazyPagingItems()
+            UserListContent(
+                uiState = UserListUiState.Loading,
+                pagingItems = pagingItems,
+                favoriteUsernames = emptySet(),
+                onRefresh = {},
+                onRetryClick = {},
+                onUserClick = {},
+                onFavoriteClick = {},
+                onConfirmRemoveFavorite = {},
+                onDismissRemoveFavorite = {},
+                onUrlClick = {},
+                onDismissError = {},
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun UserListContentErrorPreview() {
+    Theme {
+        val pagingItems =
+            flowOf(PagingData.empty<UserListItem>()).collectAsLazyPagingItems()
+        Surface {
+            UserListContent(
+                uiState = UserListUiState.Error(message = "An error occurred"),
+                pagingItems = pagingItems,
+                favoriteUsernames = emptySet(),
+                onRefresh = {},
+                onRetryClick = {},
+                onUserClick = {},
+                onFavoriteClick = {},
+                onConfirmRemoveFavorite = {},
+                onDismissRemoveFavorite = {},
+                onUrlClick = {},
+                onDismissError = {},
             )
         }
     }

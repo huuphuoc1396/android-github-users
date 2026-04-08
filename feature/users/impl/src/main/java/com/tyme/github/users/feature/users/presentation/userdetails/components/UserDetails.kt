@@ -9,12 +9,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.window.core.layout.WindowHeightSizeClass
 import androidx.window.core.layout.WindowSizeClass
 import com.tyme.github.users.core.ui.theme.Theme
 import com.tyme.github.users.feature.users.presentation.userdetails.UserDetailUiState
@@ -26,16 +24,14 @@ internal fun UserDetails(
     modifier: Modifier = Modifier,
     windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass,
 ) {
-    val isHeightCompact = remember {
-        windowSizeClass.windowHeightSizeClass == WindowHeightSizeClass.COMPACT
-    }
+    val useHorizontalLayout = windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND)
     Column(
         modifier = modifier
             .verticalScroll(rememberScrollState())
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        if (isHeightCompact) {
+        if (useHorizontalLayout) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -81,7 +77,7 @@ internal fun UserDetails(
 
 @Preview
 @Composable
-private fun UserDetailsContentPreview() {
+private fun UserDetailsPreview() {
     Theme {
         UserDetails(
             uiState = UserDetailUiState.Success(

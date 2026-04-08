@@ -18,12 +18,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tyme.github.users.core.ui.components.BackButton
 import com.tyme.github.users.core.ui.components.ErrorDialog
 import com.tyme.github.users.core.ui.components.Loading
 import com.tyme.github.users.core.ui.components.RemoveFavoriteDialog
+import com.tyme.github.users.core.ui.theme.Theme
 import com.tyme.github.users.feature.users.R
 import com.tyme.github.users.feature.users.presentation.userdetails.components.UserDetails
 
@@ -94,6 +96,30 @@ private fun UserDetailsContent(
             username = uiState.username,
             onConfirm = onConfirmRemoveFavorite,
             onDismiss = onDismissRemoveFavorite,
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun UserDetailsContentPreview() {
+    Theme {
+        UserDetailsContent(
+            uiState = UserDetailUiState.Success(
+                username = "mojombo",
+                avatarUrl = "https://avatars.githubusercontent.com/u/1?v=4",
+                country = "San Francisco",
+                followers = "20k",
+                following = "11k",
+                url = "https://github.com/mojombo"
+            ),
+            isFavorite = true,
+            onBackClick = {},
+            onBlogClick = {},
+            onFavoriteToggle = {},
+            onConfirmRemoveFavorite = {},
+            onDismissRemoveFavorite = {},
+            onDismissError = {}
         )
     }
 }
