@@ -6,11 +6,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,7 +20,6 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
-import androidx.window.core.layout.WindowSizeClass
 import com.tyme.github.users.core.ui.R
 import com.tyme.github.users.core.ui.theme.Theme
 import kotlinx.coroutines.flow.flowOf
@@ -30,7 +27,6 @@ import kotlinx.coroutines.flow.flowOf
 @Composable
 fun UserList(
     pagingItems: LazyPagingItems<UserListItem>,
-    favoriteUsernames: Set<String>,
     modifier: Modifier = Modifier,
     onRetryClick: () -> Unit = {},
     onUserClick: (UserListItem) -> Unit = {},
@@ -54,7 +50,7 @@ fun UserList(
                 username = user.username,
                 avatarUrl = user.avatarUrl,
                 url = user.url,
-                isFavorite = user.username in favoriteUsernames,
+                isFavorite = user.isFavorite,
                 onUserClick = { onUserClick(user) },
                 onFavoriteClick = { onFavoriteClick(user) },
                 onUrlClick = onUrlClick,
@@ -86,37 +82,6 @@ fun UserList(
     }
 }
 
-@Composable
-fun UserList(
-    users: List<UserListItem>,
-    modifier: Modifier = Modifier,
-    windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass,
-    onUserClick: (UserListItem) -> Unit = {},
-    onFavoriteClick: (UserListItem) -> Unit = {},
-    onUrlClick: (String) -> Unit = {},
-) {
-    val arrangement = Arrangement.spacedBy(12.dp)
-    LazyVerticalGrid(
-        columns = GridCells.Adaptive(300.dp),
-        modifier = modifier,
-        verticalArrangement = arrangement,
-        horizontalArrangement = arrangement,
-        contentPadding = PaddingValues(16.dp),
-    ) {
-        items(users, key = { it.id }) { user ->
-            UserCard(
-                username = user.username,
-                avatarUrl = user.avatarUrl,
-                url = user.url,
-                isFavorite = user.isFavorite,
-                onUserClick = { onUserClick(user) },
-                onFavoriteClick = { onFavoriteClick(user) },
-                onUrlClick = onUrlClick,
-            )
-        }
-    }
-}
-
 @Preview
 @Composable
 private fun UserListPagingPreview() {
@@ -129,22 +94,6 @@ private fun UserListPagingPreview() {
             )
         }
         val pagingItems = flowOf(PagingData.from(userList)).collectAsLazyPagingItems()
-        UserList(pagingItems = pagingItems, favoriteUsernames = emptySet())
-    }
-}
-
-@Preview
-@Composable
-private fun UserListStaticPreview() {
-    Theme {
-        val users = List(5) { index ->
-            UserListItem(
-                id = index,
-                username = "user$index",
-                url = "https://www.github.com/user$index",
-                isFavorite = true,
-            )
-        }
-        UserList(users = users)
+        UserList(pagingItems = pagingItems)
     }
 }

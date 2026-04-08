@@ -40,7 +40,6 @@ fun UserListScreen(
     viewModel: UserListViewModel = hiltViewModel<UserListViewModel>(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val favoriteUsernames by viewModel.favoriteUsernames.collectAsStateWithLifecycle()
     val pagingItems = viewModel.userPaging.collectAsLazyPagingItems()
 
     fun onRefresh() {
@@ -55,7 +54,6 @@ fun UserListScreen(
     UserListContent(
         uiState = uiState,
         pagingItems = pagingItems,
-        favoriteUsernames = favoriteUsernames,
         onRefresh = ::onRefresh,
         onRetryClick = { pagingItems.retry() },
         onUserClick = viewModel::onNavigateToUser,
@@ -72,7 +70,6 @@ private fun UserListContent(
     modifier: Modifier = Modifier,
     uiState: UserListUiState,
     pagingItems: LazyPagingItems<UserListItem>,
-    favoriteUsernames: Set<String>,
     onRefresh: () -> Unit,
     onRetryClick: () -> Unit,
     onUserClick: (UserListItem) -> Unit,
@@ -98,7 +95,6 @@ private fun UserListContent(
                 ) {
                     UserList(
                         pagingItems = pagingItems,
-                        favoriteUsernames = favoriteUsernames,
                         onRetryClick = onRetryClick,
                         onUserClick = onUserClick,
                         onFavoriteClick = onFavoriteClick,
@@ -148,7 +144,6 @@ private fun UserListContentSuccessPreview() {
             UserListContent(
                 uiState = UserListUiState.Success(),
                 pagingItems = pagingItems,
-                favoriteUsernames = setOf("User 1", "User 3"),
                 onRefresh = {},
                 onRetryClick = {},
                 onUserClick = {},
@@ -172,7 +167,6 @@ private fun UserListContentLoadingPreview() {
             UserListContent(
                 uiState = UserListUiState.Loading,
                 pagingItems = pagingItems,
-                favoriteUsernames = emptySet(),
                 onRefresh = {},
                 onRetryClick = {},
                 onUserClick = {},
@@ -196,7 +190,6 @@ private fun UserListContentErrorPreview() {
             UserListContent(
                 uiState = UserListUiState.Error(message = "An error occurred"),
                 pagingItems = pagingItems,
-                favoriteUsernames = emptySet(),
                 onRefresh = {},
                 onRetryClick = {},
                 onUserClick = {},

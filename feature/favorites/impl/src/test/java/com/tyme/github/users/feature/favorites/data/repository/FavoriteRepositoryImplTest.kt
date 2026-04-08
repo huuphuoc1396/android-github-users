@@ -1,5 +1,8 @@
 package com.tyme.github.users.feature.favorites.data.repository
 
+import androidx.paging.PagingSource
+import androidx.paging.PagingState
+import androidx.paging.testing.asSnapshot
 import app.cash.turbine.test
 import com.tyme.github.users.core.common.models.UserModel
 import com.tyme.github.users.core.database.dao.FavoriteDao
@@ -100,42 +103,28 @@ internal class FavoriteRepositoryImplTest {
     }
 
     @Test
-    fun `getFavorites emits mapped UserModel list from dao`() = runTest {
+    fun `getFavoritePaging returns mapped paging data from dao`() = runTest {
         // Given
         val entities = listOf(
             UserEntity(id = 1, username = "user1", avatarUrl = "avatar1", url = "https://github.com/user1", isFavorite = true),
             UserEntity(id = 2, username = "user2", avatarUrl = "avatar2", url = "https://github.com/user2", isFavorite = true),
         )
-        every { dao.getFavorites() } returns flowOf(entities)
+        every { dao.getFavoritePagingSource() } returns FakeUserPagingSource(entities)
 
-        // When / Then
-        repository.getFavorites().test {
-            expectMostRecentItem() shouldBe entities.map { it.toUserModel() }
-        }
+        // When
+        val snapshot = repository.getFavoritePaging().asSnapshot()
+
+        // Then
+        snapshot shouldBe entities.map { it.toUserModel() }
     }
+}
 
-    @Test
-    fun `getFavorites emits empty list when no favorites`() = runTest {
-        // Given
-        every { dao.getFavorites() } returns flowOf(emptyList())
+private class FakeUserPagingSource(
+    private val entities: List<UserEntity>,
+) : PagingSource<Int, UserEntity>() {
 
-        // When / Then
-        repository.getFavorites().test {
-            expectMostRecentItem() shouldBe emptyList()
-        }
-    }
+    override fun getRefreshKey(state: PagingState<Int, UserEntity>): Int? = null
 
-    @Test
-    fun `getFavorites emits multiple updates as favorites change`() = runTest {
-        // Given
-        val entity = UserEntity(id = 1, username = "user1", avatarUrl = "avatar1", url = "https://github.com/user1", isFavorite = true)
-        every { dao.getFavorites() } returns flowOf(emptyList(), listOf(entity))
-
-        // When / Then
-        repository.getFavorites().test {
-            awaitItem() shouldBe emptyList()
-            awaitItem() shouldBe listOf(entity.toUserModel())
-            awaitComplete()
-        }
-    }
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, UserEntity> =
+        LoadResult.Page(data = entities, prevKey = null, nextKey = null)
 }

@@ -34,6 +34,7 @@ dependencies {
     implementation(project(":core:common"))
 
     implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.androidx.paging.runtime.ktx)
     implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.hilt.android)

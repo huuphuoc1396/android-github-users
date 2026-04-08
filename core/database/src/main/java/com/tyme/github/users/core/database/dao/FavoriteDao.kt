@@ -1,5 +1,6 @@
 package com.tyme.github.users.core.database.dao
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Query
 import com.tyme.github.users.core.database.entity.UserEntity
@@ -7,6 +8,9 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface FavoriteDao {
+
+    @Query("SELECT * FROM UserEntity WHERE is_favorite = 1")
+    fun getFavoritePagingSource(): PagingSource<Int, UserEntity>
 
     @Query("SELECT * FROM UserEntity WHERE is_favorite = 1")
     fun getFavorites(): Flow<List<UserEntity>>
