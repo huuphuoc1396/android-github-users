@@ -8,6 +8,6 @@ sealed interface FavoritesUiState {
     data class ConfirmRemoval(val item: UserListItem) : FavoritesUiState
     data class RemovalError(
         val message: String = "",
-        @StringRes val messageRes: Int = 0,
+        @param:StringRes val messageRes: Int = 0,
     ) : FavoritesUiState
 }

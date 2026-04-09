@@ -2,38 +2,44 @@ package com.tyme.github.users.feature.favorites.presentation.favorites
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
-import androidx.paging.map
+import com.tyme.github.users.core.common.providers.DispatchersProvider
 import com.tyme.github.users.core.navigation.AppNavigator
 import com.tyme.github.users.core.navigation.NavigationIntent
-import com.tyme.github.users.core.common.providers.DispatchersProvider
 import com.tyme.github.users.core.network.models.errors.toNetworkErrorMessage
 import com.tyme.github.users.core.ui.components.UserListItem
-import com.tyme.github.users.feature.favorites.domain.usecase.GetFavoritePagingUseCase
+import com.tyme.github.users.feature.favorites.domain.usecase.GetFavoritesUseCase
 import com.tyme.github.users.feature.favorites.domain.usecase.RemoveFavoriteUseCase
 import com.tyme.github.users.feature.favorites.presentation.mappers.toUserListItem
 import com.tyme.github.users.feature.users.navigation.UserDetailsDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class FavoritesViewModel @Inject constructor(
-    getFavoritePagingUseCase: GetFavoritePagingUseCase,
+    getFavoritesUseCase: GetFavoritesUseCase,
     private val removeFavoriteUseCase: RemoveFavoriteUseCase,
     private val navigator: AppNavigator,
     private val dispatchers: DispatchersProvider,
 ) : ViewModel() {
 
-    val favorites: Flow<PagingData<UserListItem>> = getFavoritePagingUseCase()
-        .map { pagingData -> pagingData.map { it.toUserListItem() } }
-        .cachedIn(viewModelScope)
+    val favorites: StateFlow<List<UserListItem>> = getFavoritesUseCase()
+        .map { list -> list.map { it.toUserListItem() } }
+        .catch { throwable ->
+            val errorMessage = throwable.toNetworkErrorMessage()
+            _uiState.value = FavoritesUiState.RemovalError(
+                message = errorMessage.message,
+                messageRes = errorMessage.messageRes,
+            )
+        }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     private val _uiState = MutableStateFlow<FavoritesUiState>(FavoritesUiState.Idle)
     val uiState: StateFlow<FavoritesUiState> = _uiState.asStateFlow()

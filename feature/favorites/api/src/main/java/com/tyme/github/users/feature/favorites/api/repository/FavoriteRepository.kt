@@ -1,6 +1,5 @@
 package com.tyme.github.users.feature.favorites.api.repository
 
-import androidx.paging.PagingData
 import com.tyme.github.users.core.common.models.UserModel
 import kotlinx.coroutines.flow.Flow
 
@@ -12,5 +11,5 @@ interface FavoriteRepository {
 
     fun isFavorite(username: String): Flow<Boolean>
 
-    fun getFavoritePaging(): Flow<PagingData<UserModel>>
+    fun getFavorites(): Flow<List<UserModel>>
 }
