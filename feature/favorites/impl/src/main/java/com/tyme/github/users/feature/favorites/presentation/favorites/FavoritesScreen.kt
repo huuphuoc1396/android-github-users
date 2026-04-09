@@ -1,11 +1,16 @@
 package com.tyme.github.users.feature.favorites.presentation.favorites
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
@@ -20,18 +25,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.paging.LoadState
-import androidx.paging.PagingData
-import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.tyme.github.users.core.ui.components.ErrorDialog
-import com.tyme.github.users.core.ui.components.Loading
 import com.tyme.github.users.core.ui.components.RemoveFavoriteDialog
-import com.tyme.github.users.core.ui.components.UserList
+import com.tyme.github.users.core.ui.components.UserCard
 import com.tyme.github.users.core.ui.components.UserListItem
 import com.tyme.github.users.core.ui.theme.Theme
 import com.tyme.github.users.feature.favorites.impl.R
-import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun FavoritesScreen(
@@ -39,7 +38,7 @@ fun FavoritesScreen(
     viewModel: FavoritesViewModel = hiltViewModel<FavoritesViewModel>(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val favorites = viewModel.favorites.collectAsLazyPagingItems()
+    val favorites by viewModel.favorites.collectAsStateWithLifecycle()
     FavoritesContent(
         favorites = favorites,
         uiState = uiState,
@@ -55,7 +54,7 @@ fun FavoritesScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun FavoritesContent(
-    favorites: LazyPagingItems<UserListItem>,
+    favorites: List<UserListItem>,
     uiState: FavoritesUiState,
     onUserClick: (UserListItem) -> Unit = {},
     onRemoveFavoriteClick: (UserListItem) -> Unit = {},
@@ -70,8 +69,7 @@ private fun FavoritesContent(
             windowInsets = TopAppBarDefaults.windowInsets.only(WindowInsetsSides.Horizontal),
         )
         when {
-            favorites.loadState.refresh is LoadState.Loading -> Loading()
-            favorites.itemCount == 0 -> Box(
+            favorites.isEmpty() -> Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(32.dp),
@@ -83,13 +81,27 @@ private fun FavoritesContent(
                 )
             }
 
-            else -> UserList(
-                pagingItems = favorites,
-                onRetryClick = favorites::retry,
-                onUserClick = onUserClick,
-                onFavoriteClick = onRemoveFavoriteClick,
-                onUrlClick = onUrlClick,
-            )
+            else -> {
+                val arrangement = Arrangement.spacedBy(12.dp)
+                LazyVerticalGrid(
+                    columns = GridCells.Adaptive(256.dp),
+                    verticalArrangement = arrangement,
+                    horizontalArrangement = arrangement,
+                    contentPadding = PaddingValues(16.dp),
+                ) {
+                    items(
+                        items = favorites,
+                        key = { it.id },
+                    ) { user ->
+                        UserCard(
+                            item = user,
+                            onUserClick = { onUserClick(user) },
+                            onFavoriteClick = { onRemoveFavoriteClick(user) },
+                            onUrlClick = onUrlClick,
+                        )
+                    }
+                }
+            }
         }
     }
 
@@ -111,9 +123,8 @@ private fun FavoritesContent(
 @Composable
 private fun FavoritesEmptyPreview() {
     Theme {
-        val emptyPaging = flowOf(PagingData.empty<UserListItem>()).collectAsLazyPagingItems()
         FavoritesContent(
-            favorites = emptyPaging,
+            favorites = emptyList(),
             uiState = FavoritesUiState.Idle,
         )
     }
@@ -127,9 +138,8 @@ private fun FavoritesSuccessPreview() {
             UserListItem(1, "JohnDoe", "", "https://github.com/johndoe"),
             UserListItem(2, "JaneSmith", "", "https://github.com/janesmith"),
         )
-        val pagingItems = flowOf(PagingData.from(items)).collectAsLazyPagingItems()
         FavoritesContent(
-            favorites = pagingItems,
+            favorites = items,
             uiState = FavoritesUiState.Idle,
         )
     }

@@ -24,10 +24,7 @@ import com.tyme.github.users.core.ui.theme.Theme
 
 @Composable
 fun UserCard(
-    username: String,
-    avatarUrl: String,
-    url: String,
-    isFavorite: Boolean,
+    item: UserListItem,
     modifier: Modifier = Modifier,
     onUserClick: () -> Unit = {},
     onFavoriteClick: () -> Unit = {},
@@ -42,7 +39,7 @@ fun UserCard(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             UserAvatar(
-                avatarUrl = avatarUrl,
+                avatarUrl = item.avatarUrl,
                 modifier = Modifier.size(90.dp),
             )
             Column(
@@ -51,23 +48,23 @@ fun UserCard(
                     .padding(start = 12.dp),
             ) {
                 Text(
-                    text = username,
+                    text = item.username,
                     style = MaterialTheme.typography.titleMedium,
                 )
                 HorizontalDivider(
                     modifier = Modifier.padding(vertical = 4.dp),
                 )
                 LinkText(
-                    url = url,
+                    url = item.url,
                     onClick = onUrlClick,
                     style = MaterialTheme.typography.bodyMedium,
                 )
             }
             IconButton(onClick = onFavoriteClick) {
                 Icon(
-                    imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                    imageVector = if (item.isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
                     contentDescription = null,
-                    tint = if (isFavorite) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                    tint = if (item.isFavorite) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
         }
@@ -79,10 +76,12 @@ fun UserCard(
 private fun UserCardFavoritePreview() {
     Theme {
         UserCard(
-            username = "JohnDoe",
-            avatarUrl = "",
-            url = "https://github.com/johndoe",
-            isFavorite = true,
+            item = UserListItem(
+                username = "JohnDoe",
+                avatarUrl = "",
+                url = "https://github.com/johndoe",
+                isFavorite = true,
+            ),
         )
     }
 }
@@ -92,10 +91,12 @@ private fun UserCardFavoritePreview() {
 private fun UserCardNotFavoritePreview() {
     Theme {
         UserCard(
-            username = "JohnDoe",
-            avatarUrl = "",
-            url = "https://github.com/johndoe",
-            isFavorite = false,
+            item = UserListItem(
+                username = "JohnDoe",
+                avatarUrl = "",
+                url = "https://github.com/johndoe",
+                isFavorite = false,
+            ),
         )
     }
 }

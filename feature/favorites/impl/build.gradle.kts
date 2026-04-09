@@ -71,7 +71,6 @@ dependencies {
     implementation(libs.androidx.material3.adaptive)
     implementation(libs.androidx.material3.window.size.clazz)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.paging.compose)
 
     implementation(libs.kotlinx.serialization.json)
 
@@ -81,7 +80,6 @@ dependencies {
 
     debugImplementation(libs.androidx.ui.tooling)
 
-    testImplementation(libs.androidx.paging.testing)
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
     testImplementation(libs.kotest)

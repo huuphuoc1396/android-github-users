@@ -47,10 +47,7 @@ fun UserList(
         ) { index ->
             val user = pagingItems[index] ?: return@items
             UserCard(
-                username = user.username,
-                avatarUrl = user.avatarUrl,
-                url = user.url,
-                isFavorite = user.isFavorite,
+                item = user,
                 onUserClick = { onUserClick(user) },
                 onFavoriteClick = { onFavoriteClick(user) },
                 onUrlClick = onUrlClick,

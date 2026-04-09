@@ -1,9 +1,5 @@
 package com.tyme.github.users.feature.favorites.data.repository
 
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import androidx.paging.map
 import com.tyme.github.users.core.common.models.UserModel
 import com.tyme.github.users.core.database.dao.FavoriteDao
 import com.tyme.github.users.feature.favorites.api.repository.FavoriteRepository
@@ -27,8 +23,6 @@ internal class FavoriteRepositoryImpl @Inject constructor(
     override fun isFavorite(username: String): Flow<Boolean> =
         dao.isFavorite(username)
 
-    override fun getFavoritePaging(): Flow<PagingData<UserModel>> = Pager(
-        config = PagingConfig(pageSize = 20, enablePlaceholders = false),
-        pagingSourceFactory = { dao.getFavoritePagingSource() },
-    ).flow.map { pagingData -> pagingData.map { it.toUserModel() } }
+    override fun getFavorites(): Flow<List<UserModel>> =
+        dao.getFavorites().map { list -> list.map { it.toUserModel() } }
 }

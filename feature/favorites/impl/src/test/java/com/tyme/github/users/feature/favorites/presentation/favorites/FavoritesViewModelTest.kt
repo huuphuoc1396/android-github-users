@@ -1,12 +1,11 @@
 package com.tyme.github.users.feature.favorites.presentation.favorites
 
-import androidx.paging.PagingData
 import app.cash.turbine.test
 import com.tyme.github.users.core.navigation.AppNavigator
 import com.tyme.github.users.core.navigation.NavigationIntent
 import com.tyme.github.users.core.common.providers.DispatchersProvider
 import com.tyme.github.users.core.ui.components.UserListItem
-import com.tyme.github.users.feature.favorites.domain.usecase.GetFavoritePagingUseCase
+import com.tyme.github.users.feature.favorites.domain.usecase.GetFavoritesUseCase
 import com.tyme.github.users.feature.favorites.domain.usecase.RemoveFavoriteUseCase
 import com.tyme.github.users.feature.users.navigation.UserDetailsDestination
 import io.kotest.matchers.shouldBe
@@ -32,7 +31,7 @@ import org.junit.Test
 internal class FavoritesViewModelTest {
 
     private val testDispatcher = UnconfinedTestDispatcher()
-    private val getFavoritePagingUseCase: GetFavoritePagingUseCase = mockk()
+    private val getFavoritesUseCase: GetFavoritesUseCase = mockk()
     private val removeFavoriteUseCase: RemoveFavoriteUseCase = mockk()
     private val navigator: AppNavigator = mockk()
     private val dispatchers: DispatchersProvider = mockk()
@@ -44,7 +43,7 @@ internal class FavoritesViewModelTest {
         every { dispatchers.main } returns testDispatcher
         every { dispatchers.default } returns testDispatcher
         every { dispatchers.immediate } returns testDispatcher
-        every { getFavoritePagingUseCase() } returns flowOf(PagingData.empty())
+        every { getFavoritesUseCase() } returns flowOf(emptyList())
     }
 
     @After
@@ -53,7 +52,7 @@ internal class FavoritesViewModelTest {
     }
 
     private fun createViewModel() = FavoritesViewModel(
-        getFavoritePagingUseCase = getFavoritePagingUseCase,
+        getFavoritesUseCase = getFavoritesUseCase,
         removeFavoriteUseCase = removeFavoriteUseCase,
         navigator = navigator,
         dispatchers = dispatchers,
@@ -65,6 +64,30 @@ internal class FavoritesViewModelTest {
 
         viewModel.uiState.test {
             awaitItem() shouldBe FavoritesUiState.Idle
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `favorites emits mapped list from use case`() = runTest {
+        // Given
+        val userListItems = listOf(
+            UserListItem(id = 1, username = "user1", isFavorite = true),
+            UserListItem(id = 2, username = "user2", isFavorite = true),
+        )
+        every { getFavoritesUseCase() } returns flowOf(
+            userListItems.map {
+                com.tyme.github.users.core.common.models.UserModel(
+                    id = it.id,
+                    username = it.username,
+                    isFavorite = it.isFavorite,
+                )
+            }
+        )
+        val viewModel = createViewModel()
+
+        viewModel.favorites.test {
+            awaitItem() shouldBe userListItems
             cancelAndIgnoreRemainingEvents()
         }
     }
