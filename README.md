@@ -103,6 +103,74 @@ feature/
     impl/                     ← FavoriteRepositoryImpl, FavoritesViewModel
 ```
 
+### Dependency Graph
+
+```mermaid
+graph TD
+    app(":app")
+
+    subgraph feature["Feature Modules"]
+        fu_api(":feature:users:api")
+        fu_impl(":feature:users:impl")
+        ff_api(":feature:favorites:api")
+        ff_impl(":feature:favorites:impl")
+    end
+
+    subgraph core["Core Modules"]
+        core_common(":core:common")
+        core_ui(":core:ui")
+        core_nav(":core:navigation")
+        core_net(":core:network")
+        core_sec(":core:security")
+        core_cfg(":core:config")
+        core_db(":core:database")
+    end
+
+    %% app dependencies
+    app --> fu_api
+    app --> fu_impl
+    app --> ff_api
+    app --> ff_impl
+    app --> core_ui
+    app --> core_nav
+    app --> core_cfg
+    app --> core_common
+
+    %% feature:users:impl dependencies
+    fu_impl --> fu_api
+    fu_impl --> ff_api
+    fu_impl --> core_ui
+    fu_impl --> core_nav
+    fu_impl --> core_net
+    fu_impl --> core_db
+    fu_impl --> core_common
+
+    %% feature:favorites:api dependencies
+    ff_api --> core_common
+
+    %% feature:favorites:impl dependencies
+    ff_impl --> ff_api
+    ff_impl --> fu_api
+    ff_impl --> core_ui
+    ff_impl --> core_nav
+    ff_impl --> core_net
+    ff_impl --> core_db
+    ff_impl --> core_common
+
+    %% core:ui dependencies
+    core_ui --> core_common
+
+    %% core:network dependencies
+    core_net --> core_common
+
+    %% core:database dependencies
+    core_db --> core_sec
+
+    %% core:config dependencies
+    core_cfg --> core_net
+    core_cfg --> core_sec
+```
+
 ### Dependency Direction
 
 ```
@@ -116,7 +184,7 @@ core:* → feature:*                    ← forbidden
 ### Layer Responsibilities
 
 | Layer | Location | Responsibility |
-|---|---|---|
+| --- | --- | --- |
 | Presentation | `feature:x:impl/presentation/` | ViewModel, UiState, Screen composables |
 | Domain | `feature:x:api/domain/` or `feature:x:impl/domain/` | Use cases, repository interfaces, domain models |
 | Data | `feature:x:impl/data/` | Repository impls, Retrofit API, Room DAOs, mappers |
@@ -186,12 +254,12 @@ Coverage is measured with [Kover](https://github.com/Kotlin/kotlinx-kover) acros
 ./gradlew koverHtmlReportDevDebug
 ```
 
-<img src="https://github.com/user-attachments/assets/fccd0491-eb5c-4f5f-9c13-bfd31646d5d9" width=720>
+<img src="https://github.com/user-attachments/assets/fccd0491-eb5c-4f5f-9c13-bfd31646d5d9" alt="Kover HTML coverage report" width=720>
 
 Test coverage targets:
 
 | Area | What is tested |
-|---|---|
+| --- | --- |
 | ViewModels | All user interactions, UiState transitions, error paths |
 | Use cases | Delegation to repository, Result propagation |
 | Repositories | DAO/API calls, `runCatching` failure paths |
@@ -202,7 +270,7 @@ Test coverage targets:
 ## Product Flavors
 
 | Flavor | App ID suffix | DB encryption | Notes |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `dev` | `.dev` | disabled | For local development and inspection |
 | `stag` | `.stag` | enabled | Mirrors production security settings |
 | `prod` | _(none)_ | enabled | Production release |
@@ -222,10 +290,10 @@ Test coverage targets:
 ### SDK
 
 | Property | Value |
-|---|---|
-| `minSdk` | 28 |
-| `targetSdk` | 35 |
-| `compileSdk` | 35 |
+| --- |-------|
+| `minSdk` | 28    |
+| `targetSdk` | 36    |
+| `compileSdk` | 36    |
 
 ### Installation
 

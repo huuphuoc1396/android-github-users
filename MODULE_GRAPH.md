@@ -48,6 +48,7 @@ graph TD
     ff_impl --> fu_api
     ff_impl --> core_ui
     ff_impl --> core_nav
+    ff_impl --> core_net
     ff_impl --> core_db
     ff_impl --> core_common
 
