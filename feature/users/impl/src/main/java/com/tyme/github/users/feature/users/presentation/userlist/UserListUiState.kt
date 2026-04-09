@@ -1,6 +1,6 @@
 package com.tyme.github.users.feature.users.presentation.userlist
 
-import androidx.annotation.StringRes
+import com.tyme.github.users.core.common.models.errors.UiText
 import com.tyme.github.users.core.ui.components.UserListItem
 
 sealed interface UserListUiState {
@@ -10,5 +10,5 @@ sealed interface UserListUiState {
         val isRefreshing: Boolean = false,
         val pendingRemoval: UserListItem? = null,
     ) : UserListUiState
-    data class Error(val message: String = "", @StringRes val messageRes: Int = 0) : UserListUiState
+    data class Error(val message: UiText) : UserListUiState
 }

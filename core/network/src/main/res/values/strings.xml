@@ -1,6 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="error_message_generic">Sorry, an error occurred. Please try again.</string>
-    <string name="error_message_no_internet_connection">No internet connection. Please check your connection and try again.</string>
-    <string name="error_message_unauthorized">Unauthorized. Please login again.</string>
 </resources>

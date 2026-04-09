@@ -22,6 +22,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tyme.github.users.core.ui.components.ErrorDialog
 import com.tyme.github.users.core.ui.components.RemoveFavoriteDialog
+import com.tyme.github.users.core.ui.extensions.asString
 import com.tyme.github.users.core.ui.components.UserList
 import com.tyme.github.users.core.ui.components.UserListItem
 import com.tyme.github.users.core.ui.theme.Theme
@@ -91,10 +92,10 @@ private fun FavoritesContent(
             onConfirm = onConfirmRemoveFavorite,
             onDismiss = onDismissRemoveFavorite,
         )
-        is FavoritesUiState.RemovalError -> {
-            val message = uiState.message.ifEmpty { stringResource(uiState.messageRes) }
-            ErrorDialog(message = message, onDismiss = onDismissError)
-        }
+        is FavoritesUiState.RemovalError -> ErrorDialog(
+            message = uiState.message.asString(),
+            onDismiss = onDismissError,
+        )
         FavoritesUiState.Idle -> Unit
     }
 }

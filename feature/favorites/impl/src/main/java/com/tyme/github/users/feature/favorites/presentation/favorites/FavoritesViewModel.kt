@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.tyme.github.users.core.common.providers.DispatchersProvider
 import com.tyme.github.users.core.navigation.AppNavigator
 import com.tyme.github.users.core.navigation.NavigationIntent
-import com.tyme.github.users.core.network.models.errors.toNetworkErrorMessage
+import com.tyme.github.users.core.ui.extensions.toUiText
 import com.tyme.github.users.core.ui.components.UserListItem
 import com.tyme.github.users.feature.favorites.domain.usecase.GetFavoritesUseCase
 import com.tyme.github.users.feature.favorites.domain.usecase.RemoveFavoriteUseCase
@@ -32,13 +32,7 @@ class FavoritesViewModel @Inject constructor(
 
     val favorites: StateFlow<List<UserListItem>> = getFavoritesUseCase()
         .map { list -> list.map { it.toUserListItem() } }
-        .catch { throwable ->
-            val errorMessage = throwable.toNetworkErrorMessage()
-            _uiState.value = FavoritesUiState.RemovalError(
-                message = errorMessage.message,
-                messageRes = errorMessage.messageRes,
-            )
-        }
+        .catch { throwable -> _uiState.value = FavoritesUiState.RemovalError(throwable.toUiText()) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     private val _uiState = MutableStateFlow<FavoritesUiState>(FavoritesUiState.Idle)
@@ -52,13 +46,8 @@ class FavoritesViewModel @Inject constructor(
         val item = (_uiState.value as? FavoritesUiState.ConfirmRemoval)?.item ?: return
         _uiState.value = FavoritesUiState.Idle
         viewModelScope.launch(dispatchers.io) {
-            removeFavoriteUseCase(item.username).onFailure { throwable ->
-                val params = throwable.toNetworkErrorMessage()
-                _uiState.value = FavoritesUiState.RemovalError(
-                    message = params.message,
-                    messageRes = params.messageRes,
-                )
-            }
+            removeFavoriteUseCase(item.username)
+                .onFailure { throwable -> _uiState.value = FavoritesUiState.RemovalError(throwable.toUiText()) }
         }
     }
 

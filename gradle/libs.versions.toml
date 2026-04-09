@@ -14,6 +14,8 @@ kotlinxCollectionsImmutable = "0.4.0"
 coreKtx = "1.18.0"
 lifecycleRuntimeKtx = "2.10.0"
 
+annotationJvm = "1.9.1"
+
 activityCompose = "1.13.0"
 composeBom = "2026.03.01"
 navigationCompose = "2.9.7"
@@ -45,7 +47,6 @@ mockk = "1.14.9"
 kotest = "6.1.10"
 turbine = "1.2.1"
 robolectric = "4.16.1"
-mediationTestSuite = "3.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -67,6 +68,8 @@ androidx-material3-window-size-clazz = { group = "androidx.compose.material3", n
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 
 androidx-test-core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "coreTest" }
+
+androidx-annotation-jvm = { group = "androidx.annotation", name = "annotation-jvm", version.ref = "annotationJvm" }
 
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinSerialization" }
 kotlinx-collections-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable" }
@@ -116,7 +119,6 @@ robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectr
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

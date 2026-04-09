@@ -13,9 +13,9 @@ import com.tyme.github.users.feature.favorites.domain.usecase.AddFavoriteUseCase
 import com.tyme.github.users.feature.users.domain.usecase.GetUserPagingUseCase
 import com.tyme.github.users.feature.favorites.domain.usecase.RemoveFavoriteUseCase
 import com.tyme.github.users.feature.users.navigation.UserDetailsDestination
+import com.tyme.github.users.core.ui.extensions.toUiText
 import com.tyme.github.users.feature.users.presentation.mappers.toUserListItem
 import com.tyme.github.users.feature.users.presentation.mappers.toUserModel
-import com.tyme.github.users.feature.users.presentation.mappers.toUserListError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -46,7 +46,7 @@ class UserListViewModel @Inject constructor(
             when (loadState) {
                 is LoadState.Loading -> current as? UserListUiState.Success ?: UserListUiState.Loading
                 is LoadState.NotLoading -> if (current is UserListUiState.Success) current.copy(isRefreshing = false) else UserListUiState.Success()
-                is LoadState.Error -> loadState.error.toUserListError()
+                is LoadState.Error -> UserListUiState.Error(loadState.error.toUiText())
             }
         }
     }
@@ -69,7 +69,7 @@ class UserListViewModel @Inject constructor(
         } else {
             viewModelScope.launch(dispatchers.io) {
                 addFavoriteUseCase(user.toUserModel())
-                    .onFailure { e -> _uiState.update { e.toUserListError() } }
+                    .onFailure { e -> _uiState.value = UserListUiState.Error(e.toUiText()) }
             }
         }
     }
@@ -81,7 +81,7 @@ class UserListViewModel @Inject constructor(
         }
         viewModelScope.launch(dispatchers.io) {
             removeFavoriteUseCase(user.username)
-                .onFailure { e -> _uiState.update { e.toUserListError() } }
+                .onFailure { e -> _uiState.value = UserListUiState.Error(e.toUiText()) }
         }
     }
 

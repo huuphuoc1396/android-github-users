@@ -1,7 +1,7 @@
 package com.tyme.github.users.core.network.adapters.errors
 
 import com.tyme.github.users.core.network.adapters.mappers.toThrowable
-import com.tyme.github.users.core.network.models.errors.NoConnectionException
+import com.tyme.github.users.core.common.models.errors.NoConnectionException
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
