@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
@@ -75,6 +76,36 @@ fun UserList(
             }
 
             else -> {}
+        }
+    }
+}
+
+@Composable
+fun UserList(
+    items: List<UserListItem>,
+    modifier: Modifier = Modifier,
+    onUserClick: (UserListItem) -> Unit = {},
+    onFavoriteClick: (UserListItem) -> Unit = {},
+    onUrlClick: (String) -> Unit = {},
+) {
+    val arrangement = Arrangement.spacedBy(12.dp)
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(256.dp),
+        modifier = modifier,
+        verticalArrangement = arrangement,
+        horizontalArrangement = arrangement,
+        contentPadding = PaddingValues(16.dp),
+    ) {
+        items(
+            items = items,
+            key = { it.id },
+        ) { user ->
+            UserCard(
+                item = user,
+                onUserClick = { onUserClick(user) },
+                onFavoriteClick = { onFavoriteClick(user) },
+                onUrlClick = onUrlClick,
+            )
         }
     }
 }
