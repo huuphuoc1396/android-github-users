@@ -1,11 +1,16 @@
 package com.tyme.github.users.feature.favorites.presentation.favorites
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
@@ -22,7 +27,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tyme.github.users.core.ui.components.ErrorDialog
 import com.tyme.github.users.core.ui.components.RemoveFavoriteDialog
-import com.tyme.github.users.core.ui.components.UserList
+import com.tyme.github.users.core.ui.components.UserCard
 import com.tyme.github.users.core.ui.components.UserListItem
 import com.tyme.github.users.core.ui.theme.Theme
 import com.tyme.github.users.feature.favorites.impl.R
@@ -76,12 +81,27 @@ private fun FavoritesContent(
                 )
             }
 
-            else -> UserList(
-                items = favorites,
-                onUserClick = onUserClick,
-                onFavoriteClick = onRemoveFavoriteClick,
-                onUrlClick = onUrlClick,
-            )
+            else -> {
+                val arrangement = Arrangement.spacedBy(12.dp)
+                LazyVerticalGrid(
+                    columns = GridCells.Adaptive(256.dp),
+                    verticalArrangement = arrangement,
+                    horizontalArrangement = arrangement,
+                    contentPadding = PaddingValues(16.dp),
+                ) {
+                    items(
+                        items = favorites,
+                        key = { it.id },
+                    ) { user ->
+                        UserCard(
+                            item = user,
+                            onUserClick = { onUserClick(user) },
+                            onFavoriteClick = { onRemoveFavoriteClick(user) },
+                            onUrlClick = onUrlClick,
+                        )
+                    }
+                }
+            }
         }
     }
 

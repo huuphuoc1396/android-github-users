@@ -2,9 +2,9 @@ package com.tyme.github.users.feature.favorites.presentation.favorites
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tyme.github.users.core.common.providers.DispatchersProvider
 import com.tyme.github.users.core.navigation.AppNavigator
 import com.tyme.github.users.core.navigation.NavigationIntent
+import com.tyme.github.users.core.common.providers.DispatchersProvider
 import com.tyme.github.users.core.network.models.errors.toNetworkErrorMessage
 import com.tyme.github.users.core.ui.components.UserListItem
 import com.tyme.github.users.feature.favorites.domain.usecase.GetFavoritesUseCase
@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -32,13 +31,6 @@ class FavoritesViewModel @Inject constructor(
 
     val favorites: StateFlow<List<UserListItem>> = getFavoritesUseCase()
         .map { list -> list.map { it.toUserListItem() } }
-        .catch { throwable ->
-            val errorMessage = throwable.toNetworkErrorMessage()
-            _uiState.value = FavoritesUiState.RemovalError(
-                message = errorMessage.message,
-                messageRes = errorMessage.messageRes,
-            )
-        }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     private val _uiState = MutableStateFlow<FavoritesUiState>(FavoritesUiState.Idle)
