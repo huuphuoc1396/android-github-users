@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Button
@@ -34,14 +35,7 @@ fun UserList(
     onFavoriteClick: (UserListItem) -> Unit = {},
     onUrlClick: (String) -> Unit = {},
 ) {
-    val arrangement = Arrangement.spacedBy(12.dp)
-    LazyVerticalGrid(
-        columns = GridCells.Adaptive(256.dp),
-        modifier = modifier,
-        verticalArrangement = arrangement,
-        horizontalArrangement = arrangement,
-        contentPadding = PaddingValues(16.dp),
-    ) {
+    UserListGrid(modifier) {
         items(
             count = pagingItems.itemCount,
             key = pagingItems.itemKey { user -> user.id },
@@ -88,14 +82,7 @@ fun UserList(
     onFavoriteClick: (UserListItem) -> Unit = {},
     onUrlClick: (String) -> Unit = {},
 ) {
-    val arrangement = Arrangement.spacedBy(12.dp)
-    LazyVerticalGrid(
-        columns = GridCells.Adaptive(256.dp),
-        modifier = modifier,
-        verticalArrangement = arrangement,
-        horizontalArrangement = arrangement,
-        contentPadding = PaddingValues(16.dp),
-    ) {
+    UserListGrid(modifier) {
         items(
             items = items,
             key = { it.id },
@@ -108,6 +95,22 @@ fun UserList(
             )
         }
     }
+}
+
+@Composable
+private fun UserListGrid(
+    modifier: Modifier = Modifier,
+    content: LazyGridScope.() -> Unit,
+) {
+    val arrangement = Arrangement.spacedBy(12.dp)
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(256.dp),
+        modifier = modifier,
+        verticalArrangement = arrangement,
+        horizontalArrangement = arrangement,
+        contentPadding = PaddingValues(16.dp),
+        content = content,
+    )
 }
 
 @Preview
@@ -123,5 +126,20 @@ private fun UserListPagingPreview() {
         }
         val pagingItems = flowOf(PagingData.from(userList)).collectAsLazyPagingItems()
         UserList(pagingItems = pagingItems)
+    }
+}
+
+@Preview
+@Composable
+private fun UserListPreview() {
+    Theme {
+        val userList = List(10) { index ->
+            UserListItem(
+                id = index,
+                username = "user$index",
+                url = "https://www.github.com/user$index",
+            )
+        }
+        UserList(items = userList)
     }
 }
