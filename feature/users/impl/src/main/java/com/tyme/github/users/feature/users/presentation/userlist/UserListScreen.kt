@@ -25,8 +25,10 @@ import androidx.paging.LoadStates
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.tyme.github.users.core.common.models.errors.UiText
 import com.tyme.github.users.core.ui.components.ErrorDialog
 import com.tyme.github.users.core.ui.components.Loading
+import com.tyme.github.users.core.ui.extensions.asString
 import com.tyme.github.users.core.ui.components.RemoveFavoriteDialog
 import com.tyme.github.users.core.ui.components.UserList
 import com.tyme.github.users.core.ui.components.UserListItem
@@ -111,7 +113,7 @@ private fun UserListContent(
             }
 
             is UserListUiState.Error -> ErrorDialog(
-                message = uiState.message.ifEmpty { stringResource(uiState.messageRes) },
+                message = uiState.message.asString(),
                 onDismiss = onDismissError,
             )
         }
@@ -188,7 +190,7 @@ private fun UserListContentErrorPreview() {
             flowOf(PagingData.empty<UserListItem>()).collectAsLazyPagingItems()
         Surface {
             UserListContent(
-                uiState = UserListUiState.Error(message = "An error occurred"),
+                uiState = UserListUiState.Error(UiText.Dynamic("An error occurred")),
                 pagingItems = pagingItems,
                 onRefresh = {},
                 onRetryClick = {},

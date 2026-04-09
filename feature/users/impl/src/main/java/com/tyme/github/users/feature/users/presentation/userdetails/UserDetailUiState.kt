@@ -1,6 +1,6 @@
 package com.tyme.github.users.feature.users.presentation.userdetails
 
-import androidx.annotation.StringRes
+import com.tyme.github.users.core.common.models.errors.UiText
 
 sealed interface UserDetailUiState {
     object Idle : UserDetailUiState
@@ -14,5 +14,5 @@ sealed interface UserDetailUiState {
         val url: String,
         val showRemoveConfirmDialog: Boolean = false,
     ) : UserDetailUiState
-    data class Error(val message: String = "", @StringRes val messageRes: Int = 0) : UserDetailUiState
+    data class Error(val message: UiText) : UserDetailUiState
 }

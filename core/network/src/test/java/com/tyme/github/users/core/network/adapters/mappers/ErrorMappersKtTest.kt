@@ -1,8 +1,8 @@
 package com.tyme.github.users.core.network.adapters.mappers
 
 import com.google.gson.JsonSyntaxException
-import com.tyme.github.users.core.network.models.errors.ApiException
-import com.tyme.github.users.core.network.models.errors.UnauthorizedException
+import com.tyme.github.users.core.common.models.errors.ApiException
+import com.tyme.github.users.core.common.models.errors.UnauthorizedException
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.beInstanceOf

@@ -4,8 +4,8 @@ import com.google.gson.Gson
 import com.tyme.github.users.core.network.responses.errors.ErrorResponse
 import com.tyme.github.users.core.common.extensions.orEmpty
 import com.tyme.github.users.core.common.extensions.orZero
-import com.tyme.github.users.core.network.models.errors.ApiException
-import com.tyme.github.users.core.network.models.errors.UnauthorizedException
+import com.tyme.github.users.core.common.models.errors.ApiException
+import com.tyme.github.users.core.common.models.errors.UnauthorizedException
 import retrofit2.Response
 import timber.log.Timber
 import java.net.HttpURLConnection

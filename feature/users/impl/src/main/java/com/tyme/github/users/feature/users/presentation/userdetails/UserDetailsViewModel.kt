@@ -14,7 +14,7 @@ import com.tyme.github.users.feature.users.domain.usecase.GetUserDetailsUseCase
 import com.tyme.github.users.feature.favorites.domain.usecase.IsFavoriteUseCase
 import com.tyme.github.users.feature.favorites.domain.usecase.RemoveFavoriteUseCase
 import com.tyme.github.users.feature.users.navigation.UserDetailsDestination
-import com.tyme.github.users.feature.users.presentation.mappers.toUserDetailError
+import com.tyme.github.users.core.ui.extensions.toUiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -58,7 +58,7 @@ class UserDetailsViewModel @Inject constructor(
         viewModelScope.launch(dispatchers.io) {
             _uiState.value = UserDetailUiState.Loading
             getUserDetailsUseCase(destination.username)
-                .catch { e -> _uiState.value = e.toUserDetailError() }
+                .catch { e -> _uiState.value = UserDetailUiState.Error(e.toUiText()) }
                 .collect { details -> _uiState.value = details.toUserDetailUiState() }
         }
     }
@@ -76,7 +76,7 @@ class UserDetailsViewModel @Inject constructor(
                         avatarUrl = destination.avatarUrl,
                         url = destination.url,
                     )
-                ).onFailure { e -> _uiState.value = e.toUserDetailError() }
+                ).onFailure { e -> _uiState.value = UserDetailUiState.Error(e.toUiText()) }
             }
         }
     }
@@ -87,7 +87,7 @@ class UserDetailsViewModel @Inject constructor(
         }
         viewModelScope.launch(dispatchers.io) {
             removeFavoriteUseCase(destination.username)
-                .onFailure { e -> _uiState.value = e.toUserDetailError() }
+                .onFailure { e -> _uiState.value = UserDetailUiState.Error(e.toUiText()) }
         }
     }
 
