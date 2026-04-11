@@ -93,11 +93,11 @@ internal class FavoritesViewModelTest {
     }
 
     @Test
-    fun `onRemoveFavoriteClick sets ConfirmRemoval state`() = runTest {
+    fun `onAction RemoveFavoriteClick sets ConfirmRemoval state`() = runTest {
         val userListItem = UserListItem(username = "user1")
         val viewModel = createViewModel()
 
-        viewModel.onRemoveFavoriteClick(userListItem)
+        viewModel.onAction(FavoritesUiAction.RemoveFavoriteClick(userListItem))
 
         viewModel.uiState.test {
             awaitItem() shouldBe FavoritesUiState.ConfirmRemoval(userListItem)
@@ -106,13 +106,13 @@ internal class FavoritesViewModelTest {
     }
 
     @Test
-    fun `onConfirmRemoveFavorite calls removeFavoriteUseCase and resets to Idle`() = runTest {
+    fun `onAction ConfirmRemoveFavorite calls removeFavoriteUseCase and resets to Idle`() = runTest {
         val userListItem = UserListItem(username = "user1")
         coEvery { removeFavoriteUseCase(userListItem.username) } returns Result.success(Unit)
         val viewModel = createViewModel()
-        viewModel.onRemoveFavoriteClick(userListItem)
+        viewModel.onAction(FavoritesUiAction.RemoveFavoriteClick(userListItem))
 
-        viewModel.onConfirmRemoveFavorite()
+        viewModel.onAction(FavoritesUiAction.ConfirmRemoveFavorite)
 
         coVerify { removeFavoriteUseCase(userListItem.username) }
         viewModel.uiState.test {
@@ -122,13 +122,13 @@ internal class FavoritesViewModelTest {
     }
 
     @Test
-    fun `onConfirmRemoveFavorite emits RemovalError when removal fails`() = runTest {
+    fun `onAction ConfirmRemoveFavorite emits RemovalError when removal fails`() = runTest {
         val userListItem = UserListItem(username = "user1")
         coEvery { removeFavoriteUseCase(userListItem.username) } returns Result.failure(RuntimeException("db error"))
         val viewModel = createViewModel()
-        viewModel.onRemoveFavoriteClick(userListItem)
+        viewModel.onAction(FavoritesUiAction.RemoveFavoriteClick(userListItem))
 
-        viewModel.onConfirmRemoveFavorite()
+        viewModel.onAction(FavoritesUiAction.ConfirmRemoveFavorite)
 
         viewModel.uiState.test {
             awaitItem().shouldBeInstanceOf<FavoritesUiState.RemovalError>()
@@ -137,21 +137,21 @@ internal class FavoritesViewModelTest {
     }
 
     @Test
-    fun `onConfirmRemoveFavorite does nothing when state is Idle`() = runTest {
+    fun `onAction ConfirmRemoveFavorite does nothing when state is Idle`() = runTest {
         val viewModel = createViewModel()
 
-        viewModel.onConfirmRemoveFavorite()
+        viewModel.onAction(FavoritesUiAction.ConfirmRemoveFavorite)
 
         coVerify(exactly = 0) { removeFavoriteUseCase(any()) }
     }
 
     @Test
-    fun `onDismissRemoveFavorite resets state to Idle`() = runTest {
+    fun `onAction DismissRemoveFavorite resets state to Idle`() = runTest {
         val userListItem = UserListItem(username = "user1")
         val viewModel = createViewModel()
-        viewModel.onRemoveFavoriteClick(userListItem)
+        viewModel.onAction(FavoritesUiAction.RemoveFavoriteClick(userListItem))
 
-        viewModel.onDismissRemoveFavorite()
+        viewModel.onAction(FavoritesUiAction.DismissRemoveFavorite)
 
         viewModel.uiState.test {
             awaitItem() shouldBe FavoritesUiState.Idle
@@ -160,14 +160,14 @@ internal class FavoritesViewModelTest {
     }
 
     @Test
-    fun `onDismissError resets state to Idle`() = runTest {
+    fun `onAction DismissError resets state to Idle`() = runTest {
         val userListItem = UserListItem(username = "user1")
         coEvery { removeFavoriteUseCase(userListItem.username) } returns Result.failure(RuntimeException())
         val viewModel = createViewModel()
-        viewModel.onRemoveFavoriteClick(userListItem)
-        viewModel.onConfirmRemoveFavorite()
+        viewModel.onAction(FavoritesUiAction.RemoveFavoriteClick(userListItem))
+        viewModel.onAction(FavoritesUiAction.ConfirmRemoveFavorite)
 
-        viewModel.onDismissError()
+        viewModel.onAction(FavoritesUiAction.DismissError)
 
         viewModel.uiState.test {
             awaitItem() shouldBe FavoritesUiState.Idle
@@ -176,7 +176,7 @@ internal class FavoritesViewModelTest {
     }
 
     @Test
-    fun `onNavigateToUser navigates to UserDetailsDestination`() = runTest {
+    fun `onAction UserClick navigates to UserDetailsDestination`() = runTest {
         val userListItem = UserListItem(
             username = "user1",
             avatarUrl = "avatar",
@@ -185,7 +185,7 @@ internal class FavoritesViewModelTest {
         coEvery { navigator.navigate(any()) } just runs
         val viewModel = createViewModel()
 
-        viewModel.onNavigateToUser(userListItem)
+        viewModel.onAction(FavoritesUiAction.UserClick(userListItem))
 
         coVerify {
             navigator.navigate(
@@ -198,5 +198,16 @@ internal class FavoritesViewModelTest {
                 )
             )
         }
+    }
+
+    @Test
+    fun `onAction UrlClick navigates to NavigationIntent OpenUrl`() = runTest {
+        val url = "https://example.com"
+        coEvery { navigator.navigate(any()) } just runs
+        val viewModel = createViewModel()
+
+        viewModel.onAction(FavoritesUiAction.UrlClick(url))
+
+        coVerify { navigator.navigate(NavigationIntent.OpenUrl(url)) }
     }
 }
