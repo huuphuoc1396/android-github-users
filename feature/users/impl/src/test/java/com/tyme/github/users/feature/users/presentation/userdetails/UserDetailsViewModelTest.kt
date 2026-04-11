@@ -133,7 +133,7 @@ internal class UserDetailsViewModelTest {
         advanceUntilIdle()
 
         // When
-        viewModel.onFavoriteClick()
+        viewModel.onAction(UserDetailsUiAction.FavoriteToggle)
 
         // Then
         (viewModel.uiState.value as UserDetailUiState.Success).showRemoveConfirmDialog shouldBe true
@@ -151,7 +151,7 @@ internal class UserDetailsViewModelTest {
         val viewModel = createViewModel()
 
         // When
-        viewModel.onFavoriteClick()
+        viewModel.onAction(UserDetailsUiAction.FavoriteToggle)
 
         // Then
         coVerify { addFavoriteUseCase(expectedUser) }
@@ -165,10 +165,10 @@ internal class UserDetailsViewModelTest {
         val viewModel = createViewModel()
         backgroundScope.launch { viewModel.isFavorite.collect {} }
         advanceUntilIdle()
-        viewModel.onFavoriteClick()
+        viewModel.onAction(UserDetailsUiAction.FavoriteToggle)
 
         // When
-        viewModel.onConfirmRemoveFavorite()
+        viewModel.onAction(UserDetailsUiAction.ConfirmRemoveFavorite)
 
         // Then
         coVerify { removeFavoriteUseCase(destination.username) }
@@ -182,10 +182,10 @@ internal class UserDetailsViewModelTest {
         val viewModel = createViewModel()
         backgroundScope.launch { viewModel.isFavorite.collect {} }
         advanceUntilIdle()
-        viewModel.onFavoriteClick()
+        viewModel.onAction(UserDetailsUiAction.FavoriteToggle)
 
         // When
-        viewModel.onDismissRemoveFavorite()
+        viewModel.onAction(UserDetailsUiAction.DismissRemoveFavorite)
 
         // Then
         (viewModel.uiState.value as UserDetailUiState.Success).showRemoveConfirmDialog shouldBe false
@@ -198,7 +198,7 @@ internal class UserDetailsViewModelTest {
         val viewModel = createViewModel()
 
         // When
-        viewModel.dismissError()
+        viewModel.onAction(UserDetailsUiAction.DismissError)
 
         // Then
         viewModel.uiState.value shouldBe UserDetailUiState.Idle
@@ -211,7 +211,7 @@ internal class UserDetailsViewModelTest {
         val viewModel = createViewModel()
 
         // When
-        viewModel.onNavigateBack()
+        viewModel.onAction(UserDetailsUiAction.NavigateBack)
 
         // Then
         coVerify { navigator.navigate(NavigationIntent.NavigateUp) }

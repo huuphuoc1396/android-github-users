@@ -63,7 +63,18 @@ class UserDetailsViewModel @Inject constructor(
         }
     }
 
-    fun onFavoriteClick() {
+    fun onAction(action: UserDetailsUiAction) {
+        when (action) {
+            UserDetailsUiAction.NavigateBack -> onNavigateBack()
+            UserDetailsUiAction.FavoriteToggle -> onFavoriteClick()
+            UserDetailsUiAction.ConfirmRemoveFavorite -> onConfirmRemoveFavorite()
+            UserDetailsUiAction.DismissRemoveFavorite -> onDismissRemoveFavorite()
+            UserDetailsUiAction.DismissError -> dismissError()
+            is UserDetailsUiAction.BlogClick -> Unit
+        }
+    }
+
+    private fun onFavoriteClick() {
         if (isFavorite.value) {
             _uiState.update { current ->
                 if (current is UserDetailUiState.Success) current.copy(showRemoveConfirmDialog = true) else current
@@ -81,7 +92,7 @@ class UserDetailsViewModel @Inject constructor(
         }
     }
 
-    fun onConfirmRemoveFavorite() {
+    private fun onConfirmRemoveFavorite() {
         _uiState.update { current ->
             if (current is UserDetailUiState.Success) current.copy(showRemoveConfirmDialog = false) else current
         }
@@ -91,17 +102,17 @@ class UserDetailsViewModel @Inject constructor(
         }
     }
 
-    fun onDismissRemoveFavorite() {
+    private fun onDismissRemoveFavorite() {
         _uiState.update { current ->
             if (current is UserDetailUiState.Success) current.copy(showRemoveConfirmDialog = false) else current
         }
     }
 
-    fun dismissError() {
+    private fun dismissError() {
         _uiState.value = UserDetailUiState.Idle
     }
 
-    fun onNavigateBack() {
+    private fun onNavigateBack() {
         viewModelScope.launch { navigator.navigate(NavigationIntent.NavigateUp) }
     }
 }
