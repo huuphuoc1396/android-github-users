@@ -13,4 +13,6 @@ sealed interface NavigationIntent {
     ) : NavigationIntent
 
     data object NavigateUp : NavigationIntent
+
+    data class OpenUrl(val url: String) : NavigationIntent
 }

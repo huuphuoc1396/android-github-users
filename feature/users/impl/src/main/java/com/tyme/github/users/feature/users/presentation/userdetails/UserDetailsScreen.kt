@@ -32,7 +32,6 @@ import com.tyme.github.users.feature.users.presentation.userdetails.components.U
 
 @Composable
 fun UserDetailsScreen(
-    onUrlClick: (String) -> Unit,
     viewModel: UserDetailsViewModel = hiltViewModel<UserDetailsViewModel>(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -40,12 +39,7 @@ fun UserDetailsScreen(
     UserDetailsContent(
         uiState = uiState,
         isFavorite = isFavorite,
-        onBackClick = viewModel::onNavigateBack,
-        onBlogClick = onUrlClick,
-        onFavoriteToggle = viewModel::onFavoriteClick,
-        onConfirmRemoveFavorite = viewModel::onConfirmRemoveFavorite,
-        onDismissRemoveFavorite = viewModel::onDismissRemoveFavorite,
-        onDismissError = viewModel::dismissError,
+        onAction = viewModel::onAction,
     )
 }
 
@@ -54,21 +48,16 @@ fun UserDetailsScreen(
 private fun UserDetailsContent(
     uiState: UserDetailUiState,
     isFavorite: Boolean,
-    onBackClick: () -> Unit,
-    onBlogClick: (String) -> Unit,
-    onFavoriteToggle: () -> Unit,
-    onConfirmRemoveFavorite: () -> Unit,
-    onDismissRemoveFavorite: () -> Unit,
-    onDismissError: () -> Unit,
+    onAction: (UserDetailsUiAction) -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         CenterAlignedTopAppBar(
             title = { Text(text = stringResource(R.string.user_details_title)) },
-            navigationIcon = { BackButton(onClick = onBackClick) },
+            navigationIcon = { BackButton(onClick = { onAction(UserDetailsUiAction.NavigateBack) }) },
             windowInsets = TopAppBarDefaults.windowInsets.only(WindowInsetsSides.Horizontal),
             actions = {
                 if (uiState is UserDetailUiState.Success) {
-                    IconButton(onClick = onFavoriteToggle) {
+                    IconButton(onClick = { onAction(UserDetailsUiAction.FavoriteToggle) }) {
                         Icon(
                             imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
                             contentDescription = null,
@@ -83,20 +72,20 @@ private fun UserDetailsContent(
             is UserDetailUiState.Loading -> Loading()
             is UserDetailUiState.Success -> UserDetails(
                 uiState = uiState,
-                onBlogClick = onBlogClick,
+                onBlogClick = { url -> onAction(UserDetailsUiAction.BlogClick(url)) },
                 modifier = Modifier.fillMaxSize(),
             )
             is UserDetailUiState.Error -> ErrorDialog(
                 message = uiState.message.asString(),
-                onDismiss = onDismissError,
+                onDismiss = { onAction(UserDetailsUiAction.DismissError) },
             )
         }
     }
     if (uiState is UserDetailUiState.Success && uiState.showRemoveConfirmDialog) {
         RemoveFavoriteDialog(
             username = uiState.username,
-            onConfirm = onConfirmRemoveFavorite,
-            onDismiss = onDismissRemoveFavorite,
+            onConfirm = { onAction(UserDetailsUiAction.ConfirmRemoveFavorite) },
+            onDismiss = { onAction(UserDetailsUiAction.DismissRemoveFavorite) },
         )
     }
 }
@@ -115,12 +104,7 @@ private fun UserDetailsContentPreview() {
                 url = "https://github.com/mojombo"
             ),
             isFavorite = true,
-            onBackClick = {},
-            onBlogClick = {},
-            onFavoriteToggle = {},
-            onConfirmRemoveFavorite = {},
-            onDismissRemoveFavorite = {},
-            onDismissError = {}
+            onAction = {},
         )
     }
 }
