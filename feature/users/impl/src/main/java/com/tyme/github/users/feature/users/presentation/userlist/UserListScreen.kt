@@ -17,8 +17,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.tyme.github.users.core.ui.extensions.openBrowser
 import androidx.compose.material3.Surface
 import androidx.paging.LoadState
 import androidx.paging.LoadStates
@@ -38,9 +40,9 @@ import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun UserListScreen(
-    onUrlClick: (String) -> Unit,
     viewModel: UserListViewModel = hiltViewModel<UserListViewModel>(),
 ) {
+    val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val pagingItems = viewModel.userPaging.collectAsLazyPagingItems()
 
@@ -62,7 +64,7 @@ fun UserListScreen(
         onFavoriteClick = viewModel::onFavoriteClick,
         onConfirmRemoveFavorite = viewModel::onConfirmRemoveFavorite,
         onDismissRemoveFavorite = viewModel::onDismissRemoveFavorite,
-        onUrlClick = onUrlClick,
+        onUrlClick = { url -> context.openBrowser(url) },
         onDismissError = viewModel::dismissError,
     )
 }

@@ -21,10 +21,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.compose.ui.platform.LocalContext
 import com.tyme.github.users.R
 import com.tyme.github.users.core.navigation.AppNavigator
 import com.tyme.github.users.core.navigation.NavigationEffects
 import com.tyme.github.users.core.navigation.NavigationIntent
+import com.tyme.github.users.core.ui.extensions.openBrowser
 import com.tyme.github.users.feature.favorites.navigation.FavoritesDestination
 import com.tyme.github.users.feature.favorites.navigation.favoritesNavGraph
 import com.tyme.github.users.feature.users.navigation.UserListDestination
@@ -37,6 +39,7 @@ internal fun AppNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
 ) {
+    val context = LocalContext.current
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     val scope = rememberCoroutineScope()
@@ -59,7 +62,11 @@ internal fun AppNavHost(
         )
     }
 
-    NavigationEffects(navigator = navigator, navController = navController)
+    NavigationEffects(
+        navigator = navigator,
+        navController = navController,
+        onOpenUrl = { url -> context.openBrowser(url) },
+    )
 
     Scaffold(
         modifier = modifier,

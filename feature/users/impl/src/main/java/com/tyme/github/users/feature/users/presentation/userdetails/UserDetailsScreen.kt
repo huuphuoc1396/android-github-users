@@ -32,7 +32,6 @@ import com.tyme.github.users.feature.users.presentation.userdetails.components.U
 
 @Composable
 fun UserDetailsScreen(
-    onUrlClick: (String) -> Unit,
     viewModel: UserDetailsViewModel = hiltViewModel<UserDetailsViewModel>(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -40,13 +39,7 @@ fun UserDetailsScreen(
     UserDetailsContent(
         uiState = uiState,
         isFavorite = isFavorite,
-        onAction = { action ->
-            if (action is UserDetailsUiAction.BlogClick) {
-                onUrlClick(action.url)
-            } else {
-                viewModel.onAction(action)
-            }
-        },
+        onAction = viewModel::onAction,
     )
 }
 

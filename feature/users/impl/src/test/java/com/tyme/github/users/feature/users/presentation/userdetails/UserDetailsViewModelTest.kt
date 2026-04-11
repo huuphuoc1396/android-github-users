@@ -218,6 +218,20 @@ internal class UserDetailsViewModelTest {
     }
 
     @Test
+    fun `onAction BlogClick navigates to OpenUrl`() = runTest {
+        // Given
+        coEvery { navigator.navigate(any()) } returns Unit
+        val viewModel = createViewModel()
+
+        // When
+        viewModel.onAction(UserDetailsUiAction.BlogClick("https://example.com"))
+        advanceUntilIdle()
+
+        // Then
+        coVerify { navigator.navigate(NavigationIntent.OpenUrl("https://example.com")) }
+    }
+
+    @Test
     fun `isFavorite emits value from use case`() = runTest {
         // Given
         every { isFavoriteUseCase(destination.username) } returns flowOf(true)

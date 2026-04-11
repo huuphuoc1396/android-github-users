@@ -9,6 +9,7 @@ import androidx.navigation.NavHostController
 fun NavigationEffects(
     navigator: AppNavigator,
     navController: NavHostController,
+    onOpenUrl: (String) -> Unit = {},
 ) {
     LaunchedEffect(navigator, navController) {
         navigator.navigationActions.collect { intent ->
@@ -27,6 +28,7 @@ fun NavigationEffects(
                     restoreState = intent.restoreState
                 }
                 NavigationIntent.NavigateUp -> navController.navigateUp()
+                is NavigationIntent.OpenUrl -> onOpenUrl(intent.url)
             }
         }
     }
