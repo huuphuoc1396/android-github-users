@@ -70,9 +70,12 @@ class UserDetailsViewModel @Inject constructor(
             UserDetailsUiAction.ConfirmRemoveFavorite -> onConfirmRemoveFavorite()
             UserDetailsUiAction.DismissRemoveFavorite -> onDismissRemoveFavorite()
             UserDetailsUiAction.DismissError -> dismissError()
-            is UserDetailsUiAction.BlogClick ->
-                viewModelScope.launch { navigator.navigate(NavigationIntent.OpenUrl(action.url)) }
+            is UserDetailsUiAction.BlogClick -> onBlogClick(action)
         }
+    }
+
+    private fun onBlogClick(action: UserDetailsUiAction.BlogClick) {
+        viewModelScope.launch { navigator.navigate(NavigationIntent.OpenUrl(action.url)) }
     }
 
     private fun onFavoriteClick() {
