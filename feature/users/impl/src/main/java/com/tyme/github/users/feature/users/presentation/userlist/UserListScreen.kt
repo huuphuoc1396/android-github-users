@@ -17,10 +17,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.tyme.github.users.core.ui.extensions.openBrowser
 import androidx.compose.material3.Surface
 import androidx.paging.LoadState
 import androidx.paging.LoadStates
@@ -42,30 +40,18 @@ import kotlinx.coroutines.flow.flowOf
 fun UserListScreen(
     viewModel: UserListViewModel = hiltViewModel<UserListViewModel>(),
 ) {
-    val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val pagingItems = viewModel.userPaging.collectAsLazyPagingItems()
-
-    fun onRefresh() {
-        pagingItems.refresh()
-        viewModel.onRefreshTriggered()
-    }
-
-    LaunchedEffect(pagingItems.loadState.refresh) {
-        viewModel.onRefreshLoadState(pagingItems.loadState.refresh)
-    }
 
     UserListContent(
         uiState = uiState,
         pagingItems = pagingItems,
-        onRefresh = ::onRefresh,
+        onRefresh = {
+            pagingItems.refresh()
+            viewModel.onAction(UserListUiAction.Refresh)
+        },
         onRetryClick = { pagingItems.retry() },
-        onUserClick = viewModel::onNavigateToUser,
-        onFavoriteClick = viewModel::onFavoriteClick,
-        onConfirmRemoveFavorite = viewModel::onConfirmRemoveFavorite,
-        onDismissRemoveFavorite = viewModel::onDismissRemoveFavorite,
-        onUrlClick = { url -> context.openBrowser(url) },
-        onDismissError = viewModel::dismissError,
+        onAction = viewModel::onAction,
     )
 }
 
@@ -76,13 +62,12 @@ private fun UserListContent(
     pagingItems: LazyPagingItems<UserListItem>,
     onRefresh: () -> Unit,
     onRetryClick: () -> Unit,
-    onUserClick: (UserListItem) -> Unit,
-    onFavoriteClick: (UserListItem) -> Unit,
-    onConfirmRemoveFavorite: () -> Unit,
-    onDismissRemoveFavorite: () -> Unit,
-    onUrlClick: (String) -> Unit,
-    onDismissError: () -> Unit,
+    onAction: (UserListUiAction) -> Unit,
 ) {
+    LaunchedEffect(pagingItems.loadState.refresh) {
+        onAction(UserListUiAction.RefreshLoadStateChanged(pagingItems.loadState.refresh))
+    }
+
     Column(modifier = modifier.fillMaxSize()) {
         CenterAlignedTopAppBar(
             title = { Text(text = stringResource(R.string.user_list_title)) },
@@ -100,23 +85,23 @@ private fun UserListContent(
                     UserList(
                         pagingItems = pagingItems,
                         onRetryClick = onRetryClick,
-                        onUserClick = onUserClick,
-                        onFavoriteClick = onFavoriteClick,
-                        onUrlClick = onUrlClick,
+                        onUserClick = { onAction(UserListUiAction.UserClick(it)) },
+                        onFavoriteClick = { onAction(UserListUiAction.FavoriteClick(it)) },
+                        onUrlClick = { onAction(UserListUiAction.UrlClick(it)) },
                     )
                 }
                 if (uiState.pendingRemoval != null) {
                     RemoveFavoriteDialog(
                         username = uiState.pendingRemoval.username,
-                        onConfirm = onConfirmRemoveFavorite,
-                        onDismiss = onDismissRemoveFavorite,
+                        onConfirm = { onAction(UserListUiAction.ConfirmRemoveFavorite) },
+                        onDismiss = { onAction(UserListUiAction.DismissRemoveFavorite) },
                     )
                 }
             }
 
             is UserListUiState.Error -> ErrorDialog(
                 message = uiState.message.asString(),
-                onDismiss = onDismissError,
+                onDismiss = { onAction(UserListUiAction.DismissError) },
             )
         }
     }
@@ -150,12 +135,7 @@ private fun UserListContentSuccessPreview() {
                 pagingItems = pagingItems,
                 onRefresh = {},
                 onRetryClick = {},
-                onUserClick = {},
-                onFavoriteClick = {},
-                onConfirmRemoveFavorite = {},
-                onDismissRemoveFavorite = {},
-                onUrlClick = {},
-                onDismissError = {},
+                onAction = {},
             )
         }
     }
@@ -173,12 +153,7 @@ private fun UserListContentLoadingPreview() {
                 pagingItems = pagingItems,
                 onRefresh = {},
                 onRetryClick = {},
-                onUserClick = {},
-                onFavoriteClick = {},
-                onConfirmRemoveFavorite = {},
-                onDismissRemoveFavorite = {},
-                onUrlClick = {},
-                onDismissError = {},
+                onAction = {},
             )
         }
     }
@@ -196,12 +171,7 @@ private fun UserListContentErrorPreview() {
                 pagingItems = pagingItems,
                 onRefresh = {},
                 onRetryClick = {},
-                onUserClick = {},
-                onFavoriteClick = {},
-                onConfirmRemoveFavorite = {},
-                onDismissRemoveFavorite = {},
-                onUrlClick = {},
-                onDismissError = {},
+                onAction = {},
             )
         }
     }
