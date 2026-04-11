@@ -69,139 +69,139 @@ internal class UserListViewModelTest {
     }
 
     @Test
-    fun `onRefreshLoadState Loading when current is Idle sets Loading`() = runTest {
+    fun `onAction RefreshLoadStateChanged Loading when current is Idle sets Loading`() = runTest {
         val viewModel = createViewModel()
 
-        viewModel.onRefreshLoadState(LoadState.Loading)
+        viewModel.onAction(UserListUiAction.RefreshLoadStateChanged(LoadState.Loading))
 
         viewModel.uiState.value shouldBe UserListUiState.Loading
     }
 
     @Test
-    fun `onRefreshLoadState Loading when current is Success keeps Success`() = runTest {
+    fun `onAction RefreshLoadStateChanged Loading when current is Success keeps Success`() = runTest {
         val viewModel = createViewModel()
-        viewModel.onRefreshLoadState(LoadState.NotLoading(false))
+        viewModel.onAction(UserListUiAction.RefreshLoadStateChanged(LoadState.NotLoading(false)))
 
-        viewModel.onRefreshLoadState(LoadState.Loading)
+        viewModel.onAction(UserListUiAction.RefreshLoadStateChanged(LoadState.Loading))
 
         viewModel.uiState.value.shouldBeInstanceOf<UserListUiState.Success>()
     }
 
     @Test
-    fun `onRefreshLoadState NotLoading when current is Success sets isRefreshing false`() = runTest {
+    fun `onAction RefreshLoadStateChanged NotLoading when current is Success sets isRefreshing false`() = runTest {
         val viewModel = createViewModel()
-        viewModel.onRefreshLoadState(LoadState.NotLoading(false))
-        viewModel.onRefreshTriggered()
+        viewModel.onAction(UserListUiAction.RefreshLoadStateChanged(LoadState.NotLoading(false)))
+        viewModel.onAction(UserListUiAction.Refresh)
 
-        viewModel.onRefreshLoadState(LoadState.NotLoading(false))
+        viewModel.onAction(UserListUiAction.RefreshLoadStateChanged(LoadState.NotLoading(false)))
 
         (viewModel.uiState.value as UserListUiState.Success).isRefreshing shouldBe false
     }
 
     @Test
-    fun `onRefreshLoadState NotLoading when current is not Success sets Success`() = runTest {
+    fun `onAction RefreshLoadStateChanged NotLoading when current is not Success sets Success`() = runTest {
         val viewModel = createViewModel()
 
-        viewModel.onRefreshLoadState(LoadState.NotLoading(false))
+        viewModel.onAction(UserListUiAction.RefreshLoadStateChanged(LoadState.NotLoading(false)))
 
         viewModel.uiState.value.shouldBeInstanceOf<UserListUiState.Success>()
     }
 
     @Test
-    fun `onRefreshLoadState Error sets Error state`() = runTest {
+    fun `onAction RefreshLoadStateChanged Error sets Error state`() = runTest {
         val viewModel = createViewModel()
 
-        viewModel.onRefreshLoadState(LoadState.Error(Exception("network error")))
+        viewModel.onAction(UserListUiAction.RefreshLoadStateChanged(LoadState.Error(Exception("network error"))))
 
         viewModel.uiState.value.shouldBeInstanceOf<UserListUiState.Error>()
     }
 
     @Test
-    fun `onRefreshTriggered when Success sets isRefreshing true`() = runTest {
+    fun `onAction Refresh when Success sets isRefreshing true`() = runTest {
         val viewModel = createViewModel()
-        viewModel.onRefreshLoadState(LoadState.NotLoading(false))
+        viewModel.onAction(UserListUiAction.RefreshLoadStateChanged(LoadState.NotLoading(false)))
 
-        viewModel.onRefreshTriggered()
+        viewModel.onAction(UserListUiAction.Refresh)
 
         (viewModel.uiState.value as UserListUiState.Success).isRefreshing shouldBe true
     }
 
     @Test
-    fun `onRefreshTriggered when not Success sets Loading`() = runTest {
+    fun `onAction Refresh when not Success sets Loading`() = runTest {
         val viewModel = createViewModel()
 
-        viewModel.onRefreshTriggered()
+        viewModel.onAction(UserListUiAction.Refresh)
 
         viewModel.uiState.value shouldBe UserListUiState.Loading
     }
 
     @Test
-    fun `dismissError resets to Success`() = runTest {
+    fun `onAction DismissError resets to Success`() = runTest {
         val viewModel = createViewModel()
-        viewModel.onRefreshLoadState(LoadState.Error(Exception()))
+        viewModel.onAction(UserListUiAction.RefreshLoadStateChanged(LoadState.Error(Exception())))
 
-        viewModel.dismissError()
+        viewModel.onAction(UserListUiAction.DismissError)
 
         viewModel.uiState.value.shouldBeInstanceOf<UserListUiState.Success>()
     }
 
     @Test
-    fun `onFavoriteClick when user is favorite sets pendingRemoval`() = runTest {
+    fun `onAction FavoriteClick when user is favorite sets pendingRemoval`() = runTest {
         val userListItem = UserListItem(username = "user1", isFavorite = true)
         val viewModel = createViewModel()
-        viewModel.onRefreshLoadState(LoadState.NotLoading(false))
+        viewModel.onAction(UserListUiAction.RefreshLoadStateChanged(LoadState.NotLoading(false)))
 
-        viewModel.onFavoriteClick(userListItem)
+        viewModel.onAction(UserListUiAction.FavoriteClick(userListItem))
 
         (viewModel.uiState.value as UserListUiState.Success).pendingRemoval shouldBe userListItem
     }
 
     @Test
-    fun `onFavoriteClick when user is not favorite calls addFavorite`() = runTest {
+    fun `onAction FavoriteClick when user is not favorite calls addFavorite`() = runTest {
         val userListItem = UserListItem(username = "user1", isFavorite = false)
         val userModel = UserModel(username = "user1")
         coEvery { addFavoriteUseCase(userModel) } returns Result.success(Unit)
         val viewModel = createViewModel()
-        viewModel.onRefreshLoadState(LoadState.NotLoading(false))
+        viewModel.onAction(UserListUiAction.RefreshLoadStateChanged(LoadState.NotLoading(false)))
 
-        viewModel.onFavoriteClick(userListItem)
+        viewModel.onAction(UserListUiAction.FavoriteClick(userListItem))
 
         coVerify { addFavoriteUseCase(userModel) }
     }
 
     @Test
-    fun `onConfirmRemoveFavorite calls removeFavorite and clears pendingRemoval`() = runTest {
+    fun `onAction ConfirmRemoveFavorite calls removeFavorite and clears pendingRemoval`() = runTest {
         val userListItem = UserListItem(username = "user1", isFavorite = true)
         coEvery { removeFavoriteUseCase(userListItem.username) } returns Result.success(Unit)
         val viewModel = createViewModel()
-        viewModel.onRefreshLoadState(LoadState.NotLoading(false))
-        viewModel.onFavoriteClick(userListItem)
+        viewModel.onAction(UserListUiAction.RefreshLoadStateChanged(LoadState.NotLoading(false)))
+        viewModel.onAction(UserListUiAction.FavoriteClick(userListItem))
 
-        viewModel.onConfirmRemoveFavorite()
+        viewModel.onAction(UserListUiAction.ConfirmRemoveFavorite)
 
         coVerify { removeFavoriteUseCase(userListItem.username) }
         (viewModel.uiState.value as UserListUiState.Success).pendingRemoval shouldBe null
     }
 
     @Test
-    fun `onDismissRemoveFavorite clears pendingRemoval`() = runTest {
+    fun `onAction DismissRemoveFavorite clears pendingRemoval`() = runTest {
         val userListItem = UserListItem(username = "user1", isFavorite = true)
         val viewModel = createViewModel()
-        viewModel.onRefreshLoadState(LoadState.NotLoading(false))
-        viewModel.onFavoriteClick(userListItem)
+        viewModel.onAction(UserListUiAction.RefreshLoadStateChanged(LoadState.NotLoading(false)))
+        viewModel.onAction(UserListUiAction.FavoriteClick(userListItem))
 
-        viewModel.onDismissRemoveFavorite()
+        viewModel.onAction(UserListUiAction.DismissRemoveFavorite)
 
         (viewModel.uiState.value as UserListUiState.Success).pendingRemoval shouldBe null
     }
 
     @Test
-    fun `onNavigateToUser navigates to UserDetailsDestination`() = runTest {
+    fun `onAction UserClick navigates to UserDetailsDestination`() = runTest {
         val user = UserListItem(username = "user1", avatarUrl = "avatar", url = "https://github.com/user1")
         coEvery { navigator.navigate(any()) } returns Unit
         val viewModel = createViewModel()
 
-        viewModel.onNavigateToUser(user)
+        viewModel.onAction(UserListUiAction.UserClick(user))
 
         coVerify {
             navigator.navigate(
@@ -214,5 +214,16 @@ internal class UserListViewModelTest {
                 )
             )
         }
+    }
+
+    @Test
+    fun `onAction UrlClick navigates to NavigationIntent OpenUrl`() = runTest {
+        val url = "https://example.com"
+        coEvery { navigator.navigate(any()) } returns Unit
+        val viewModel = createViewModel()
+
+        viewModel.onAction(UserListUiAction.UrlClick(url))
+
+        coVerify { navigator.navigate(NavigationIntent.OpenUrl(url)) }
     }
 }

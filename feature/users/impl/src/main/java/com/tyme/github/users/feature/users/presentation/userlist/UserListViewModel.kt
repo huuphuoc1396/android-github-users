@@ -41,7 +41,20 @@ class UserListViewModel @Inject constructor(
         .map { pagingData -> pagingData.map { it.toUserListItem() } }
         .cachedIn(viewModelScope)
 
-    fun onRefreshLoadState(loadState: LoadState) {
+    fun onAction(action: UserListUiAction) {
+        when (action) {
+            UserListUiAction.Refresh -> onRefreshTriggered()
+            is UserListUiAction.RefreshLoadStateChanged -> onRefreshLoadState(action.loadState)
+            is UserListUiAction.UserClick -> onNavigateToUser(action.user)
+            is UserListUiAction.FavoriteClick -> onFavoriteClick(action.user)
+            UserListUiAction.ConfirmRemoveFavorite -> onConfirmRemoveFavorite()
+            UserListUiAction.DismissRemoveFavorite -> onDismissRemoveFavorite()
+            UserListUiAction.DismissError -> dismissError()
+            is UserListUiAction.UrlClick -> onUrlClick(action.url)
+        }
+    }
+
+    private fun onRefreshLoadState(loadState: LoadState) {
         _uiState.update { current ->
             when (loadState) {
                 is LoadState.Loading -> current as? UserListUiState.Success ?: UserListUiState.Loading
@@ -51,17 +64,17 @@ class UserListViewModel @Inject constructor(
         }
     }
 
-    fun onRefreshTriggered() {
+    private fun onRefreshTriggered() {
         _uiState.update { current ->
             if (current is UserListUiState.Success) current.copy(isRefreshing = true) else UserListUiState.Loading
         }
     }
 
-    fun dismissError() {
+    private fun dismissError() {
         _uiState.update { UserListUiState.Success() }
     }
 
-    fun onFavoriteClick(user: UserListItem) {
+    private fun onFavoriteClick(user: UserListItem) {
         if (user.isFavorite) {
             _uiState.update { current ->
                 if (current is UserListUiState.Success) current.copy(pendingRemoval = user) else current
@@ -74,7 +87,7 @@ class UserListViewModel @Inject constructor(
         }
     }
 
-    fun onConfirmRemoveFavorite() {
+    private fun onConfirmRemoveFavorite() {
         val user = (_uiState.value as? UserListUiState.Success)?.pendingRemoval ?: return
         _uiState.update { current ->
             if (current is UserListUiState.Success) current.copy(pendingRemoval = null) else current
@@ -85,13 +98,13 @@ class UserListViewModel @Inject constructor(
         }
     }
 
-    fun onDismissRemoveFavorite() {
+    private fun onDismissRemoveFavorite() {
         _uiState.update { current ->
             if (current is UserListUiState.Success) current.copy(pendingRemoval = null) else current
         }
     }
 
-    fun onNavigateToUser(user: UserListItem) {
+    private fun onNavigateToUser(user: UserListItem) {
         viewModelScope.launch {
             navigator.navigate(
                 NavigationIntent.NavigateTo(
@@ -103,5 +116,9 @@ class UserListViewModel @Inject constructor(
                 )
             )
         }
+    }
+
+    private fun onUrlClick(url: String) {
+        viewModelScope.launch { navigator.navigate(NavigationIntent.OpenUrl(url)) }
     }
 }
