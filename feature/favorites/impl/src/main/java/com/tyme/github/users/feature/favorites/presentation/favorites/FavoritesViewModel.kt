@@ -38,11 +38,22 @@ class FavoritesViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<FavoritesUiState>(FavoritesUiState.Idle)
     val uiState: StateFlow<FavoritesUiState> = _uiState.asStateFlow()
 
-    fun onRemoveFavoriteClick(user: UserListItem) {
+    fun onAction(action: FavoritesUiAction) {
+        when (action) {
+            is FavoritesUiAction.UserClick -> onNavigateToUser(action.user)
+            is FavoritesUiAction.RemoveFavoriteClick -> onRemoveFavoriteClick(action.user)
+            FavoritesUiAction.ConfirmRemoveFavorite -> onConfirmRemoveFavorite()
+            FavoritesUiAction.DismissRemoveFavorite -> onDismissRemoveFavorite()
+            FavoritesUiAction.DismissError -> onDismissError()
+            is FavoritesUiAction.UrlClick -> onUrlClick(action.url)
+        }
+    }
+
+    private fun onRemoveFavoriteClick(user: UserListItem) {
         _uiState.value = FavoritesUiState.ConfirmRemoval(user)
     }
 
-    fun onConfirmRemoveFavorite() {
+    private fun onConfirmRemoveFavorite() {
         val item = (_uiState.value as? FavoritesUiState.ConfirmRemoval)?.item ?: return
         _uiState.value = FavoritesUiState.Idle
         viewModelScope.launch(dispatchers.io) {
@@ -51,15 +62,15 @@ class FavoritesViewModel @Inject constructor(
         }
     }
 
-    fun onDismissRemoveFavorite() {
+    private fun onDismissRemoveFavorite() {
         _uiState.value = FavoritesUiState.Idle
     }
 
-    fun onDismissError() {
+    private fun onDismissError() {
         _uiState.value = FavoritesUiState.Idle
     }
 
-    fun onNavigateToUser(user: UserListItem) {
+    private fun onNavigateToUser(user: UserListItem) {
         viewModelScope.launch {
             navigator.navigate(
                 NavigationIntent.NavigateTo(
@@ -71,5 +82,9 @@ class FavoritesViewModel @Inject constructor(
                 )
             )
         }
+    }
+
+    private fun onUrlClick(url: String) {
+        viewModelScope.launch { navigator.navigate(NavigationIntent.OpenUrl(url)) }
     }
 }

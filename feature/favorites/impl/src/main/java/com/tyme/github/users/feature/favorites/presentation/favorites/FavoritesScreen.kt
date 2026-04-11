@@ -30,7 +30,6 @@ import com.tyme.github.users.feature.favorites.impl.R
 
 @Composable
 fun FavoritesScreen(
-    onUrlClick: (String) -> Unit,
     viewModel: FavoritesViewModel = hiltViewModel<FavoritesViewModel>(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -38,12 +37,7 @@ fun FavoritesScreen(
     FavoritesContent(
         favorites = favorites,
         uiState = uiState,
-        onUserClick = viewModel::onNavigateToUser,
-        onRemoveFavoriteClick = viewModel::onRemoveFavoriteClick,
-        onConfirmRemoveFavorite = viewModel::onConfirmRemoveFavorite,
-        onDismissRemoveFavorite = viewModel::onDismissRemoveFavorite,
-        onDismissError = viewModel::onDismissError,
-        onUrlClick = onUrlClick,
+        onAction = viewModel::onAction,
     )
 }
 
@@ -52,12 +46,7 @@ fun FavoritesScreen(
 private fun FavoritesContent(
     favorites: List<UserListItem>,
     uiState: FavoritesUiState,
-    onUserClick: (UserListItem) -> Unit = {},
-    onRemoveFavoriteClick: (UserListItem) -> Unit = {},
-    onConfirmRemoveFavorite: () -> Unit = {},
-    onDismissRemoveFavorite: () -> Unit = {},
-    onDismissError: () -> Unit = {},
-    onUrlClick: (String) -> Unit = {},
+    onAction: (FavoritesUiAction) -> Unit = {},
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         CenterAlignedTopAppBar(
@@ -79,9 +68,9 @@ private fun FavoritesContent(
 
             else -> UserList(
                 items = favorites,
-                onUserClick = onUserClick,
-                onFavoriteClick = onRemoveFavoriteClick,
-                onUrlClick = onUrlClick,
+                onUserClick = { onAction(FavoritesUiAction.UserClick(it)) },
+                onFavoriteClick = { onAction(FavoritesUiAction.RemoveFavoriteClick(it)) },
+                onUrlClick = { onAction(FavoritesUiAction.UrlClick(it)) },
             )
         }
     }
@@ -89,12 +78,12 @@ private fun FavoritesContent(
     when (uiState) {
         is FavoritesUiState.ConfirmRemoval -> RemoveFavoriteDialog(
             username = uiState.item.username,
-            onConfirm = onConfirmRemoveFavorite,
-            onDismiss = onDismissRemoveFavorite,
+            onConfirm = { onAction(FavoritesUiAction.ConfirmRemoveFavorite) },
+            onDismiss = { onAction(FavoritesUiAction.DismissRemoveFavorite) },
         )
         is FavoritesUiState.RemovalError -> ErrorDialog(
             message = uiState.message.asString(),
-            onDismiss = onDismissError,
+            onDismiss = { onAction(FavoritesUiAction.DismissError) },
         )
         FavoritesUiState.Idle -> Unit
     }
