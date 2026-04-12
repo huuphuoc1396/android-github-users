@@ -13,7 +13,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.tyme.github.users.feature.favorites.api"
+    namespace = "com.example.github.users.feature.favorites.api"
     compileSdk = libs.versions.compileSdk.get().toInt()
     defaultConfig { minSdk = libs.versions.minSdk.get().toInt() }
 

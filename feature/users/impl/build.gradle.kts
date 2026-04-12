@@ -14,7 +14,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.tyme.github.users.feature.users"
+    namespace = "com.example.github.users.feature.users"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {

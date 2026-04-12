@@ -14,7 +14,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.tyme.github.users.feature.favorites.impl"
+    namespace = "com.example.github.users.feature.favorites.impl"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {

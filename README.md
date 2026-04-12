@@ -58,19 +58,19 @@ An Android application for browsing GitHub users and their details, with the abi
 
 ### Deep Links
 
-- User List: `https://github-users.tyme.com/users`
+- User List: `https://github-users.example.com/users`
 
   ```bash
-  adb shell am start -a android.intent.action.VIEW -d "https://github-users.tyme.com/users"
+  adb shell am start -a android.intent.action.VIEW -d "https://github-users.example.com/users"
   ```
 
-- User Details: `https://github-users.tyme.com/users/{username}`
+- User Details: `https://github-users.example.com/users/{username}`
 
   ```bash
-  adb shell am start -a android.intent.action.VIEW -d "https://github-users.tyme.com/users/huuphuoc1396"
+  adb shell am start -a android.intent.action.VIEW -d "https://github-users.example.com/users/huuphuoc1396"
   ```
 
-> **Note:** `https://github-users.tyme.com` is a demo domain that has not been verified. You must enable it manually in the app's supported links settings.
+> **Note:** `https://github-users.example.com` is a demo domain that has not been verified. You must enable it manually in the app's supported links settings.
 
 <img src="https://github.com/user-attachments/assets/53c7cf96-2c73-49ba-ad40-3ea714db4acd" width=164>
 <img src="https://github.com/user-attachments/assets/b23f37db-78ac-4bf9-a31f-ebf0a2b01b77" width=164>

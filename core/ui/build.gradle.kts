@@ -11,7 +11,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.tyme.github.users.core.ui"
+    namespace = "com.example.github.users.core.ui"
     compileSdk = libs.versions.compileSdk.get().toInt()
     defaultConfig { minSdk = libs.versions.minSdk.get().toInt() }
     compileOptions {

@@ -13,7 +13,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.tyme.github.users.core.navigation"
+    namespace = "com.example.github.users.core.navigation"
     compileSdk = libs.versions.compileSdk.get().toInt()
     defaultConfig { minSdk = libs.versions.minSdk.get().toInt() }
 

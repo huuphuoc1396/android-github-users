@@ -11,7 +11,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.tyme.github.users.feature.users.api"
+    namespace = "com.example.github.users.feature.users.api"
     compileSdk = libs.versions.compileSdk.get().toInt()
     defaultConfig { minSdk = libs.versions.minSdk.get().toInt() }
 

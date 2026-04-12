@@ -14,11 +14,11 @@ kotlin {
 }
 
 android {
-    namespace = "com.tyme.github.users"
+    namespace = "com.example.github.users"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.tyme.github.users"
+        applicationId = "com.example.github.users"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 1
@@ -95,13 +95,13 @@ kover {
                 packages(
                     "hilt_aggregated_deps",
                     "dagger.hilt.internal.aggregatedroot.codegen",
-                    "com.tyme.github.users.*.di.*",
-                    "com.tyme.github.users.ui.uistate",
-                    "com.tyme.github.users.core.ui.*",
-                    "com.tyme.github.users.*.navigation",
-                    "com.tyme.github.users.navigation",
-                    "com.tyme.github.users.core.config",
-                    "com.tyme.github.users.dispatcher"
+                    "com.example.github.users.*.di.*",
+                    "com.example.github.users.ui.uistate",
+                    "com.example.github.users.core.ui.*",
+                    "com.example.github.users.*.navigation",
+                    "com.example.github.users.navigation",
+                    "com.example.github.users.core.config",
+                    "com.example.github.users.dispatcher"
                 )
                 annotatedBy(
                     "dagger.hilt.android.HiltAndroidApp",

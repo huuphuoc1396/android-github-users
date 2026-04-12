@@ -10,7 +10,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.tyme.github.users.core.common"
+    namespace = "com.example.github.users.core.common"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
@@ -46,7 +46,6 @@ android {
 
 dependencies {
     implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.androidx.annotation.jvm)
 
     testImplementation(libs.junit)
     testImplementation(libs.mockk)

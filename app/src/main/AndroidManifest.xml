@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
-            android:name=".activities.MainActivity"
+            android:name=".activity.MainActivity"
             android:exported="true"
             android:theme="@style/AppTheme">
             <intent-filter>
@@ -31,7 +31,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="github-users.tyme.com"
+                    android:host="github-users.example.com"
                     android:scheme="https" />
             </intent-filter>
         </activity>

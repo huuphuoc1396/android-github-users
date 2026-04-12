@@ -12,7 +12,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.tyme.github.users.core.security"
+    namespace = "com.example.github.users.core.security"
     compileSdk = libs.versions.compileSdk.get().toInt()
     defaultConfig { minSdk = libs.versions.minSdk.get().toInt() }
 

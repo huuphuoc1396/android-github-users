@@ -13,7 +13,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.tyme.github.users.core.database"
+    namespace = "com.example.github.users.core.database"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
