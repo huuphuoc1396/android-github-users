@@ -25,7 +25,7 @@ import androidx.paging.LoadStates
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.tyme.github.users.core.common.models.UiText
+import com.tyme.github.users.core.ui.models.UiText
 import com.tyme.github.users.core.ui.components.ErrorDialog
 import com.tyme.github.users.core.ui.components.Loading
 import com.tyme.github.users.core.ui.extensions.asString

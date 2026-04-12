@@ -1,4 +1,4 @@
-package com.tyme.github.users.core.common.models
+package com.tyme.github.users.core.ui.models
 
 import androidx.annotation.StringRes
 

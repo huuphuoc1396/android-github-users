@@ -244,4 +244,92 @@ internal class UserDetailsViewModelTest {
             expectMostRecentItem() shouldBe true
         }
     }
+
+    @Test
+    fun `isFavorite emits false when isFavoriteUseCase throws`() = runTest {
+        // Given
+        every { isFavoriteUseCase(destination.username) } returns flow { throw RuntimeException() }
+
+        // When
+        val viewModel = createViewModel()
+
+        // Then
+        viewModel.isFavorite.test {
+            expectMostRecentItem() shouldBe false
+        }
+    }
+
+    @Test
+    fun `onAction FavoriteToggle when isFavorite and state is not Success does nothing`() = runTest {
+        // Given
+        every { isFavoriteUseCase(destination.username) } returns flowOf(true)
+        every { getUserDetailsUseCase(destination.username) } returns flow { } // stays Loading
+        val viewModel = createViewModel()
+        backgroundScope.launch { viewModel.isFavorite.collect {} }
+        advanceUntilIdle()
+
+        // When
+        viewModel.onAction(UserDetailsUiAction.FavoriteToggle)
+
+        // Then
+        viewModel.uiState.value shouldBe UserDetailUiState.Loading
+    }
+
+    @Test
+    fun `onAction FavoriteToggle when not favorite and addFavorite fails sets Error`() = runTest {
+        // Given
+        coEvery { addFavoriteUseCase(any()) } returns Result.failure(RuntimeException("db error"))
+        val viewModel = createViewModel()
+
+        // When
+        viewModel.onAction(UserDetailsUiAction.FavoriteToggle)
+
+        // Then
+        viewModel.uiState.value.shouldBeInstanceOf<UserDetailUiState.Error>()
+    }
+
+    @Test
+    fun `onConfirmRemoveFavorite when state is not Success still calls removeFavorite`() = runTest {
+        // Given
+        every { getUserDetailsUseCase(destination.username) } returns flow { } // stays Loading
+        coEvery { removeFavoriteUseCase(destination.username) } returns Result.success(Unit)
+        val viewModel = createViewModel()
+
+        // When
+        viewModel.onAction(UserDetailsUiAction.ConfirmRemoveFavorite)
+
+        // Then
+        coVerify { removeFavoriteUseCase(destination.username) }
+        viewModel.uiState.value shouldBe UserDetailUiState.Loading
+    }
+
+    @Test
+    fun `onConfirmRemoveFavorite sets Error when removeFavorite fails`() = runTest {
+        // Given
+        every { isFavoriteUseCase(destination.username) } returns flowOf(true)
+        coEvery { removeFavoriteUseCase(destination.username) } returns Result.failure(RuntimeException("db error"))
+        val viewModel = createViewModel()
+        backgroundScope.launch { viewModel.isFavorite.collect {} }
+        advanceUntilIdle()
+        viewModel.onAction(UserDetailsUiAction.FavoriteToggle)
+
+        // When
+        viewModel.onAction(UserDetailsUiAction.ConfirmRemoveFavorite)
+
+        // Then
+        viewModel.uiState.value.shouldBeInstanceOf<UserDetailUiState.Error>()
+    }
+
+    @Test
+    fun `onDismissRemoveFavorite when state is not Success does nothing`() = runTest {
+        // Given
+        every { getUserDetailsUseCase(destination.username) } returns flow { } // stays Loading
+        val viewModel = createViewModel()
+
+        // When
+        viewModel.onAction(UserDetailsUiAction.DismissRemoveFavorite)
+
+        // Then
+        viewModel.uiState.value shouldBe UserDetailUiState.Loading
+    }
 }

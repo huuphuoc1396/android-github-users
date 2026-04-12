@@ -1,6 +1,6 @@
 package com.tyme.github.users.feature.users.presentation.userlist
 
-import com.tyme.github.users.core.common.models.UiText
+import com.tyme.github.users.core.ui.models.UiText
 import com.tyme.github.users.core.ui.components.UserListItem
 
 sealed interface UserListUiState {
