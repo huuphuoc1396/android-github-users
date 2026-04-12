@@ -6,5 +6,6 @@ import com.tyme.github.users.core.ui.components.UserListItem
 sealed interface FavoritesUiState {
     data object Idle : FavoritesUiState
     data class ConfirmRemoval(val item: UserListItem) : FavoritesUiState
+    data class LoadError(val message: UiText) : FavoritesUiState
     data class RemovalError(val message: UiText) : FavoritesUiState
 }

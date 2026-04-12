@@ -1,9 +1,9 @@
 package com.tyme.github.users.feature.favorites.presentation.favorites
 
 import app.cash.turbine.test
+import com.tyme.github.users.core.common.dispatcher.CoroutineDispatchers
 import com.tyme.github.users.core.navigation.AppNavigator
 import com.tyme.github.users.core.navigation.NavigationIntent
-import com.tyme.github.users.core.common.dispatcher.CoroutineDispatchers
 import com.tyme.github.users.core.ui.components.UserListItem
 import com.tyme.github.users.feature.favorites.domain.usecase.GetFavoritesUseCase
 import com.tyme.github.users.feature.favorites.domain.usecase.RemoveFavoriteUseCase
@@ -18,7 +18,9 @@ import io.mockk.mockk
 import io.mockk.runs
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -88,6 +90,23 @@ internal class FavoritesViewModelTest {
 
         viewModel.favorites.test {
             awaitItem() shouldBe userListItems
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `favorites sets uiState to LoadError when getFavoritesUseCase throws`() = runTest {
+        every { getFavoritesUseCase() } returns flow { throw RuntimeException("stream error") }
+        val viewModel = createViewModel()
+
+        viewModel.uiState.test {
+            awaitItem() shouldBe FavoritesUiState.Idle
+
+            backgroundScope.launch {
+                viewModel.favorites.collect {}
+            }
+
+            awaitItem().shouldBeInstanceOf<FavoritesUiState.LoadError>()
             cancelAndIgnoreRemainingEvents()
         }
     }

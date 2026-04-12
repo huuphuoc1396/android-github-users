@@ -32,7 +32,7 @@ class FavoritesViewModel @Inject constructor(
 
     val favorites: StateFlow<List<UserListItem>> = getFavoritesUseCase()
         .map { list -> list.map { it.toUserListItem() } }
-        .catch { throwable -> _uiState.value = FavoritesUiState.RemovalError(throwable.toUiText()) }
+        .catch { throwable -> _uiState.value = FavoritesUiState.LoadError(throwable.toUiText()) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     private val _uiState = MutableStateFlow<FavoritesUiState>(FavoritesUiState.Idle)

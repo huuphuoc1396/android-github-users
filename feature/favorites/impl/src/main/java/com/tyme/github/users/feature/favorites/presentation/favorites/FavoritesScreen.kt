@@ -85,6 +85,10 @@ private fun FavoritesContent(
             message = uiState.message.asString(),
             onDismiss = { onAction(FavoritesUiAction.DismissError) },
         )
+        is FavoritesUiState.LoadError -> ErrorDialog(
+            message = uiState.message.asString(),
+            onDismiss = { onAction(FavoritesUiAction.DismissError) },
+        )
         FavoritesUiState.Idle -> Unit
     }
 }
