@@ -1,8 +1,8 @@
 package com.tyme.github.users.feature.users.data.mapper
 
+import com.tyme.github.users.core.common.models.UserModel
 import com.tyme.github.users.core.database.entity.UserEntity
 import com.tyme.github.users.feature.users.data.remote.dto.UserResponse
-import com.tyme.github.users.core.common.models.UserModel
 import io.kotest.matchers.shouldBe
 import org.junit.Test
 

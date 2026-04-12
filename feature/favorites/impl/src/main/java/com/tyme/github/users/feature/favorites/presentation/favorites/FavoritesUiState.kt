@@ -1,7 +1,7 @@
 package com.tyme.github.users.feature.favorites.presentation.favorites
 
-import com.tyme.github.users.core.ui.models.UiText
 import com.tyme.github.users.core.ui.components.UserListItem
+import com.tyme.github.users.core.ui.models.UiText
 
 internal sealed interface FavoritesUiState {
     data object Idle : FavoritesUiState

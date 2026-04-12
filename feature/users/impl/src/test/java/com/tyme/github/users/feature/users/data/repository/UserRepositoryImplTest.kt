@@ -2,8 +2,6 @@ package com.tyme.github.users.feature.users.data.repository
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
-import androidx.paging.PagingConfig
-import androidx.paging.PagingState
 import androidx.paging.RemoteMediator.InitializeAction
 import androidx.paging.RemoteMediator.MediatorResult
 import androidx.paging.testing.asPagingSourceFactory

@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.tyme.github.users.core.common.dispatcher.CoroutineDispatchers
 import com.tyme.github.users.core.navigation.AppNavigator
 import com.tyme.github.users.core.navigation.NavigationIntent
-import com.tyme.github.users.core.ui.extensions.toUiText
 import com.tyme.github.users.core.ui.components.UserListItem
+import com.tyme.github.users.core.ui.extensions.toUiText
 import com.tyme.github.users.feature.favorites.domain.usecase.GetFavoritesUseCase
 import com.tyme.github.users.feature.favorites.domain.usecase.RemoveFavoriteUseCase
 import com.tyme.github.users.feature.favorites.presentation.mappers.toUserListItem

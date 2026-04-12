@@ -2,9 +2,9 @@ package com.tyme.github.users.core.ui.extensions
 
 import com.tyme.github.users.core.common.models.errors.ApiException
 import com.tyme.github.users.core.common.models.errors.NoConnectionException
-import com.tyme.github.users.core.ui.models.UiText
 import com.tyme.github.users.core.common.models.errors.UnauthorizedException
 import com.tyme.github.users.core.ui.R
+import com.tyme.github.users.core.ui.models.UiText
 
 fun Throwable.toUiText(): UiText = when (this) {
     is ApiException -> UiText.Dynamic(message)

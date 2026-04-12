@@ -1,7 +1,7 @@
 package com.tyme.github.users.feature.users.presentation.userlist
 
-import com.tyme.github.users.core.ui.models.UiText
 import com.tyme.github.users.core.ui.components.UserListItem
+import com.tyme.github.users.core.ui.models.UiText
 
 internal sealed interface UserListUiState {
     data object Idle : UserListUiState

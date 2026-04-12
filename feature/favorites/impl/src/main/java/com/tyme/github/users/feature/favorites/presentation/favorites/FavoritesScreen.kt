@@ -22,9 +22,9 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.tyme.github.users.core.ui.components.ErrorDialog
 import com.tyme.github.users.core.ui.components.RemoveFavoriteDialog
-import com.tyme.github.users.core.ui.extensions.asString
 import com.tyme.github.users.core.ui.components.UserList
 import com.tyme.github.users.core.ui.components.UserListItem
+import com.tyme.github.users.core.ui.extensions.asString
 import com.tyme.github.users.core.ui.theme.Theme
 import com.tyme.github.users.feature.favorites.impl.R
 

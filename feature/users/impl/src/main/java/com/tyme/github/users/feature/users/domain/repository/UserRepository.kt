@@ -1,8 +1,8 @@
 package com.tyme.github.users.feature.users.domain.repository
 
 import androidx.paging.PagingData
-import com.tyme.github.users.feature.users.domain.model.UserDetailsModel
 import com.tyme.github.users.core.common.models.UserModel
+import com.tyme.github.users.feature.users.domain.model.UserDetailsModel
 import kotlinx.coroutines.flow.Flow
 
 internal interface UserRepository {

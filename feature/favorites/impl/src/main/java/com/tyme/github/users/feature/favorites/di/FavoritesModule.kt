@@ -1,7 +1,7 @@
 package com.tyme.github.users.feature.favorites.di
 
-import com.tyme.github.users.feature.favorites.domain.repository.FavoriteRepository
 import com.tyme.github.users.feature.favorites.data.repository.FavoriteRepositoryImpl
+import com.tyme.github.users.feature.favorites.domain.repository.FavoriteRepository
 import com.tyme.github.users.feature.favorites.domain.usecase.AddFavoriteUseCase
 import com.tyme.github.users.feature.favorites.domain.usecase.AddFavoriteUseCaseImpl
 import com.tyme.github.users.feature.favorites.domain.usecase.GetFavoritesUseCase
