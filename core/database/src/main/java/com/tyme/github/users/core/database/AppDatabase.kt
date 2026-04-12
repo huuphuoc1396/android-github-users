@@ -18,7 +18,7 @@ import java.nio.charset.StandardCharsets
     version = 2,
     exportSchema = true,
 )
-abstract class AppDatabase : RoomDatabase() {
+internal abstract class AppDatabase : RoomDatabase() {
 
     abstract fun userDao(): UserDao
 

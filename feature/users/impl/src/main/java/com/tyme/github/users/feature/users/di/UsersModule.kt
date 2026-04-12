@@ -1,8 +1,6 @@
 package com.tyme.github.users.feature.users.di
 
 import android.content.Context
-import com.tyme.github.users.core.database.AppDatabase
-import com.tyme.github.users.core.database.dao.UserDao
 import com.tyme.github.users.feature.users.data.local.UserPreferencesDataStore
 import com.tyme.github.users.feature.users.data.local.UserPreferencesDataStoreImpl
 import com.tyme.github.users.feature.users.data.remote.UserService
