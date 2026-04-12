@@ -1,7 +1,7 @@
 package com.tyme.github.users.core.security.di.modules
 
-import com.tyme.github.users.core.security.providers.SecretKeysProvider
-import com.tyme.github.users.core.security.providers.SecretKeysProviderImpl
+import com.tyme.github.users.core.security.AppSecrets
+import com.tyme.github.users.core.security.AppSecretsImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -12,5 +12,5 @@ import dagger.hilt.components.SingletonComponent
 internal interface SecurityModule {
 
     @Binds
-    fun bindSecretKeysProvider(impl: SecretKeysProviderImpl): SecretKeysProvider
+    fun bindAppSecrets(impl: AppSecretsImpl): AppSecrets
 }
