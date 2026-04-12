@@ -254,7 +254,8 @@ Coverage is measured with [Kover](https://github.com/Kotlin/kotlinx-kover) acros
 ./gradlew koverHtmlReportDevDebug
 ```
 
-<img src="https://github.com/user-attachments/assets/fccd0491-eb5c-4f5f-9c13-bfd31646d5d9" alt="Kover HTML coverage report" width=720>
+<img width="800" alt="android-github-users_app_build_reports_kover_htmlDevDebug" src="https://github.com/user-attachments/assets/771a6243-737b-4546-b9f5-62a25eb6ab8b" />
+
 
 Test coverage targets:
 
