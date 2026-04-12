@@ -3,7 +3,7 @@
 #include "credentials.cpp"
 
 extern "C" jstring
-Java_com_tyme_github_users_core_security_providers_SecretKeysProviderImpl_getSecretKey(
+Java_com_tyme_github_users_core_security_AppSecretsImpl_getSecretKey(
         JNIEnv *env,
         jclass,
         jint id
