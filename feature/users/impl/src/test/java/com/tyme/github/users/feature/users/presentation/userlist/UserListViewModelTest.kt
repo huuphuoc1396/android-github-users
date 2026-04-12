@@ -156,6 +156,17 @@ internal class UserListViewModelTest {
     }
 
     @Test
+    fun `onAction FavoriteClick when user is favorite but state is not Success does nothing`() = runTest {
+        val userListItem = UserListItem(username = "user1", isFavorite = true)
+        val viewModel = createViewModel()
+        // state remains Idle (no NotLoading transition)
+
+        viewModel.onAction(UserListUiAction.FavoriteClick(userListItem))
+
+        viewModel.uiState.value shouldBe UserListUiState.Idle
+    }
+
+    @Test
     fun `onAction FavoriteClick when user is not favorite calls addFavorite`() = runTest {
         val userListItem = UserListItem(username = "user1", isFavorite = false)
         val userModel = UserModel(username = "user1")
@@ -166,6 +177,19 @@ internal class UserListViewModelTest {
         viewModel.onAction(UserListUiAction.FavoriteClick(userListItem))
 
         coVerify { addFavoriteUseCase(userModel) }
+    }
+
+    @Test
+    fun `onAction FavoriteClick when user is not favorite and addFavorite fails sets Error`() = runTest {
+        val userListItem = UserListItem(username = "user1", isFavorite = false)
+        val userModel = UserModel(username = "user1")
+        coEvery { addFavoriteUseCase(userModel) } returns Result.failure(RuntimeException("db error"))
+        val viewModel = createViewModel()
+        viewModel.onAction(UserListUiAction.RefreshLoadStateChanged(LoadState.NotLoading(false)))
+
+        viewModel.onAction(UserListUiAction.FavoriteClick(userListItem))
+
+        viewModel.uiState.value.shouldBeInstanceOf<UserListUiState.Error>()
     }
 
     @Test
@@ -183,6 +207,42 @@ internal class UserListViewModelTest {
     }
 
     @Test
+    fun `onAction ConfirmRemoveFavorite does nothing when state is not Success`() = runTest {
+        val viewModel = createViewModel()
+        // state remains Idle (no NotLoading transition)
+
+        viewModel.onAction(UserListUiAction.ConfirmRemoveFavorite)
+
+        coVerify(exactly = 0) { removeFavoriteUseCase(any()) }
+        viewModel.uiState.value shouldBe UserListUiState.Idle
+    }
+
+    @Test
+    fun `onAction ConfirmRemoveFavorite does nothing when Success state has no pendingRemoval`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.onAction(UserListUiAction.RefreshLoadStateChanged(LoadState.NotLoading(false)))
+        // Success state with pendingRemoval = null
+
+        viewModel.onAction(UserListUiAction.ConfirmRemoveFavorite)
+
+        coVerify(exactly = 0) { removeFavoriteUseCase(any()) }
+        (viewModel.uiState.value as UserListUiState.Success).pendingRemoval shouldBe null
+    }
+
+    @Test
+    fun `onAction ConfirmRemoveFavorite sets Error when removeFavorite fails`() = runTest {
+        val userListItem = UserListItem(username = "user1", isFavorite = true)
+        coEvery { removeFavoriteUseCase(userListItem.username) } returns Result.failure(RuntimeException("db error"))
+        val viewModel = createViewModel()
+        viewModel.onAction(UserListUiAction.RefreshLoadStateChanged(LoadState.NotLoading(false)))
+        viewModel.onAction(UserListUiAction.FavoriteClick(userListItem))
+
+        viewModel.onAction(UserListUiAction.ConfirmRemoveFavorite)
+
+        viewModel.uiState.value.shouldBeInstanceOf<UserListUiState.Error>()
+    }
+
+    @Test
     fun `onAction DismissRemoveFavorite clears pendingRemoval`() = runTest {
         val userListItem = UserListItem(username = "user1", isFavorite = true)
         val viewModel = createViewModel()
@@ -192,6 +252,16 @@ internal class UserListViewModelTest {
         viewModel.onAction(UserListUiAction.DismissRemoveFavorite)
 
         (viewModel.uiState.value as UserListUiState.Success).pendingRemoval shouldBe null
+    }
+
+    @Test
+    fun `onAction DismissRemoveFavorite when state is not Success does nothing`() = runTest {
+        val viewModel = createViewModel()
+        // state remains Idle (no NotLoading transition)
+
+        viewModel.onAction(UserListUiAction.DismissRemoveFavorite)
+
+        viewModel.uiState.value shouldBe UserListUiState.Idle
     }
 
     @Test
