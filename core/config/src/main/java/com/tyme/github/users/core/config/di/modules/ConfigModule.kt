@@ -3,7 +3,7 @@ package com.tyme.github.users.core.config.di.modules
 import com.tyme.github.users.core.config.BuildConfig
 import com.tyme.github.users.core.config.NetworkConfigImpl
 import com.tyme.github.users.core.network.config.NetworkConfig
-import com.tyme.github.users.core.security.providers.SecretKeysProvider
+import com.tyme.github.users.core.security.AppSecrets
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,11 +16,11 @@ internal class ConfigModule {
 
     @Provides
     @Singleton
-    fun provideNetworkConfig(secretKeysProvider: SecretKeysProvider): NetworkConfig {
+    fun provideNetworkConfig(appSecrets: AppSecrets): NetworkConfig {
         return NetworkConfigImpl(
             baseUrl = BuildConfig.BASE_URL,
             baseDomain = BuildConfig.BASE_DOMAIN,
-            pinningPublicKey = secretKeysProvider.providePiningPublicKey(),
+            pinningPublicKey = appSecrets.pinningPublicKey,
             isDebug = BuildConfig.DEBUG,
         )
     }
