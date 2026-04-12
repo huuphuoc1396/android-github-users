@@ -1,12 +1,8 @@
 package com.tyme.github.users.feature.favorites.domain.usecase
 
 import com.tyme.github.users.core.common.models.UserModel
-import com.tyme.github.users.feature.favorites.api.repository.FavoriteRepository
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
 
-class GetFavoritesUseCase @Inject constructor(
-    private val repository: FavoriteRepository,
-) {
-    operator fun invoke(): Flow<List<UserModel>> = repository.getFavorites()
+interface GetFavoritesUseCase {
+    operator fun invoke(): Flow<List<UserModel>>
 }

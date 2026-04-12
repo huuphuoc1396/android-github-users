@@ -9,17 +9,17 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-internal class IsFavoriteUseCaseTest {
+internal class IsFavoriteUseCaseImplTest {
 
-    private val favoriteRepository = mockk<FavoriteRepository>()
+    private val repository = mockk<FavoriteRepository>()
 
-    private val useCase = IsFavoriteUseCase(favoriteRepository)
+    private val useCase = IsFavoriteUseCaseImpl(repository)
 
     @Test
     fun `invoke emits true when username is favorite`() = runTest {
         // Given
         val username = "user1"
-        every { favoriteRepository.isFavorite(username) } returns flowOf(true)
+        every { repository.isFavorite(username) } returns flowOf(true)
 
         // When / Then
         useCase(username).test {
@@ -31,7 +31,7 @@ internal class IsFavoriteUseCaseTest {
     fun `invoke emits false when username is not favorite`() = runTest {
         // Given
         val username = "user1"
-        every { favoriteRepository.isFavorite(username) } returns flowOf(false)
+        every { repository.isFavorite(username) } returns flowOf(false)
 
         // When / Then
         useCase(username).test {
@@ -43,7 +43,7 @@ internal class IsFavoriteUseCaseTest {
     fun `invoke emits multiple values as favorite status changes`() = runTest {
         // Given
         val username = "user1"
-        every { favoriteRepository.isFavorite(username) } returns flowOf(false, true, false)
+        every { repository.isFavorite(username) } returns flowOf(false, true, false)
 
         // When / Then
         useCase(username).test {

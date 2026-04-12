@@ -2,18 +2,17 @@ package com.tyme.github.users.feature.favorites.domain.usecase
 
 import com.tyme.github.users.core.common.models.UserModel
 import com.tyme.github.users.feature.favorites.api.repository.FavoriteRepository
-import com.tyme.github.users.feature.favorites.domain.usecase.AddFavoriteUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-internal class AddFavoriteUseCaseTest {
+internal class AddFavoriteUseCaseImplTest {
 
     private val repository = mockk<FavoriteRepository>()
 
-    private val useCase = AddFavoriteUseCase(repository)
+    private val useCase = AddFavoriteUseCaseImpl(repository)
 
     @Test
     fun `invoke calls repository addFavorite with given user`() = runTest {
