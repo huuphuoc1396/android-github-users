@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class UserDetailsViewModel @Inject constructor(
+internal class UserDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getUserDetailsUseCase: GetUserDetailsUseCase,
     private val isFavoriteUseCase: IsFavoriteUseCase,

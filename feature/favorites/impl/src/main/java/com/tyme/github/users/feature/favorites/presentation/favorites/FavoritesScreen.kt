@@ -29,7 +29,7 @@ import com.tyme.github.users.core.ui.theme.Theme
 import com.tyme.github.users.feature.favorites.impl.R
 
 @Composable
-fun FavoritesScreen(
+internal fun FavoritesScreen(
     viewModel: FavoritesViewModel = hiltViewModel<FavoritesViewModel>(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()

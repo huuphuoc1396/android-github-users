@@ -5,7 +5,7 @@ import com.tyme.github.users.feature.users.domain.model.UserDetailsModel
 import com.tyme.github.users.core.common.models.UserModel
 import kotlinx.coroutines.flow.Flow
 
-interface UserRepository {
+internal interface UserRepository {
 
     fun getUserPaging(): Flow<PagingData<UserModel>>
 

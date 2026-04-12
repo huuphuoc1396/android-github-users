@@ -3,7 +3,7 @@ package com.tyme.github.users.feature.users.presentation.userlist
 import com.tyme.github.users.core.ui.models.UiText
 import com.tyme.github.users.core.ui.components.UserListItem
 
-sealed interface UserListUiState {
+internal sealed interface UserListUiState {
     data object Idle : UserListUiState
     data object Loading : UserListUiState
     data class Success(

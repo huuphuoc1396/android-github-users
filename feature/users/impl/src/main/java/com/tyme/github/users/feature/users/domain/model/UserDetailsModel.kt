@@ -1,6 +1,6 @@
 package com.tyme.github.users.feature.users.domain.model
 
-data class UserDetailsModel(
+internal data class UserDetailsModel(
     val username: String,
     val avatarUrl: String,
     val country: String,

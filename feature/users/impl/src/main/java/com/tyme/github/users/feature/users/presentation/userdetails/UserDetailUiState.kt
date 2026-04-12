@@ -2,7 +2,7 @@ package com.tyme.github.users.feature.users.presentation.userdetails
 
 import com.tyme.github.users.core.ui.models.UiText
 
-sealed interface UserDetailUiState {
+internal sealed interface UserDetailUiState {
     object Idle : UserDetailUiState
     object Loading : UserDetailUiState
     data class Success(

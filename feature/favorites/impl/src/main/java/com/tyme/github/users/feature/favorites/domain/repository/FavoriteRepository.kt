@@ -1,9 +1,9 @@
-package com.tyme.github.users.feature.favorites.api.repository
+package com.tyme.github.users.feature.favorites.domain.repository
 
 import com.tyme.github.users.core.common.models.UserModel
 import kotlinx.coroutines.flow.Flow
 
-interface FavoriteRepository {
+internal interface FavoriteRepository {
 
     suspend fun addFavorite(user: UserModel): Result<Unit>
 

@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class UserListViewModel @Inject constructor(
+internal class UserListViewModel @Inject constructor(
     getUserPagingUseCase: GetUserPagingUseCase,
     private val addFavoriteUseCase: AddFavoriteUseCase,
     private val removeFavoriteUseCase: RemoveFavoriteUseCase,

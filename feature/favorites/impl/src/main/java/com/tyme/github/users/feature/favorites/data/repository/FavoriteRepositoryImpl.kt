@@ -2,7 +2,7 @@ package com.tyme.github.users.feature.favorites.data.repository
 
 import com.tyme.github.users.core.common.models.UserModel
 import com.tyme.github.users.core.database.dao.FavoriteDao
-import com.tyme.github.users.feature.favorites.api.repository.FavoriteRepository
+import com.tyme.github.users.feature.favorites.domain.repository.FavoriteRepository
 import com.tyme.github.users.feature.favorites.data.mapper.toUserModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

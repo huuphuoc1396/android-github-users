@@ -6,7 +6,7 @@ import com.tyme.github.users.feature.users.domain.repository.UserRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class GetUserPagingUseCase @Inject constructor(
+internal class GetUserPagingUseCase @Inject constructor(
     private val userRepository: UserRepository,
 ) {
 

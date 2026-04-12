@@ -31,7 +31,7 @@ import com.tyme.github.users.feature.users.R
 import com.tyme.github.users.feature.users.presentation.userdetails.components.UserDetails
 
 @Composable
-fun UserDetailsScreen(
+internal fun UserDetailsScreen(
     viewModel: UserDetailsViewModel = hiltViewModel<UserDetailsViewModel>(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()

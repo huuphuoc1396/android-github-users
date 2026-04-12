@@ -2,7 +2,7 @@ package com.tyme.github.users.feature.favorites.domain.usecase
 
 import app.cash.turbine.test
 import com.tyme.github.users.core.common.models.UserModel
-import com.tyme.github.users.feature.favorites.api.repository.FavoriteRepository
+import com.tyme.github.users.feature.favorites.domain.repository.FavoriteRepository
 import io.kotest.matchers.shouldBe
 import io.mockk.every
 import io.mockk.mockk

@@ -1,6 +1,6 @@
 package com.tyme.github.users.feature.users.presentation.userdetails
 
-sealed interface UserDetailsUiAction {
+internal sealed interface UserDetailsUiAction {
     data object NavigateBack : UserDetailsUiAction
     data object FavoriteToggle : UserDetailsUiAction
     data object ConfirmRemoveFavorite : UserDetailsUiAction

@@ -37,7 +37,7 @@ import com.tyme.github.users.feature.users.R
 import kotlinx.coroutines.flow.flowOf
 
 @Composable
-fun UserListScreen(
+internal fun UserListScreen(
     viewModel: UserListViewModel = hiltViewModel<UserListViewModel>(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()

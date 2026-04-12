@@ -5,7 +5,7 @@ import com.tyme.github.users.feature.users.domain.repository.UserRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class GetUserDetailsUseCase @Inject constructor(
+internal class GetUserDetailsUseCase @Inject constructor(
     private val userRepository: UserRepository,
 ) {
 

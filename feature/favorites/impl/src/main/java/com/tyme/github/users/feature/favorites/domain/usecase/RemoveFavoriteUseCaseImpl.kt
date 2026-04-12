@@ -1,6 +1,6 @@
 package com.tyme.github.users.feature.favorites.domain.usecase
 
-import com.tyme.github.users.feature.favorites.api.repository.FavoriteRepository
+import com.tyme.github.users.feature.favorites.domain.repository.FavoriteRepository
 import javax.inject.Inject
 
 internal class RemoveFavoriteUseCaseImpl @Inject constructor(
