@@ -1,7 +1,7 @@
 package com.tyme.github.users.core.network.adapters.mappers
 
 import com.google.gson.Gson
-import com.tyme.github.users.core.network.responses.errors.ErrorResponse
+import com.tyme.github.users.core.network.responses.ErrorResponse
 import com.tyme.github.users.core.common.extensions.orEmpty
 import com.tyme.github.users.core.common.extensions.orZero
 import com.tyme.github.users.core.common.models.errors.ApiException
