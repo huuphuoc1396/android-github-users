@@ -5,7 +5,7 @@ import com.tyme.github.users.core.database.AppDatabase
 import com.tyme.github.users.core.database.BuildConfig
 import com.tyme.github.users.core.database.dao.FavoriteDao
 import com.tyme.github.users.core.database.dao.UserDao
-import com.tyme.github.users.core.security.providers.SecretKeysProvider
+import com.tyme.github.users.core.security.AppSecrets
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,11 +21,11 @@ object DatabaseModule {
     @Singleton
     fun provideAppDatabase(
         @ApplicationContext context: Context,
-        secretKeysProvider: SecretKeysProvider,
+        appSecrets: AppSecrets,
     ): AppDatabase = AppDatabase.Factory(
         context = context,
         isEncrypted = BuildConfig.DB_ENCRYPTION_ENABLED,
-        secretKeysProvider = secretKeysProvider,
+        appSecrets = appSecrets,
     ).create()
 
     @Provides

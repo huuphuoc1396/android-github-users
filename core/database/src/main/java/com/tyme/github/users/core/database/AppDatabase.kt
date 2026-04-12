@@ -9,7 +9,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.tyme.github.users.core.database.dao.FavoriteDao
 import com.tyme.github.users.core.database.dao.UserDao
 import com.tyme.github.users.core.database.entity.UserEntity
-import com.tyme.github.users.core.security.providers.SecretKeysProvider
+import com.tyme.github.users.core.security.AppSecrets
 import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
 import java.nio.charset.StandardCharsets
 
@@ -37,12 +37,12 @@ abstract class AppDatabase : RoomDatabase() {
     class Factory(
         private val context: Context,
         private val isEncrypted: Boolean,
-        private val secretKeysProvider: SecretKeysProvider,
+        private val appSecrets: AppSecrets,
     ) {
         fun create(): AppDatabase {
             if (isEncrypted) {
                 System.loadLibrary("sqlcipher")
-                val password = secretKeysProvider.getDatabasePassword()
+                val password = appSecrets.databasePassword
                 val databaseFile = context.getDatabasePath(DATABASE_NAME)
                 val factory = SupportOpenHelperFactory(password.toByteArray(StandardCharsets.UTF_8))
                 return Room.databaseBuilder(
