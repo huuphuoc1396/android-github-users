@@ -90,16 +90,18 @@ kover {
                     "*.*ComposableSingletons*",
                     "*.*Destination*",
                     "*.*Provider*",
+                    "*.*MembersInjector*"
                 )
                 packages(
                     "hilt_aggregated_deps",
                     "dagger.hilt.internal.aggregatedroot.codegen",
                     "com.tyme.github.users.*.di.*",
-                    "com.tyme.github.users.extenstions",
                     "com.tyme.github.users.ui.uistate",
-                    "com.tyme.github.users.core.ui.theme",
-                    "com.tyme.github.users.core.ui.utils",
-                    "com.tyme.github.users.core.ui.extensions",
+                    "com.tyme.github.users.core.ui.*",
+                    "com.tyme.github.users.*.navigation",
+                    "com.tyme.github.users.navigation",
+                    "com.tyme.github.users.core.config",
+                    "com.tyme.github.users.dispatcher"
                 )
                 annotatedBy(
                     "dagger.hilt.android.HiltAndroidApp",
