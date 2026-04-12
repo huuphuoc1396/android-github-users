@@ -3,7 +3,7 @@ package com.tyme.github.users.feature.favorites.presentation.favorites
 import app.cash.turbine.test
 import com.tyme.github.users.core.navigation.AppNavigator
 import com.tyme.github.users.core.navigation.NavigationIntent
-import com.tyme.github.users.core.common.providers.DispatchersProvider
+import com.tyme.github.users.core.common.dispatcher.CoroutineDispatchers
 import com.tyme.github.users.core.ui.components.UserListItem
 import com.tyme.github.users.feature.favorites.domain.usecase.GetFavoritesUseCase
 import com.tyme.github.users.feature.favorites.domain.usecase.RemoveFavoriteUseCase
@@ -34,7 +34,7 @@ internal class FavoritesViewModelTest {
     private val getFavoritesUseCase: GetFavoritesUseCase = mockk()
     private val removeFavoriteUseCase: RemoveFavoriteUseCase = mockk()
     private val navigator: AppNavigator = mockk()
-    private val dispatchers: DispatchersProvider = mockk()
+    private val dispatchers: CoroutineDispatchers = mockk()
 
     @Before
     fun setUp() {

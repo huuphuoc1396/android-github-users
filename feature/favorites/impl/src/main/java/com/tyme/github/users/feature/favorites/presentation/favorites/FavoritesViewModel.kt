@@ -2,7 +2,7 @@ package com.tyme.github.users.feature.favorites.presentation.favorites
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tyme.github.users.core.common.providers.DispatchersProvider
+import com.tyme.github.users.core.common.dispatcher.CoroutineDispatchers
 import com.tyme.github.users.core.navigation.AppNavigator
 import com.tyme.github.users.core.navigation.NavigationIntent
 import com.tyme.github.users.core.ui.extensions.toUiText
@@ -27,7 +27,7 @@ class FavoritesViewModel @Inject constructor(
     getFavoritesUseCase: GetFavoritesUseCase,
     private val removeFavoriteUseCase: RemoveFavoriteUseCase,
     private val navigator: AppNavigator,
-    private val dispatchers: DispatchersProvider,
+    private val dispatchers: CoroutineDispatchers,
 ) : ViewModel() {
 
     val favorites: StateFlow<List<UserListItem>> = getFavoritesUseCase()

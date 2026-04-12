@@ -6,7 +6,7 @@ import app.cash.turbine.test
 import com.tyme.github.users.core.navigation.AppNavigator
 import com.tyme.github.users.core.navigation.NavigationIntent
 import com.tyme.github.users.core.common.models.UserModel
-import com.tyme.github.users.core.common.providers.DispatchersProvider
+import com.tyme.github.users.core.common.dispatcher.CoroutineDispatchers
 import com.tyme.github.users.feature.users.data.mapper.toUserDetailUiState
 import com.tyme.github.users.feature.users.domain.model.UserDetailsModel
 import com.tyme.github.users.feature.favorites.domain.usecase.AddFavoriteUseCase
@@ -46,7 +46,7 @@ internal class UserDetailsViewModelTest {
     private val addFavoriteUseCase: AddFavoriteUseCase = mockk()
     private val removeFavoriteUseCase: RemoveFavoriteUseCase = mockk()
     private val navigator: AppNavigator = mockk()
-    private val dispatchers: DispatchersProvider = mockk()
+    private val dispatchers: CoroutineDispatchers = mockk()
 
     private val destination = UserDetailsDestination(
         username = "user1",

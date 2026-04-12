@@ -1,4 +1,4 @@
-package com.tyme.github.users.core.common.providers
+package com.tyme.github.users.core.common.dispatcher
 
 import kotlinx.coroutines.CoroutineDispatcher
 
@@ -15,16 +15,16 @@ import kotlinx.coroutines.CoroutineDispatcher
  *
  * **Usage Example:**
  * ```kotlin
- * class MyViewModel(private val dispatchersProvider: DispatchersProvider) : ViewModel() {
+ * class MyViewModel(private val dispatchers: CoroutineDispatchers) : ViewModel() {
  *     fun fetchData() {
- *         viewModelScope.launch(dispatchersProvider.io) {
+ *         viewModelScope.launch(dispatchers.io) {
  *             // Perform I/O work
  *         }
  *     }
  * }
  * ```
  */
-interface DispatchersProvider {
+interface CoroutineDispatchers {
     val default: CoroutineDispatcher
     val main: CoroutineDispatcher
     val io: CoroutineDispatcher

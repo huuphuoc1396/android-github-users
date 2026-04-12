@@ -7,7 +7,7 @@ import androidx.navigation.toRoute
 import com.tyme.github.users.core.navigation.AppNavigator
 import com.tyme.github.users.core.navigation.NavigationIntent
 import com.tyme.github.users.core.common.models.UserModel
-import com.tyme.github.users.core.common.providers.DispatchersProvider
+import com.tyme.github.users.core.common.dispatcher.CoroutineDispatchers
 import com.tyme.github.users.feature.users.data.mapper.toUserDetailUiState
 import com.tyme.github.users.feature.favorites.domain.usecase.AddFavoriteUseCase
 import com.tyme.github.users.feature.users.domain.usecase.GetUserDetailsUseCase
@@ -34,7 +34,7 @@ class UserDetailsViewModel @Inject constructor(
     private val addFavoriteUseCase: AddFavoriteUseCase,
     private val removeFavoriteUseCase: RemoveFavoriteUseCase,
     private val navigator: AppNavigator,
-    private val dispatchers: DispatchersProvider,
+    private val dispatchers: CoroutineDispatchers,
 ) : ViewModel() {
 
     private val destination: UserDetailsDestination = savedStateHandle.toRoute()

@@ -1,11 +1,11 @@
-package com.tyme.github.users.providers
+package com.tyme.github.users.dispatcher
 
-import com.tyme.github.users.core.common.providers.DispatchersProvider
+import com.tyme.github.users.core.common.dispatcher.CoroutineDispatchers
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
 
-internal class DispatchersProviderImpl @Inject constructor() : DispatchersProvider {
+internal class CoroutineDispatchersImpl @Inject constructor() : CoroutineDispatchers {
     override val default: CoroutineDispatcher
         get() = Dispatchers.Default
 

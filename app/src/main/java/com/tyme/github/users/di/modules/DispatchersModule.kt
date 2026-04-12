@@ -1,7 +1,7 @@
 package com.tyme.github.users.di.modules
 
-import com.tyme.github.users.core.common.providers.DispatchersProvider
-import com.tyme.github.users.providers.DispatchersProviderImpl
+import com.tyme.github.users.core.common.dispatcher.CoroutineDispatchers
+import com.tyme.github.users.dispatcher.CoroutineDispatchersImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -14,5 +14,5 @@ internal interface DispatchersModule {
 
     @Binds
     @Singleton
-    fun bindDispatchersProvider(impl: DispatchersProviderImpl): DispatchersProvider
+    fun bindCoroutineDispatchers(impl: CoroutineDispatchersImpl): CoroutineDispatchers
 }
