@@ -93,7 +93,7 @@ private fun FavoritesContent(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun FavoritesEmptyPreview() {
     Theme {
@@ -104,7 +104,7 @@ private fun FavoritesEmptyPreview() {
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun FavoritesSuccessPreview() {
     Theme {
