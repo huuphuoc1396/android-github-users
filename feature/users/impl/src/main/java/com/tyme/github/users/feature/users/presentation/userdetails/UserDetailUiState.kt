@@ -1,6 +1,6 @@
 package com.tyme.github.users.feature.users.presentation.userdetails
 
-import com.tyme.github.users.core.common.models.errors.UiText
+import com.tyme.github.users.core.common.models.UiText
 
 sealed interface UserDetailUiState {
     object Idle : UserDetailUiState

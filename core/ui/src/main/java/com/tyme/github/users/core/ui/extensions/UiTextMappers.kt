@@ -2,7 +2,7 @@ package com.tyme.github.users.core.ui.extensions
 
 import com.tyme.github.users.core.common.models.errors.ApiException
 import com.tyme.github.users.core.common.models.errors.NoConnectionException
-import com.tyme.github.users.core.common.models.errors.UiText
+import com.tyme.github.users.core.common.models.UiText
 import com.tyme.github.users.core.common.models.errors.UnauthorizedException
 import com.tyme.github.users.core.ui.R
 

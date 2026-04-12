@@ -1,4 +1,4 @@
-package com.tyme.github.users.core.common.models.errors
+package com.tyme.github.users.core.common.models
 
 import androidx.annotation.StringRes
 
