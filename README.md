@@ -192,7 +192,7 @@ core:* → feature:*                    ← forbidden
 
 ### Error Handling
 
-- **Write operations** (add/remove favorite): `FavoriteRepository` returns `Result<Unit>`. Errors are caught at the repository boundary with `runCatching {}` and surfaced to the ViewModel via `.onFailure {}`.
+- **Write operations**: Repositories return `Result<Unit>`. Errors are caught at the repository boundary with `runCatching {}` and surfaced to the ViewModel via `.onFailure {}`.
 - **Reactive flows**: Repositories return `Flow<T>`. ViewModels apply `.catch {}` before `.stateIn()` to prevent silent Flow termination on errors.
 
 ---

@@ -2,8 +2,6 @@ package com.tyme.github.users.core.network.interceptors
 
 import okhttp3.Interceptor
 import okhttp3.Response
-import javax.inject.Inject
-
 /**
  * An OkHttp interceptor that adds common headers to HTTP requests.
  *
@@ -20,7 +18,7 @@ import javax.inject.Inject
  *     .build()
  * ```
  */
-internal class HeaderInterceptor @Inject constructor() : Interceptor {
+internal class HeaderInterceptor : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request().newBuilder()

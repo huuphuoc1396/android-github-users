@@ -7,7 +7,7 @@ import androidx.paging.cachedIn
 import androidx.paging.map
 import com.tyme.github.users.core.navigation.AppNavigator
 import com.tyme.github.users.core.navigation.NavigationIntent
-import com.tyme.github.users.core.common.providers.DispatchersProvider
+import com.tyme.github.users.core.common.dispatcher.CoroutineDispatchers
 import com.tyme.github.users.core.ui.components.UserListItem
 import com.tyme.github.users.feature.favorites.domain.usecase.AddFavoriteUseCase
 import com.tyme.github.users.feature.users.domain.usecase.GetUserPagingUseCase
@@ -31,7 +31,7 @@ class UserListViewModel @Inject constructor(
     private val addFavoriteUseCase: AddFavoriteUseCase,
     private val removeFavoriteUseCase: RemoveFavoriteUseCase,
     private val navigator: AppNavigator,
-    private val dispatchers: DispatchersProvider,
+    private val dispatchers: CoroutineDispatchers,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<UserListUiState>(UserListUiState.Idle)

@@ -1,11 +1,10 @@
 package com.tyme.github.users.feature.users.presentation.userlist
 
 import androidx.paging.LoadState
-import app.cash.turbine.test
 import com.tyme.github.users.core.navigation.AppNavigator
 import com.tyme.github.users.core.navigation.NavigationIntent
 import com.tyme.github.users.core.common.models.UserModel
-import com.tyme.github.users.core.common.providers.DispatchersProvider
+import com.tyme.github.users.core.common.dispatcher.CoroutineDispatchers
 import com.tyme.github.users.core.ui.components.UserListItem
 import com.tyme.github.users.feature.favorites.domain.usecase.AddFavoriteUseCase
 import com.tyme.github.users.feature.users.domain.usecase.GetUserPagingUseCase
@@ -36,7 +35,7 @@ internal class UserListViewModelTest {
     private val addFavoriteUseCase: AddFavoriteUseCase = mockk()
     private val removeFavoriteUseCase: RemoveFavoriteUseCase = mockk()
     private val navigator: AppNavigator = mockk()
-    private val dispatchers: DispatchersProvider = mockk()
+    private val dispatchers: CoroutineDispatchers = mockk()
 
     @Before
     fun setUp() {
