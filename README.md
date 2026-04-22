@@ -24,7 +24,7 @@ An Android application for browsing GitHub users and their details, with the abi
 
 - View profile information: avatar, location, follower and following counts, and GitHub profile link.
 - Add or remove the user from favorites with a single tap.
-<img width="164" height="2400" alt="Screenshot_1775559294" src="https://github.com/user-attachments/assets/1b57b39e-a7ee-44d3-9ff1-0771674cbcda" />
+<img width="164" alt="Screenshot_1775559294" src="https://github.com/user-attachments/assets/1b57b39e-a7ee-44d3-9ff1-0771674cbcda" />
 
 
 ### Favorites
